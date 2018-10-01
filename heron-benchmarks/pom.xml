@@ -25,12 +25,6 @@
         </dependency>
         <dependency>
             <groupId>com.twitter.heron</groupId>
-            <artifactId>heron-storm</artifactId>
-            <version>${heron.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.twitter.heron</groupId>
             <artifactId>heron-kafka</artifactId>
             <version>0.15.0</version>
         </dependency>

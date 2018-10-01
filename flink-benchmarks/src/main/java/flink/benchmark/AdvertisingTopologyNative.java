@@ -37,6 +37,8 @@ public class AdvertisingTopologyNative {
 
         ParameterTool parameterTool = ParameterTool.fromArgs(args);
 
+
+
         Map conf = Utils.findAndReadConfigFile(parameterTool.getRequired("confPath"), true);
         int kafkaPartitions = ((Number)conf.get("kafka.partitions")).intValue();
         int hosts = ((Number)conf.get("process.hosts")).intValue();

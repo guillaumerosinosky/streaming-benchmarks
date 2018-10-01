@@ -16,7 +16,6 @@ LONG_SLEEP=5
 WAIT_AFTER_STOP_PRODUCER=30
 WAIT_AFTER_REBOOT_SERVER=30
 
-SSH_USER="root"
 
 # Before running kafka stream benchmark comment the first line and uncomment the second line after this line.
 KAFKA_FOLDER="kafka_2.11-0.11.0.2"
