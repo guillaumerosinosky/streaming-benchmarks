@@ -28,7 +28,7 @@ PROJECT_DIR="/root/stream-benchmarking"
 CLEAN_LOAD_RESULT_CMD="rm *.load; rm -rf $PROJECT_DIR/$STORM_DIR/logs/*;rm -rf $PROJECT_DIR/$STORM_DIR/logs/*; rm -rf $PROJECT_DIR/$SPARK_DIR/work/*; rm -rf /root/kafka-logs/*;"
 REBOOT_CMD="reboot;"
 SHUTDOWN_CMD="shutdown;"
-CLEAN_RESULT_CMD="cd $PROJECT_DIR; rm data/*.txt; rm -rf data/workers; rm -rf $JSTORM_DIR/data/*; rm -rf /root/zookeeper/version-2/*; rm -rf $PROJECT_DIR/$JSTORM_DIR/data/*"
+CLEAN_RESULT_CMD="cd $PROJECT_DIR; rm data/*.txt; rm -rf data/workers; rm -rf /root/zookeeper/version-2/*"
 
 CLEAN_BUILD_BENCHMARK="cd $PROJECT_DIR; ./stream-bench.sh SETUP_BENCHMARK"
 SETUP_KAFKA="cd $PROJECT_DIR; ./stream-bench.sh SETUP_KAFKA"
@@ -51,23 +51,6 @@ START_STORM_SUPERVISOR_CMD="cd $PROJECT_DIR; ./$STORM_DIR/bin/storm supervisor;"
 STOP_STORM_SUPERVISOR_CMD="ps aux | grep storm | awk {'print \$2'} | xargs sudo kill;"
 START_STORM_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_STORM_TOPOLOGY;"
 STOP_STORM_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_STORM_TOPOLOGY;"
-
-START_JSTORM_NIMBUS_CMD="cd $PROJECT_DIR; ./$JSTORM_DIR/bin/jstorm.py nimbus;"
-STOP_JSTORM_NIMBUS_CMD="ps aux | grep jstorm | awk {'print \$2'} | xargs sudo kill;"
-START_JSTORM_SUPERVISOR_CMD="cd $PROJECT_DIR; ./$JSTORM_DIR/bin/jstorm.py supervisor;"
-STOP_JSTORM_SUPERVISOR_CMD="ps aux | grep jstorm | awk {'print \$2'} | xargs sudo kill;"
-START_JSTORM_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_JSTORM_TOPOLOGY;"
-STOP_JSTORM_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_JSTORM_TOPOLOGY;"
-
-
-START_HERON_CMD="heron-admin standalone cluster start;"
-START_HERON_API_CMD="heron-apiserver --cluster standalone;"
-STOP_HERON_CMD="yes yes | heron-admin standalone cluster stop;"
-START_HERON_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_HERON_PROCESSING;"
-STOP_HERON_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_HERON_PROCESSING;"
-
-COMMENT_ZOO="sed -i \"s/heron.statemgr.connection.string/#heron.statemgr.connection.string/g\" ~/.heron/conf/standalone/statemgr.yaml;"
-ADD_ZOO="echo \"heron.statemgr.connection.string: zookeeper-node03:2181,zookeeper-node02:2181,zookeeper-node01:2181\" >> ~/.heron/conf/standalone/statemgr.yaml"
 
 START_FLINK_CMD="cd $PROJECT_DIR; ./$FLINK_DIR/bin/start-cluster.sh;"
 STOP_FLINK_CMD="cd $PROJECT_DIR; ./$FLINK_DIR/bin/stop-cluster.sh;"
@@ -176,30 +159,6 @@ function cleanResult {
     runCommandZKServers "${CLEAN_RESULT_CMD}" "nohup"
 }
 
-
-function startHeron {
-    echo "Starting Heron"
-    runCommandMasterStreamServers "${START_ZK_CMD}"
-    runCommandMasterStreamServers "${START_HERON_CMD}"
-    #runCommandMasterStreamServers "${COMMENT_ZOO}"
-    #runCommandMasterStreamServers "${ADD_ZOO}"
-}
-
-function stopHeron {
-    echo "Stopping Heron"
-    runCommandMasterStreamServers "${STOP_HERON_CMD}"
-    runCommandMasterStreamServers "${STOP_ZK_CMD}"
-}
-
-function startHeronProcessing {
-    echo "Starting Heron Processing"
-    runCommandMasterStreamServers "${START_HERON_PROC_CMD}"
-}
-
-function stopHeronProcessing {
-    echo "Stopping Heron Processing"
-    runCommandMasterStreamServers "${STOP_HERON_PROC_CMD}"
-}
 
 function startJet {
     echo "Starting Jet"
@@ -325,30 +284,6 @@ function stopStormProcessing {
     runCommandMasterStreamServers "${STOP_STORM_PROC_CMD}" "nohup"
 }
 
-function startJStorm {
-    echo "Starting JStorm"
-    runCommandMasterStreamServers "${START_JSTORM_NIMBUS_CMD}" "nohup"
-    sleep ${SHORT_SLEEP}
-    runCommandSlaveStreamServers "${START_JSTORM_SUPERVISOR_CMD}" "nohup"
-}
-
-function stopJStorm {
-    echo "Stopping JStorm"
-    runCommandSlaveStreamServers "${STOP_JSTORM_SUPERVISOR_CMD}" "nohup"
-    sleep ${SHORT_SLEEP}
-    runCommandMasterStreamServers "${STOP_JSTORM_NIMBUS_CMD}" "nohup"
-}
-
-function startJStormProcessing {
-    echo "Starting JStorm processing"
-    runCommandMasterStreamServers "${START_JSTORM_PROC_CMD}" "nohup"
-}
-
-function stopJStormProcessing {
-    echo "Stopping JStorm processing"
-    runCommandMasterStreamServers "${STOP_JSTORM_PROC_CMD}" "nohup"
-}
-
 function startMonitoring(){
     echo "Start Monitoring"
     runCommandStreamServers "${START_MONITOR_CPU}" "nohup"
@@ -367,7 +302,6 @@ function changeTps(){
     #TODO replace with CHANGE_TPS_CMD variable
     runCommandLoadServers "sed -i \"s/TPS:-${INITIAL_TPS}/TPS:-$1/g\" stream-benchmarking/variable.sh" "nohup"
 }
-
 
 
 
@@ -481,28 +415,6 @@ function runSystem(){
             sleep ${SHORT_SLEEP}
             stopStorm
         ;;
-        jstorm)
-            startJStorm
-            sleep ${LONG_SLEEP}
-            startJStormProcessing
-            sleep ${LONG_SLEEP}
-            sleep ${LONG_SLEEP}
-            benchmark $1
-            stopJStormProcessing
-            sleep ${LONG_SLEEP}
-            sleep ${LONG_SLEEP}
-            stopJStorm
-            sleep ${LONG_SLEEP}
-        ;;
-        heron)
-            startHeron
-            startHeronProcessing
-            sleep ${LONG_SLEEP}
-            benchmark $1
-            stopHeronProcessing
-            sleep ${SHORT_SLEEP}
-            stopHeron
-        ;;
         kafka)
             sleep ${LONG_SLEEP}
             startKafkaProcessing
@@ -526,12 +438,8 @@ function stopAll (){
     stopSparkProcessing "dataset"
     stopSparkProcessing "dstream"
     stopSpark
-    stopStormProcessizng
+    stopStormProcessing
     stopStorm
-    stopJStormProcessing
-    stopJStorm
-    stopHeronProcessing
-    stopHeron
     cleanKafka
     destroyEnvironment
     cleanResult
@@ -573,24 +481,15 @@ case $1 in
         changeTps ${TPS}
         benchmarkLoop "storm"
     ;;
-    jstorm)
-        changeTps ${TPS}
-        benchmarkLoop "jstorm"
-    ;;
     kafka)
         benchmarkLoop "kafka"
-    ;;
-    heron)
-        benchmarkLoop "heron"
     ;;
     all)
         benchmarkLoop "spark" "dataset"
         benchmarkLoop "spark" "dstream"
         benchmarkLoop "storm"
-        benchmarkLoop "jstorm"
         benchmarkLoop "flink"
         benchmarkLoop "kafka"
-        benchmarkLoop "heron"
         benchmarkLoop "jet"
     ;;
     start)
@@ -606,18 +505,8 @@ case $1 in
                 sleep ${SHORT_SLEEP}
                 startStorm
             ;;
-            jstorm)
-                startZK
-                sleep ${SHORT_SLEEP}
-                startJStorm
-            ;;
-            heron)
-                startZK
-                sleep ${SHORT_SLEEP}
-                startHeron
-            ;;
             process)
-                startJStormProcessing
+                startFlinkProcessing
             ;;
             redis)
                 startRedis
@@ -649,18 +538,8 @@ case $1 in
                 sleep ${SHORT_SLEEP}
                 stopZK
             ;;
-            jstorm)
-                stopJStorm
-                sleep ${SHORT_SLEEP}
-                stopZK
-            ;;
-            heron)
-                stopHeron
-                sleep ${SHORT_SLEEP}
-                stopZK
-            ;;
             process)
-                stopJStormProcessing
+                stopFlinkProcessing
             ;;
             zoo)
                 stopZK

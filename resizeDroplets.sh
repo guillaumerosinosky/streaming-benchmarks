@@ -3,7 +3,7 @@
 # Last version of Resize droplet scripts has been migrated to remoteInvocation.sh
 
 CONTENT_TYPE="'Content-Type: application/json'"
-AUTH="'Authorization: Bearer 808fe5b62bc168f757a40463ee3dfdefc58f2d5b865b88ff1a0a1bad71a5154e'"
+AUTH="'Authorization: Bearer '"
 C1="c-1vcpu-2gb"
 C16="'{"type":"resize","size":"c-16"}'"
 C4="c-4"
