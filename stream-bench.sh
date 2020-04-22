@@ -78,13 +78,7 @@ fetch_untar_file() {
     fi
   fi
 
-  if [[ ${FILE} = *"heron"* ]];then
-    mkdir -p ${HERON_DIR}
-    tar -xzvf ${FILE} -C ${HERON_DIR}
-  else
-    tar -xzvf "$FILE"
-  fi
-
+  tar -xzvf "$FILE"
 }
 
 create_kafka_topic() {
@@ -115,21 +109,20 @@ run() {
 	run "SETUP_REDIS"
     run "SETUP_KAFKA"
     run "SETUP_KAFKA_STREAM"
-    run "SETUP_HERON_UBUNTU"
     run "SETUP_HAZELCAST"
     run "SETUP_STORM"
     run "SETUP_FLINK"
     run "SETUP_SPARK"
-
   elif [ "SETUP_BENCHMARK" = "$OPERATION" ];
   then
     
-    $MVN clean install -Dspark.version="$SPARK_VERSION" -Dkafka.version="$KAFKA_VERSION" -Dkafka.stream.version="$KAFKA_STREAM_VERSION" -Dheron.version="$HERON_VERSION" -Dhazelcast.version="$HAZELCAST_VERSION" -Dflink.version="$FLINK_VERSION" -Dstorm.version="$STORM_VERSION" -DJstorm.version="$JSTORM_VERSION" -Dscala.binary.version="$SCALA_BIN_VERSION" -Dscala.version="$SCALA_BIN_VERSION.$SCALA_SUB_VERSION"
+    $MVN clean install -Dspark.version="$SPARK_VERSION" -Dkafka.version="$KAFKA_VERSION" -Dkafka.stream.version="$KAFKA_STREAM_VERSION" -Dhazelcast.version="$HAZELCAST_VERSION" -Dflink.version="$FLINK_VERSION" -Dstorm.version="$STORM_VERSION" -Dscala.binary.version="$SCALA_BIN_VERSION" -Dscala.version="$SCALA_BIN_VERSION.$SCALA_SUB_VERSION"
   elif [ "SETUP_REDIS" = "$OPERATION" ];
   then
-    
+
     #Fetch and build Redis
     REDIS_FILE="$REDIS_DIR.tar.gz"
+    echo $REDIS_FILE
     fetch_untar_file "$REDIS_FILE" "http://download.redis.io/releases/$REDIS_FILE"
     cd $REDIS_DIR
     $MAKE
@@ -140,11 +133,6 @@ run() {
     #Fetch Kafka
     KAFKA_FILE="$KAFKA_DIR.tgz"
     fetch_untar_file "$KAFKA_FILE" "$APACHE_MIRROR/kafka/$KAFKA_VERSION/$KAFKA_FILE"
-  elif [ "SETUP_JSTORM" = "$OPERATION" ];
-  then
-    #Fetch JStorm
-    JSTORM_FILE="$JSTORM_DIR.zip"
-    fetch_untar_file "$JSTORM_FILE" "https://github.com/alibaba/jstorm/releases/download/$JSTORM_VERSION/$JSTORM_FILE"
   elif [ "SETUP_KAFKA_STREAM" = "$OPERATION" ];
   then
 
@@ -171,22 +159,9 @@ run() {
     fetch_untar_file "$STORM_FILE" "$APACHE_MIRROR/storm/$STORM_DIR/$STORM_FILE"
   elif [ "SETUP_HAZELCAST" = "$OPERATION" ];
   then
-    #Fetch Heron
+    #Fetch Hazelcast
     HAZELCAST_FILE="$HAZELCAST_DIR.tar.gz"
     fetch_untar_file "$HAZELCAST_FILE" "https://download.hazelcast.com/jet/$HAZELCAST_FILE"
-  elif [ "SETUP_HERON_UBUNTU" = "$OPERATION" ];
-  then
-    
-    #Fetch Heron
-    HERON_FILE="$HERON_DIR.tgz.gz"
-    fetch_untar_file "$HERON_FILE" "https://github.com/twitter/heron/releases/download/$HERON_VERSION/heron-$HERON_VERSION-ubuntu.tar.gz"
-  elif [ "SETUP_HERON_DARWIN" = "$OPERATION" ];
-  then
-
-    #Fetch Heron
-    HERON_FILE="$HERON_DIR.tgz.gz"
-    fetch_untar_file "$HERON_FILE" "https://github.com/twitter/heron/releases/download/$HERON_VERSION/heron-$HERON_VERSION-darwin.tar.gz"
-
   elif [ "START_STORM_ZK" = "$OPERATION" ];
   then
     start_if_needed dev_zookeeper_storm ZooKeeperStorm 10 "$STORM_DIR/bin/storm" dev-zookeeper_storm
@@ -239,15 +214,6 @@ run() {
     stop_if_needed daemon.name=supervisor "Storm Supervisor"
 #    stop_if_needed daemon.name=ui "Storm UI"
 #    stop_if_needed daemon.name=logviewer "Storm LogViewer"
-  elif [ "START_JSTORM" = "$OPERATION" ];
-  then
-    start_if_needed daemon.name=nimbus "JStorm Nimbus" 3 "$JSTORM_DIR/bin/jstorm.py" nimbus
-    start_if_needed daemon.name=supervisor "JStorm Supervisor" 3 "$JSTORM_DIR/bin/jstorm.py" supervisor
-    sleep 15
-  elif [ "STOP_JSTORM" = "$OPERATION" ];
-  then
-    ${JSTORM_DIR}/bin/stop.sh
-    sleep 5
   elif [ "START_KAFKA" = "$OPERATION" ];
   then
     start_if_needed kafka\.Kafka Kafka 10 "$KAFKA_DIR/bin/kafka-server-start.sh" "$KAFKA_DIR/config/server.properties"
@@ -301,14 +267,6 @@ run() {
   then
     "$STORM_DIR/bin/storm" kill -w 0 test-topo || true
     sleep 10
-  elif [ "START_JSTORM_TOPOLOGY" = "$OPERATION" ];
-  then
-    "$JSTORM_DIR/bin/jstorm.py" jar ./jstorm-benchmarks/target/jstorm-benchmarks-0.1.0.jar jstorm.benchmark.AdvertisingTopology test-topo -conf $CONF_FILE
-    sleep 15
-  elif [ "STOP_JSTORM_TOPOLOGY" = "$OPERATION" ];
-  then
-    "$JSTORM_DIR/bin/jstorm.py" kill test-topo
-    sleep 15
   elif [ "START_SPARK_PROCESSING" = "$OPERATION" ];
   then
     "$SPARK_DIR/bin/spark-submit" --master spark://${SPARK_MASTER_HOST}:7077 --class spark.benchmark.KafkaRedisAdvertisingStream ./spark-benchmarks/target/spark-benchmarks-0.1.0.jar "$CONF_FILE" &
@@ -357,19 +315,6 @@ run() {
   then
     stop_if_needed hazelcast-benchmarks hazelcast-benchmarks
     rm -rf /tmp/kafka-streams/
-  elif [ "START_HERON_PROCESSING" = "$OPERATION" ];
-      then
-        heron submit local ./heron-benchmarks/target/heron-benchmarks-0.1.0.jar heron.benchmark.AdvertisingHeron test-topo -conf $CONF_FILE  --verbose
-        sleep 5
-  elif [ "STOP_HERON_PROCESSING" = "$OPERATION" ];
-       then
-       heron kill local test-topo
-  elif [ "START_HERON" = "$OPERATION" ];
-       then
-        heron-admin standalone cluster start
-  elif [ "STOP_HERON" = "$OPERATION" ];
-       then
-       yes yes | heron-admin standalone cluster stop &
   elif [ "STORM_TEST" = "$OPERATION" ];
   then
     run "START_ZK"
@@ -382,21 +327,6 @@ run() {
     run "STOP_LOAD"
     run "STOP_STORM_TOPOLOGY"
     run "STOP_STORM"
-    run "STOP_KAFKA"
-    run "STOP_REDIS"
-    run "STOP_ZK"
-  elif [ "JSTORM_TEST" = "$OPERATION" ];
-  then
-    run "START_ZK"
-    run "START_REDIS"
-    run "START_KAFKA"
-    run "START_JSTORM"
-    run "START_JSTORM_TOPOLOGY"
-    run "START_LOAD"
-    sleep ${TEST_TIME}
-    run "STOP_LOAD"
-    run "STOP_JSTORM_TOPOLOGY"
-    run "STOP_JSTORM"
     run "STOP_KAFKA"
     run "STOP_REDIS"
     run "STOP_ZK"
@@ -459,21 +389,6 @@ run() {
     run "STOP_KAFKA"
     run "STOP_REDIS"
     run "STOP_ZK"
- elif [ "HERON_TEST" = "$OPERATION" ];
- then
-    run "START_ZK"
-    run "START_REDIS"
-    run "START_KAFKA"
-    run "START_HERON"
-    run "START_HERON_PROCESSING"
-    run "START_LOAD"
-    sleep ${TEST_TIME}
-    run "STOP_LOAD"
-    run "STOP_HERON_PROCESSING"
-    run "STOP_HERON"
-    run "STOP_KAFKA"
-    run "STOP_REDIS"
-    run "STOP_ZK"
   elif [ "KAFKA_TEST" = "$OPERATION" ];
   then
     run "START_ZK_KAFKA_STREAM"
@@ -500,8 +415,6 @@ run() {
     run "STOP_KAFKA_PROCESSING"
     run "STOP_KAFKA"
     run "STOP_KAFKA_STREAM"
-    run "STOP_HERON_PROCESSING"
-    run "STOP_HERON"
     run "STOP_REDIS"
     run "STOP_ZK"
     run "STOP_ZK_KAFKA_STREAM"
@@ -530,13 +443,9 @@ run() {
     echo "STOP_FLINK: kill flink processes"
     echo "START_SPARK: run spark processes"
     echo "STOP_SPARK: kill spark processes"
-    echo "START_HERON: run the Heron test processing"
-    echo "STOP_HERON: kill the Heron test processing"
     echo 
     echo "START_STORM_TOPOLOGY: run the storm test topology"
     echo "STOP_STORM_TOPOLOGY: kill the storm test topology"
-    echo "START_HERON_PROCESSING: run the heron test topology"
-    echo "STOP_HERON_PROCESSING: kill the heron test topology"
     echo "START_FLINK_PROCESSING: run the flink test processing"
     echo "STOP_FLINK_PROCESSING: kill the flink test processing"
     echo "START_KAFKA_PROCESSING: run the kafka test processing"
@@ -551,7 +460,6 @@ run() {
     echo "STORM_TEST: run Storm test (assumes SETUP is done)"
     echo "FLINK_TEST: run Flink test (assumes SETUP is done)"
     echo "SPARK_TEST: run Spark test (assumes SETUP is done)"
-    echo "HERON_TEST: run Heron test (assumes SETUP is done)"
     echo "KAFKA_TEST: run Kafka test (assumes SETUP is done)"
     echo "JET_TEST: run Hazelcast test (assumes SETUP is done)"
     echo "STOP_ALL: stop everything"
