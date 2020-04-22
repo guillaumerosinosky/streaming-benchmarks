@@ -19,7 +19,7 @@ SPARK_DIR="spark-$SPARK_VERSION-bin-hadoop2.6"
 HAZELCAST_DIR="hazelcast-jet-$HAZELCAST_VERSION"
 
 #Get one of the closet apache mirrors
-APACHE_MIRROR=$(curl 'https://www.apache.org/dyn/closer.cgi' |   grep -o '<strong>[^<]*</strong>' |   sed 's/<[^>]*>//g' |   head -1)
+APACHE_MIRROR="https://archive.apache.org/dist"
 
 ZK_HOST="localhost"
 ZK_PORT="2181"
