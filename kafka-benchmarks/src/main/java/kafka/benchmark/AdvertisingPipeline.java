@@ -28,8 +28,6 @@ import java.util.Map;
 import java.util.Properties;
 
 
-
-
 public class AdvertisingPipeline {
 
     private static final Logger logger = LoggerFactory.getLogger(AdvertisingPipeline.class);
@@ -94,7 +92,7 @@ public class AdvertisingPipeline {
         logger.info(redisServerHost);
 
         Properties config = new Properties();
-        config.put(StreamsConfig.TIMESTAMP_EXTRACTOR_CLASS_CONFIG, TimestampExtractorImpl.class);
+//        config.put(StreamsConfig.TIMESTAMP_EXTRACTOR_CLASS_CONFIG, TimestampExtractorImpl.class);
         config.put(StreamsConfig.APPLICATION_ID_CONFIG, "kafka-benchmark");
         config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServerHosts);
         config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
@@ -149,13 +147,7 @@ public class AdvertisingPipeline {
         }
 
         @Override
-        public KeyValue<String, EnrichedData> punctuate(long l) {
-            return null;
-        }
-
-        @Override
         public void close() {
-
         }
     }
 

@@ -14,7 +14,6 @@ import benchmark.common.Utils
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, Dataset, ForeachWriter, SparkSession}
 import org.json.JSONObject
-import org.sedis._
 import redis.clients.jedis._
 
 import scala.collection.Iterator

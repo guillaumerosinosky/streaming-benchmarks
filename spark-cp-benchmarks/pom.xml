@@ -16,12 +16,6 @@
     <artifactId>spark-cp-benchmarks</artifactId>
     <description>Spark Structured Streaming Benchmark</description>
 
-    <repositories>
-        <repository>
-            <id>org.sedis</id>
-            <url>http://pk11-scratch.googlecode.com/svn/trunk</url>
-        </repository>
-    </repositories>
 
     <dependencies>
 
@@ -55,10 +49,6 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming_${scala.binary.version}</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.sedis</groupId>
-            <artifactId>sedis_${scala.binary.version}</artifactId>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>

@@ -13,7 +13,6 @@ import org.apache.spark.streaming.{Milliseconds, StreamingContext}
 
 import org.apache.spark.SparkConf
 import org.json.JSONObject
-import org.sedis._
 import redis.clients.jedis._
 
 import scala.collection.Iterator

@@ -39,10 +39,6 @@
             <artifactId>jedis</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.sedis</groupId>
-            <artifactId>sedis_${scala.binary.version}</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.kafka</groupId>
             <artifactId>kafka-streams</artifactId>
             <version>${kafka.stream.version}</version>
