@@ -16,7 +16,6 @@ Licensed under the terms of the Apache License 2.0. Please see LICENSE file in t
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spark.version>3.5.0</spark.version>
-        <spark-cp.version>3.5.0</spark-cp.version>
         <kafka.version>3.6.1</kafka.version>
         <kafka.stream.version>3.6.1</kafka.stream.version>
         <flink.version>1.18.1</flink.version>

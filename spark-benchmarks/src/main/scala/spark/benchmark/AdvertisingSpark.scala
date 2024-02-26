@@ -21,12 +21,12 @@ import scala.collection.JavaConverters._
 import scala.compat.Platform.currentTime
 
 
-object KafkaRedisAdvertisingStream {
+object AdvertisingSpark {
 
 
   case class AdsEvent(user_id: String, page_id: String, ad_id: String, ad_type: String, event_type: String, event_time: String, ip_address: String)
 
-  object AdsEvent {
+  private object AdsEvent {
     def apply(rawStr: String): AdsEvent = {
       val parser = new JSONObject(rawStr)
       AdsEvent(
@@ -44,15 +44,14 @@ object KafkaRedisAdvertisingStream {
 
   case class AdsEnriched(campaign_id: String, ad_id: String, event_time: String)
 
-  case class AdsCalculated(ad_id: String, campaign_id: String, window_time: Long)
+  private case class AdsCalculated(ad_id: String, campaign_id: String, window_time: Long)
 
   case class AdsCounted(campaign_id: String, window_time: Long, count: Long = 0)
 
 
-  def main(args: Array[String]) {
-
-    //        val commonConfig = Utils.findAndReadConfigFile("./conf/localConf.yaml", true).asInstanceOf[java.util.Map[String, Any]];
-    val commonConfig = Utils.findAndReadConfigFile(args(0), true).asInstanceOf[java.util.Map[String, Any]];
+  def main(args: Array[String]): Unit = {
+    val commonConfig = Utils.findAndReadConfigFile("./conf/localConf.yaml", true).asInstanceOf[java.util.Map[String, Any]];
+//    val commonConfig = Utils.findAndReadConfigFile(args(0), true).asInstanceOf[java.util.Map[String, Any]];
     val timeDivisor = commonConfig.get("time.divisor") match {
       case n: Number => n.longValue()
       case other => throw new ClassCastException(other + " not a Number")
@@ -85,7 +84,7 @@ object KafkaRedisAdvertisingStream {
 
 
     // Create context with 2 second batch interval
-    //    val sparkConf = new SparkConf().setAppName("KafkaRedisAdvertisingStream")
+    //    val sparkConf = new SparkConf().setAppName("AdvertisingSpark")
     //    val ssc = new StreamingContext(sparkConf, Milliseconds(batchSize))
 
 
@@ -102,7 +101,7 @@ object KafkaRedisAdvertisingStream {
       case other => throw new ClassCastException(other + " not a List[String]")
     }
     val kafkaPort = commonConfig.get("kafka.port") match {
-      case n: Number => n.toString()
+      case n: Number => n.toString
       case other => throw new ClassCastException(other + " not a Number")
     }
 

@@ -13,12 +13,11 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>spark-cp-benchmarks</artifactId>
+    <artifactId>spark-benchmarks</artifactId>
     <description>Spark Structured Streaming Benchmark</description>
 
 
     <dependencies>
-
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
@@ -39,20 +38,22 @@
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql_${scala.binary.version}</artifactId>
-            <version>${spark-cp.version}</version>
+            <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-sql-kafka-0-10_${scala.binary.version}</artifactId>
-            <version>${spark-cp.version}</version>
+            <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
             <artifactId>spark-streaming_${scala.binary.version}</artifactId>
+            <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>
             <artifactId>scala-library</artifactId>
+            <version>${scala.version}</version>
         </dependency>
         <dependency>
             <groupId>com.yahoo.stream</groupId>
@@ -70,7 +71,7 @@
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
-                <version>3.2.2</version>
+                <version>4.8.1</version>
                 <executions>
                     <execution>
                         <id>eclipse-add-source</id>
