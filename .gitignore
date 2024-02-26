@@ -16,7 +16,7 @@ flink-1.*
 heron-0.*
 kafka_*
 redis-*
-spark-2.*
+spark-3.*
 jstorm-2.*
 dump.rdb
 nohup.out
