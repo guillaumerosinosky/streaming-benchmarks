@@ -24,7 +24,7 @@ Licensed under the terms of the Apache License 2.0. Please see LICENSE file in t
         <hazelcast.version>0.6</hazelcast.version>
         <storm.version>1.2.1</storm.version>
         <scala.binary.version>2.13</scala.binary.version>
-        <scala.version>2.11.11</scala.version>
+        <scala.version>2.13.13</scala.version>
         <json.version>20140107</json.version>
         <jedis.version>2.4.2</jedis.version>
         <slf4j.version>1.7.7</slf4j.version>
@@ -130,7 +130,6 @@ Licensed under the terms of the Apache License 2.0. Please see LICENSE file in t
         <module>hazelcast-benchmarks</module>
         <module>kafka-benchmarks</module>
         <module>spark-benchmarks</module>
-        <module>spark-cp-benchmarks</module>
     </modules>
 
     <build>

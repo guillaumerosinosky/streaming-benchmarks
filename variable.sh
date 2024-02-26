@@ -10,6 +10,11 @@ FLINK_VERSION=${FLINK_VERSION:-"1.18.1"}
 SPARK_VERSION=${SPARK_VERSION:-"3.5.0"}
 HAZELCAST_VERSION=${HAZELCAST_VERSION:-"0.6"}
 
+        <flink.kafka.connector.version>3.0.2-1.18</flink.kafka.connector.version>
+        <scala.binary.version>2.13</scala.binary.version>
+        <scala.version>2.11.11</scala.version>
+
+
 STORM_DIR="apache-storm-$STORM_VERSION"
 REDIS_DIR="redis-$REDIS_VERSION"
 KAFKA_DIR="kafka_$SCALA_BIN_VERSION-$KAFKA_VERSION"

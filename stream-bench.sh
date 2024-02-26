@@ -116,7 +116,15 @@ run() {
   elif [ "SETUP_BENCHMARK" = "$OPERATION" ];
   then
     
-    $MVN clean install -Dspark.version="$SPARK_VERSION" -Dkafka.version="$KAFKA_VERSION" -Dkafka.stream.version="$KAFKA_STREAM_VERSION" -Dhazelcast.version="$HAZELCAST_VERSION" -Dflink.version="$FLINK_VERSION" -Dstorm.version="$STORM_VERSION" -Dscala.binary.version="$SCALA_BIN_VERSION" -Dscala.version="$SCALA_BIN_VERSION.$SCALA_SUB_VERSION"
+    $MVN clean install \
+      -Dspark.version="$SPARK_VERSION" \
+      -Dkafka.version="$KAFKA_VERSION" \
+      -Dkafka.stream.version="$KAFKA_STREAM_VERSION" \
+      -Dhazelcast.version="$HAZELCAST_VERSION" \
+      -Dflink.version="$FLINK_VERSION" \
+      -Dstorm.version="$STORM_VERSION" \
+      -Dscala.binary.version="$SCALA_BIN_VERSION" \
+      -Dscala.version="$SCALA_BIN_VERSION.$SCALA_SUB_VERSION"
   elif [ "SETUP_REDIS" = "$OPERATION" ];
   then
 

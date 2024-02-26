@@ -303,8 +303,6 @@ function changeTps(){
     runCommandLoadServers "sed -i \"s/TPS:-${INITIAL_TPS}/TPS:-$1/g\" stream-benchmarking/variable.sh" "nohup"
 }
 
-
-
 function startRedis {
     echo "Starting Redis"
     runCommandRedisServer "${START_REDIS_CMD}" "nohup"
@@ -584,23 +582,6 @@ case $1 in
     ;;
     clean)
         cleanResult
-    ;;
-    resize_up)
-        runForRedisDroplets "${C4}"
-        runForKafkaDroplets "${C16}"
-        runForStreamDroplets "${C16}"
-
-    ;;
-    resize_down)
-        runForRedisDroplets "${C2}"
-        runForKafkaDroplets "${C2}"
-        runForStreamDroplets "${C2}"
-    ;;
-    power_off)
-        runOnAllDroplets "${DG_POWER_OFF}"
-    ;;
-    power_on)
-        runOnAllDroplets "${DG_POWER_ON}"
     ;;
     result)
         getResultFromStreamServer "result/$1/TPS_4000_DURATION_600"
