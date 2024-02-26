@@ -18,7 +18,7 @@ sudo apt-get install build-essential -y
 
 sudo add-apt-repository ppa:deadsnakes/ppa
 sudo apt-get update
-sudo apt-get install python2.7
+sudo apt-get install python2.7 -y
 
 wget -O- https://raw.githubusercontent.com/nicolargo/glancesautoinstall/master/install.sh | sudo /bin/bash
 
