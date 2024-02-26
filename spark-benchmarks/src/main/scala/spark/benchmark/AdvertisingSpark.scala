@@ -7,19 +7,15 @@
 
 package spark.benchmark
 
-import java.util
-import java.util.UUID
-
 import benchmark.common.Utils
 import org.apache.spark.sql.streaming.Trigger
 import org.apache.spark.sql.{DataFrame, Dataset, ForeachWriter, SparkSession}
 import org.json.JSONObject
 import redis.clients.jedis._
 
-import scala.collection.Iterator
+import java.util
+import java.util.UUID
 import scala.collection.JavaConverters._
-import scala.compat.Platform.currentTime
-
 
 object AdvertisingSpark {
 
@@ -40,17 +36,17 @@ object AdvertisingSpark {
     }
   }
 
-  case class AdsFiltered(ad_id: String, event_time: String)
+  private case class AdsFiltered(ad_id: String, event_time: String)
 
-  case class AdsEnriched(campaign_id: String, ad_id: String, event_time: String)
+  private case class AdsEnriched(campaign_id: String, ad_id: String, event_time: String)
 
   private case class AdsCalculated(ad_id: String, campaign_id: String, window_time: Long)
 
-  case class AdsCounted(campaign_id: String, window_time: Long, count: Long = 0)
+  private case class AdsCounted(campaign_id: String, window_time: Long, count: Long = 0)
 
 
   def main(args: Array[String]): Unit = {
-    val commonConfig = Utils.findAndReadConfigFile("./conf/localConf.yaml", true).asInstanceOf[java.util.Map[String, Any]];
+    val commonConfig = Utils.findAndReadConfigFile("./conf/localConf.yaml", true).asInstanceOf[java.util.Map[String, Any]]
 //    val commonConfig = Utils.findAndReadConfigFile(args(0), true).asInstanceOf[java.util.Map[String, Any]];
     val timeDivisor = commonConfig.get("time.divisor") match {
       case n: Number => n.longValue()
@@ -147,15 +143,15 @@ object AdvertisingSpark {
 
     val writer = new ForeachWriter[((String, Long), Long)] {
 
-      override def open(partitionId: Long, version: Long) = {
+      override def open(partitionId: Long, version: Long): Boolean = {
         true
       }
 
-      override def process(value: ((String, Long), Long)) = {
+      override def process(value: ((String, Long), Long)): Unit = {
         writeRedisTopLevel(AdsCounted(value._1._1, value._1._2, value._2), redisHost)
       }
 
-      override def close(errorOrNull: Throwable) = {
+      override def close(errorOrNull: Throwable): Unit = {
       }
     }
     val writeToConsole = totalEventsPerCampaignTime
@@ -166,29 +162,29 @@ object AdvertisingSpark {
     spark.streams.awaitAnyTermination()
   }
 
-  def joinHosts(hosts: Seq[String], port: String): String = {
-    val joined = new StringBuilder("");
+  private def joinHosts(hosts: Seq[String], port: String): String = {
+    val joined = new StringBuilder("")
     hosts.foreach({
-      joined.append(",").append(_).append(":").append(port);
+      joined.append(",").append(_).append(":").append(port)
     })
-    return joined.toString().substring(1);
+    joined.toString().substring(1)
   }
 
-  def queryRedisTopLevel(eventsIterator: Iterator[AdsFiltered], redisHost: String): Iterator[AdsEnriched] = {
+  private def queryRedisTopLevel(eventsIterator: Iterator[AdsFiltered], redisHost: String): Iterator[AdsEnriched] = {
     val pool = new Pool(new JedisPool(new JedisPoolConfig(), redisHost, 6379, 2000))
-    var ad_to_campaign = new util.HashMap[String, String]();
+    val ad_to_campaign = new util.HashMap[String, String]()
     val eventsIteratorMap = eventsIterator.map(event => queryRedis(pool, ad_to_campaign, event))
-    pool.underlying.getResource.close
-    return eventsIteratorMap
+    pool.underlying.getResource.close()
+    eventsIteratorMap
   }
 
-  def queryRedis(pool: Pool, ad_to_campaign: util.HashMap[String, String], event: AdsFiltered): AdsEnriched = {
+  private def queryRedis(pool: Pool, ad_to_campaign: util.HashMap[String, String], event: AdsFiltered): AdsEnriched = {
     val ad_id = event.ad_id
     val campaign_id_cache = ad_to_campaign.get(ad_id)
     if (campaign_id_cache == null) {
       pool.withJedisClient { client =>
         val campaign_id_temp = Dress.up(client).get(ad_id)
-        if (campaign_id_temp != None) {
+        if (campaign_id_temp.isDefined) {
           val campaign_id = campaign_id_temp.get
           ad_to_campaign.put(ad_id, campaign_id)
           AdsEnriched(campaign_id, event.ad_id, event.event_time)
@@ -202,11 +198,11 @@ object AdvertisingSpark {
     }
   }
 
-  def writeRedisTopLevel(campaign_window_counts: AdsCounted, redisHost: String) {
+  private def writeRedisTopLevel(campaign_window_counts: AdsCounted, redisHost: String): Unit = {
 
     val pool = new Pool(new JedisPool(new JedisPoolConfig(), redisHost, 6379, 2000))
     writeWindow(pool, campaign_window_counts)
-    pool.underlying.getResource.close
+    pool.underlying.getResource.close()
 
   }
 
@@ -218,11 +214,11 @@ object AdvertisingSpark {
     pool.withJedisClient { client =>
 
       val dressUp = Dress.up(client)
-      var windowUUID = dressUp.hmget(campaign, window_timestamp)(0)
+      var windowUUID = dressUp.hmget(campaign, window_timestamp).head.get
       if (windowUUID == null) {
         windowUUID = UUID.randomUUID().toString
         dressUp.hset(campaign, window_timestamp, windowUUID)
-        var windowListUUID: String = dressUp.hmget(campaign, "windows")(0)
+        var windowListUUID: String = dressUp.hmget(campaign, "windows").head.get
         if (windowListUUID == null) {
           windowListUUID = UUID.randomUUID.toString
           dressUp.hset(campaign, "windows", windowListUUID)
@@ -230,7 +226,7 @@ object AdvertisingSpark {
         dressUp.lpush(windowListUUID, window_timestamp)
       }
       dressUp.hincrBy(windowUUID, "seen_count", window_seenCount)
-      dressUp.hset(windowUUID, "time_updated", currentTime.toString)
+      dressUp.hset(windowUUID, "time_updated", System.currentTimeMillis().toString)
       return window_seenCount.toString
     }
 
