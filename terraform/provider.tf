@@ -22,6 +22,10 @@ variable "SSH_KEY" {
   sensitive = true
 }
 
+variable "SSH_PRIVATE_KEY" {
+  sensitive = true
+}
+
 provider "digitalocean" {
   token = var.DO_TOKEN
 }
