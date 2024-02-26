@@ -16,7 +16,7 @@ sudo apt-get install gcc -y
 sudo apt-get install tcl -y
 sudo apt-get install build-essential -y
 
-sudo add-apt-repository ppa:deadsnakes/ppa
+sudo add-apt-repository ppa:deadsnakes/ppa -y
 sudo apt-get update
 sudo apt-get install python2.7 -y
 
