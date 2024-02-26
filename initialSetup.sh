@@ -9,7 +9,7 @@ sudo apt-get install openjdk-17-jdk -y
 sudo apt-get install maven -y
 
 source /etc/environment
-echo $JAVA_HOME
+echo "$JAVA_HOME"
 
 sudo apt-get install make -y
 sudo apt-get install gcc -y
