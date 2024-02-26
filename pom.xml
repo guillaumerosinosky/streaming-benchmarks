@@ -15,11 +15,10 @@ Licensed under the terms of the Apache License 2.0. Please see LICENSE file in t
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <spark.version>3.5.0</spark.version>
+        <spark.version>3.5.1</spark.version>
         <kafka.version>3.6.1</kafka.version>
         <kafka.stream.version>3.6.1</kafka.stream.version>
         <flink.version>1.18.1</flink.version>
-        <flink.kafka.connector.version>3.0.2-1.18</flink.kafka.connector.version>
         <hazelcast.version>4.5.4</hazelcast.version>
         <storm.version>2.6.1</storm.version>
         <scala.binary.version>2.13</scala.binary.version>

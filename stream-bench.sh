@@ -152,7 +152,7 @@ run() {
   then
     
     #Fetch Flink
-    FLINK_FILE="$FLINK_DIR-bin-hadoop27-scala_${SCALA_BIN_VERSION}.tgz"
+    FLINK_FILE="$FLINK_DIR-bin-scala_${SCALA_BIN_VERSION_12}.tgz"
     fetch_untar_file "$FLINK_FILE" "$APACHE_MIRROR/flink/flink-$FLINK_VERSION/$FLINK_FILE"
   elif [ "SETUP_SPARK" = "$OPERATION" ];
   then
