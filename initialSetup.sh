@@ -1,4 +1,8 @@
 #! /usr/bin/env bash
+
+echo "Unattended-Upgrade::Automatic-Reboot \"true\";" >> /etc/apt/apt.conf.d/50unattended-upgrades
+echo "Unattended-Upgrade::Automatic-Reboot-WithUsers \"true\";" >> /etc/apt/apt.conf.d/50unattended-upgrades
+
 sudo apt-get update -y
 sudo apt-cache search openjdk
 sudo apt-get install openjdk-17-jdk -y
