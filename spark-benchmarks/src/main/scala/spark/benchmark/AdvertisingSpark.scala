@@ -1,10 +1,3 @@
-/*
- * Copyright 2015, Yahoo Inc.
- * Licensed under the terms of the Apache License 2.0. Please see LICENSE file in the project root for terms.
- */
-
-// scalastyle:off println
-
 package spark.benchmark
 
 import benchmark.common.Utils
@@ -15,7 +8,7 @@ import redis.clients.jedis._
 
 import java.util
 import java.util.UUID
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 
 object AdvertisingSpark {
 
@@ -169,7 +162,7 @@ object AdvertisingSpark {
     })
     joined.toString().substring(1)
   }
-
+  //noinspection DuplicatedCode
   private def queryRedisTopLevel(eventsIterator: Iterator[AdsFiltered], redisHost: String): Iterator[AdsEnriched] = {
     val pool = new Pool(new JedisPool(new JedisPoolConfig(), redisHost, 6379, 2000))
     val ad_to_campaign = new util.HashMap[String, String]()
@@ -198,6 +191,7 @@ object AdvertisingSpark {
     }
   }
 
+  //noinspection DuplicatedCode
   private def writeRedisTopLevel(campaign_window_counts: AdsCounted, redisHost: String): Unit = {
 
     val pool = new Pool(new JedisPool(new JedisPoolConfig(), redisHost, 6379, 2000))

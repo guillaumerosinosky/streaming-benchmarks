@@ -130,9 +130,9 @@ run() {
 
     #Fetch and build Redis
     REDIS_FILE="$REDIS_DIR.tar.gz"
-    echo $REDIS_FILE
+    echo "$REDIS_FILE"
     fetch_untar_file "$REDIS_FILE" "http://download.redis.io/releases/$REDIS_FILE"
-    cd $REDIS_DIR
+    cd "$REDIS_DIR"
     $MAKE
     cd ..
   elif [ "SETUP_KAFKA" = "$OPERATION" ];
@@ -140,6 +140,7 @@ run() {
     
     #Fetch Kafka
     KAFKA_FILE="$KAFKA_DIR.tgz"
+    echo "$KAFKA_FILE"
     fetch_untar_file "$KAFKA_FILE" "$APACHE_MIRROR/kafka/$KAFKA_VERSION/$KAFKA_FILE"
   elif [ "SETUP_KAFKA_STREAM" = "$OPERATION" ];
   then
@@ -243,7 +244,7 @@ run() {
     start_if_needed org.apache.flink.runtime.jobmanager.JobManager Flink 1 ${FLINK_DIR}/bin/start-cluster.sh
   elif [ "STOP_FLINK" = "$OPERATION" ];
   then
-    ${FLINK_DIR}/bin/stop-cluster.sh
+    "${FLINK_DIR}"/bin/stop-cluster.sh
   elif [ "START_JET" = "$OPERATION" ];
   then
     start_if_needed HazelcastJet HazelcastJet 1 ${HAZELCAST_DIR}/bin/jet-start.sh
