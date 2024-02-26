@@ -170,7 +170,7 @@ run() {
   then
     #Fetch Hazelcast
     HAZELCAST_FILE="$HAZELCAST_DIR.tar.gz"
-    fetch_untar_file "$HAZELCAST_FILE" "https://download.hazelcast.com/jet/$HAZELCAST_FILE"
+    fetch_untar_file "$HAZELCAST_FILE" "https://github.com/hazelcast/hazelcast-jet/releases/download/v$HAZELCAST_VERSION/$HAZELCAST_FILE"
   elif [ "START_STORM_ZK" = "$OPERATION" ];
   then
     start_if_needed dev_zookeeper_storm ZooKeeperStorm 10 "$STORM_DIR/bin/storm" dev-zookeeper_storm

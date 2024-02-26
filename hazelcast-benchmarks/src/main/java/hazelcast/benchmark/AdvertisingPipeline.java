@@ -7,14 +7,13 @@ package hazelcast.benchmark;
 import benchmark.common.Utils;
 import benchmark.common.advertising.CampaignProcessorCommon;
 import benchmark.common.advertising.RedisAdCampaignCache;
-import com.hazelcast.core.ITopic;
 import com.hazelcast.jet.Jet;
 import com.hazelcast.jet.JetInstance;
 import com.hazelcast.jet.core.AbstractProcessor;
 import com.hazelcast.jet.kafka.KafkaSources;
 import com.hazelcast.jet.pipeline.Pipeline;
-import com.hazelcast.jet.pipeline.Sink;
 import com.hazelcast.jet.pipeline.Sinks;
+import com.hazelcast.topic.ITopic;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -34,7 +33,6 @@ import java.util.function.Consumer;
 public class AdvertisingPipeline {
 
     private static final Logger logger = LoggerFactory.getLogger(AdvertisingPipeline.class);
-    private static final String deserializeBolt = "DeserializeBolt";
 
     public static class AdsFiltered {
 
@@ -128,8 +126,9 @@ public class AdvertisingPipeline {
         map = new HashMap<>();
         Pipeline pipeline = Pipeline.create();
         pipeline
-                .drawFrom(KafkaSources.kafka(properties, kafkaTopic))
+                .readFrom(KafkaSources.kafka(properties, kafkaTopic))
 //                .setLocalParallelism(parallel)
+                .withoutTimestamps()
                 .map(objectObjectEntry -> deserializeBolt(objectObjectEntry.getValue().toString()))
 //                .setLocalParallelism(parallel)
                 .filter(tuple -> tuple._5().equals("view"))
@@ -145,7 +144,7 @@ public class AdvertisingPipeline {
 //                .window(WindowDefinition.tumbling(TimeUnit.SECONDS.toMillis(10)))
 //                .groupingKey(AdsEnriched::getCampaign_id)
 //                .aggregate(AggregateOperations.counting(), (winStart, winEnd, key, result) -> Tuple2.apply(Tuple2.apply(key, winStart), result))
-                .drainTo(Sinks.logger());
+                .writeTo(Sinks.logger());
 
         instance.newJob(pipeline);
 
@@ -216,18 +215,6 @@ public class AdvertisingPipeline {
         topic.addMessageListener(event -> consumer.accept(event.getMessageObject()));
     }
 
-    private static Sink<Tuple2<Tuple2<String, Long>, Long>> buildTopicSink() {
-        return Sinks.<ITopic<Tuple2<Tuple2<String, Long>, Long>>, Tuple2<Tuple2<String, Long>, Long>>
-                builder((jet) -> jet.getHazelcastInstance().getTopic("topic")).onReceiveFn(ITopic::publish).build();
-    }
-
-//    private static void writeRedisTopLevel(Tuple2<Tuple2<String, Long>, Long> campaign_window_counts, String redisHost) {
-//        JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
-//        JedisPool jedis = new JedisPool(new JedisPoolConfig(), redisHost, 6379, 2000);
-//
-//        writeWindow(jedis, campaign_window_counts);
-//        jedis.getResource().close();
-//    }
 
     private static void writeWindow(Jedis jedis, Tuple2<Tuple2<String, Long>, Long> campaign_window_counts) {
         Tuple2<String, Long> campaign_window_pair = campaign_window_counts._1;
