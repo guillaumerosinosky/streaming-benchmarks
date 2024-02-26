@@ -16,34 +16,34 @@ sed -i 's/taskmanager.heap.mb: 15360/taskmanager.heap.mb: 30720/g' /root/stream-
 sed -i 's/taskmanager.numberOfTaskSlots: 8/taskmanager.numberOfTaskSlots: 16/g' /root/stream-benchmarking/"${FLINK_DIR}"/conf/flink-conf.yaml
 sed -i 's/jobmanager.heap.mb: 1024/jobmanager.heap.mb: 15360/g' /root/stream-benchmarking/"${FLINK_DIR}"/conf/flink-conf.yaml
 
-cp /dev/null /root/stream-benchmarking/"${FLINK_DIR}"/conf/slaves
+cp /dev/null /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
 # shellcheck disable=SC2129
-echo "stream-node02" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/slaves
-echo "stream-node03" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/slaves
-echo "stream-node04" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/slaves
-echo "stream-node05" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/slaves
-echo "stream-node06" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/slaves
-echo "stream-node07" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/slaves
-echo "stream-node08" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/slaves
-echo "stream-node09" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/slaves
-echo "stream-node10" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/slaves
+echo "stream-node02" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
+echo "stream-node03" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
+echo "stream-node04" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
+echo "stream-node05" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
+echo "stream-node06" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
+echo "stream-node07" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
+echo "stream-node08" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
+echo "stream-node09" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
+echo "stream-node10" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
 
 
 cp /dev/null /root/stream-benchmarking/"${FLINK_DIR}"/conf/masters
 echo "stream-node01" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/masters
 
 #SPARK SETUP
-cp /dev/null /root/stream-benchmarking/"${SPARK_DIR}"/conf/slaves
+cp /dev/null /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
 # shellcheck disable=SC2129
-echo "stream-node02" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/slaves
-echo "stream-node03" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/slaves
-echo "stream-node04" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/slaves
-echo "stream-node05" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/slaves
-echo "stream-node06" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/slaves
-echo "stream-node07" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/slaves
-echo "stream-node08" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/slaves
-echo "stream-node09" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/slaves
-echo "stream-node10" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/slaves
+echo "stream-node02" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
+echo "stream-node03" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
+echo "stream-node04" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
+echo "stream-node05" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
+echo "stream-node06" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
+echo "stream-node07" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
+echo "stream-node08" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
+echo "stream-node09" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
+echo "stream-node10" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
 
 
 cp /dev/null /root/stream-benchmarking/"${SPARK_DIR}"/conf/spark-env.sh

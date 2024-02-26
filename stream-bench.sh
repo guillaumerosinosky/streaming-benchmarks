@@ -115,7 +115,6 @@ run() {
     run "SETUP_SPARK"
   elif [ "SETUP_BENCHMARK" = "$OPERATION" ];
   then
-    
     $MVN clean install \
       -Dspark.version="$SPARK_VERSION" \
       -Dkafka.version="$KAFKA_VERSION" \
@@ -127,7 +126,6 @@ run() {
       -Dscala.version="$SCALA_BIN_VERSION.$SCALA_SUB_VERSION"
   elif [ "SETUP_REDIS" = "$OPERATION" ];
   then
-
     #Fetch and build Redis
     REDIS_FILE="$REDIS_DIR.tar.gz"
     echo "$REDIS_FILE"
@@ -137,7 +135,6 @@ run() {
     cd ..
   elif [ "SETUP_KAFKA" = "$OPERATION" ];
   then
-    
     #Fetch Kafka
     KAFKA_FILE="$KAFKA_DIR.tgz"
     echo "$KAFKA_FILE"
