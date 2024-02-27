@@ -2,6 +2,8 @@
 
 echo "Unattended-Upgrade::Automatic-Reboot \"true\";" >> /etc/apt/apt.conf.d/50unattended-upgrades
 echo "Unattended-Upgrade::Automatic-Reboot-WithUsers \"true\";" >> /etc/apt/apt.conf.d/50unattended-upgrades
+echo "\$nrconf{restart} = 'a';" >> /etc/needrestart/needrestart.conf
+sudo needrestart
 
 sudo apt-get update -y
 sudo apt-cache search openjdk
