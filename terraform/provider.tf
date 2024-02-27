@@ -4,6 +4,10 @@ terraform {
       source  = "digitalocean/digitalocean"
       version = ">= 2.34.1"
     }
+    ansible = {
+      source = "ansible/ansible"
+      version = "1.2.0"
+    }
   }
   cloud {
     organization = "Revsolz"
@@ -12,6 +16,10 @@ terraform {
       name = "fracsol-experiment"
     }
   }
+}
+
+provider "ansible" {
+  # Configuration options
 }
 
 variable "DO_TOKEN" {
