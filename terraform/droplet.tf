@@ -18,7 +18,8 @@ resource "digitalocean_droplet" "zookeeper" {
 
   provisioner "remote-exec" {
     inline = [
-      "git clone https://github.com/elkhan-shahverdi/streaming-benchmarks.git"
+      "git clone https://github.com/elkhan-shahverdi/streaming-benchmarks.git",
+      "./streaming-benchmarks/initial-setup.sh",
     ]
   }
 }
