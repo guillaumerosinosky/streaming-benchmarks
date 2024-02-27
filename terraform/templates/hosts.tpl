@@ -21,4 +21,4 @@ ${ip}
 [redis]
 %{ for ip in redis_nodes ~}
 ${ip}
-%{ eyesndfor ~}
+%{ endfor ~}
