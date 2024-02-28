@@ -171,5 +171,5 @@ resource "local_file" "hosts_cfg" {
       redis_nodes = digitalocean_droplet.redis.*.ipv4_address
     }
   )
-  filename = "./ansible/inventory/hosts.cfg"
+  filename = "../ansible/inventory/hosts.cfg"
 }

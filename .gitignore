@@ -27,3 +27,4 @@ data/updated.txt
 # Local .terraform directories
 **/.terraform/*
 *.tfstate.*
+*.tfstate
