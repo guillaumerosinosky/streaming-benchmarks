@@ -24,7 +24,3 @@ result_old
 *.zip
 data/seen.txt
 data/updated.txt
-# Local .terraform directories
-**/.terraform/*
-*.tfstate.*
-*.tfstate
