@@ -9,13 +9,13 @@ terraform {
       version = "1.2.0"
     }
   }
-  cloud {
-    organization = "Revsolz"
-
-    workspaces {
-      name = "fracsol-experiment"
-    }
-  }
+#  cloud {
+#    organization = "Revsolz"
+#
+#    workspaces {
+#      name = "fracsol-experiment"
+#    }
+#  }
 }
 
 provider "ansible" {
@@ -28,10 +28,12 @@ variable "DO_TOKEN" {
 
 variable "SSH_KEY" {
   sensitive = true
+  default = "~/.ssh/spa-experiment.pub"
 }
 
 variable "SSH_PRIVATE_KEY" {
   sensitive = true
+  default = "~/.ssh/spa-experiment"
 }
 
 provider "digitalocean" {
@@ -41,5 +43,5 @@ provider "digitalocean" {
 # Create a new SSH key
 resource "digitalocean_ssh_key" "ssh-key" {
   name       = "ssh-key"
-  public_key = var.SSH_KEY
+  public_key = file(var.SSH_KEY)
 }

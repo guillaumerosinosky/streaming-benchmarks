@@ -9,12 +9,12 @@ variable "droplet-region" {
 }
 
 variable "kafka-node-count" {
-  default = 5
+  default = 3
   type    = number
 }
 
 variable "zookeeper-node-count" {
-  default = 3
+  default = 1
   type    = number
 }
 

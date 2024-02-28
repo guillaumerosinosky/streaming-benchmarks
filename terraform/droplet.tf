@@ -12,7 +12,7 @@ resource "digitalocean_droplet" "zookeeper" {
     user        = "root"
     type        = "ssh"
     host        = self.ipv4_address
-    private_key = var.SSH_PRIVATE_KEY
+    private_key = file(var.SSH_PRIVATE_KEY)
     timeout     = "2m"
   }
 
@@ -37,7 +37,7 @@ resource "digitalocean_droplet" "kafka" {
     user        = "root"
     type        = "ssh"
     host        = self.ipv4_address
-    private_key = var.SSH_PRIVATE_KEY
+    private_key = file(var.SSH_PRIVATE_KEY)
     timeout     = "2m"
   }
 
@@ -62,7 +62,7 @@ resource "digitalocean_droplet" "stream" {
     user        = "root"
     type        = "ssh"
     host        = self.ipv4_address
-    private_key = var.SSH_PRIVATE_KEY
+    private_key = file(var.SSH_PRIVATE_KEY)
     timeout     = "2m"
   }
 
@@ -87,7 +87,7 @@ resource "digitalocean_droplet" "load" {
     user        = "root"
     type        = "ssh"
     host        = self.ipv4_address
-    private_key = var.SSH_PRIVATE_KEY
+    private_key = file(var.SSH_PRIVATE_KEY)
     timeout     = "2m"
   }
 
@@ -111,7 +111,7 @@ resource "digitalocean_droplet" "redis" {
     user        = "root"
     type        = "ssh"
     host        = self.ipv4_address
-    private_key = var.SSH_PRIVATE_KEY
+    private_key = file(var.SSH_PRIVATE_KEY)
     timeout     = "2m"
   }
 
@@ -171,5 +171,5 @@ resource "local_file" "hosts_cfg" {
       redis_nodes = digitalocean_droplet.redis.*.ipv4_address
     }
   )
-  filename = "../ansible/inventory/hosts.cfg"
+  filename = "./ansible/inventory/hosts.cfg"
 }
