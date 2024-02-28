@@ -275,18 +275,11 @@ run() {
     sleep 10
   elif [ "START_SPARK_PROCESSING" = "$OPERATION" ];
   then
-    "$SPARK_DIR/bin/spark-submit" --master spark://${SPARK_MASTER_HOST}:7077 --class spark.benchmark.KafkaRedisAdvertisingStream ./spark-benchmarks/target/spark-benchmarks-0.1.0.jar "$CONF_FILE" &
+    "$SPARK_DIR/bin/spark-submit" --class spark.benchmark.AdvertisingSpark ./spark-benchmarks/target/spark-benchmarks-0.1.0.jar "$CONF_FILE" &
     sleep 5
   elif [ "STOP_SPARK_PROCESSING" = "$OPERATION" ];
   then
-    stop_if_needed spark.benchmark.KafkaRedisAdvertisingStream "Spark Client Process"
-   elif [ "START_SPARK_CP_PROCESSING" = "$OPERATION" ];
-  then
-    "$SPARK_DIR/bin/spark-submit" --class spark.benchmark.KafkaRedisAdvertisingStream ./spark-cp-benchmarks/target/spark-cp-benchmarks-0.1.0.jar "$CONF_FILE" &
-    sleep 5
-  elif [ "STOP_SPARK_CP_PROCESSING" = "$OPERATION" ];
-  then
-    stop_if_needed spark.benchmark.KafkaRedisAdvertisingStream "Spark Client Process"
+    stop_if_needed spark.benchmark.AdvertisingSpark "Spark Client Process"
   elif [ "START_KAFKA_PROCESSING" = "$OPERATION" ];
   then
     java -Xms3G -Xmx30G -jar ./kafka-benchmarks/target/kafka-benchmarks-0.1.0.jar -conf $CONF_FILE &
@@ -323,7 +316,6 @@ run() {
     rm -rf /tmp/kafka-streams/
   elif [ "STORM_TEST" = "$OPERATION" ];
   then
-    run "START_ZK"
     run "START_REDIS"
     run "START_KAFKA"
     run "START_STORM"
@@ -335,10 +327,8 @@ run() {
     run "STOP_STORM"
     run "STOP_KAFKA"
     run "STOP_REDIS"
-    run "STOP_ZK"
   elif [ "FLINK_TEST" = "$OPERATION" ];
   then
-    run "START_ZK"
     run "START_REDIS"
     run "START_KAFKA"
     run "START_FLINK"
@@ -350,10 +340,8 @@ run() {
     run "STOP_FLINK"
     run "STOP_KAFKA"
     run "STOP_REDIS"
-    run "STOP_ZK"
   elif [ "JET_TEST" = "$OPERATION" ];
   then
-    run "START_ZK"
     run "START_REDIS"
     run "START_KAFKA"
     run "START_JET"
@@ -364,10 +352,8 @@ run() {
     run "STOP_JET"
     run "STOP_KAFKA"
     run "STOP_REDIS"
-    run "STOP_ZK"
   elif [ "SPARK_TEST" = "$OPERATION" ];
   then
-    run "START_ZK"
     run "START_REDIS"
     run "START_KAFKA"
     run "START_SPARK"
@@ -379,10 +365,8 @@ run() {
     run "STOP_SPARK"
     run "STOP_KAFKA"
     run "STOP_REDIS"
-    run "STOP_ZK"
   elif [ "KAFKA_TEST" = "$OPERATION" ];
   then
-    run "START_ZK_KAFKA_STREAM"
     run "START_REDIS"
     run "START_KAFKA_STREAM"
     run "START_KAFKA_PROCESSING"
@@ -392,7 +376,6 @@ run() {
     run "STOP_KAFKA_PROCESSING"
     run "STOP_KAFKA_STREAM"
     run "STOP_REDIS"
-    run "STOP_ZK_KAFKA_STREAM"
   elif [ "STOP_ALL" = "$OPERATION" ];
   then
     run "STOP_LOAD"
@@ -407,7 +390,6 @@ run() {
     run "STOP_KAFKA"
     run "STOP_KAFKA_STREAM"
     run "STOP_REDIS"
-    run "STOP_ZK"
     run "STOP_ZK_KAFKA_STREAM"
     run "STOP_ZK_STORM"
   else
@@ -445,8 +427,6 @@ run() {
     echo "START_JET_PROCESSING: run the Hazelcast Jet test processing"
     echo "START_SPARK_PROCESSING: run the spark test processing"
     echo "STOP_SPARK_PROCESSING: kill the spark test processing"
-    echo "START_SPARK_CP_PROCESSING: run the spark structured streaming test processing"
-    echo "STOP_SPARK_CP_PROCESSING: kill the spark structured streaming test processing"
     echo
     echo "STORM_TEST: run Storm test (assumes SETUP is done)"
     echo "FLINK_TEST: run Flink test (assumes SETUP is done)"
