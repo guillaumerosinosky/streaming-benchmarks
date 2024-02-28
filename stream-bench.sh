@@ -251,11 +251,11 @@ run() {
   elif [ "START_SPARK" = "$OPERATION" ];
   then
     start_if_needed org.apache.spark.deploy.master.Master SparkMaster 5 $SPARK_DIR/sbin/start-master.sh -h localhost -p 7077
-    start_if_needed org.apache.spark.deploy.worker.Worker SparkSlave 5 $SPARK_DIR/sbin/start-slave.sh spark://localhost:7077
+    start_if_needed org.apache.spark.deploy.worker.Worker SparkWorker 5 $SPARK_DIR/sbin/start-worker.sh spark://localhost:7077
   elif [ "STOP_SPARK" = "$OPERATION" ];
   then
     stop_if_needed org.apache.spark.deploy.master.Master SparkMaster
-    stop_if_needed org.apache.spark.deploy.worker.Worker SparkSlave
+    stop_if_needed org.apache.spark.deploy.worker.Worker SparkWorker
     sleep 3
   elif [ "START_LOAD" = "$OPERATION" ];
   then

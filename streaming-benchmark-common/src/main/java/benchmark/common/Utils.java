@@ -6,6 +6,7 @@ package benchmark.common;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.SafeConstructor;
 
@@ -22,8 +23,8 @@ public class Utils {
         try {
             in = getConfigFileInputStream(name);
             if (null != in) {
-                Yaml yaml = new Yaml(new SafeConstructor());
-                Map ret = (Map) yaml.load(new InputStreamReader(in));
+                Yaml yaml = new Yaml(new SafeConstructor(new LoaderOptions()));
+                Map ret = yaml.load(new InputStreamReader(in));
                 if (null != ret) {
                     return new HashMap(ret);
                 } else {

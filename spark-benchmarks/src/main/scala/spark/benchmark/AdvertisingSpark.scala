@@ -40,7 +40,7 @@ object AdvertisingSpark {
 
   def main(args: Array[String]): Unit = {
 //    val commonConfig = Utils.findAndReadConfigFile("./conf/localConf.yaml", true).asInstanceOf[java.util.Map[String, Any]]
-    val commonConfig = Utils.findAndReadConfigFile(args(0), true).asInstanceOf[java.util.Map[String, Any]];
+    val commonConfig = Utils.findAndReadConfigFile(args(0), true).asInstanceOf[java.util.Map[String, Any]]
     val timeDivisor = commonConfig.get("time.divisor") match {
       case n: Number => n.longValue()
       case other => throw new ClassCastException(other + " not a Number")
