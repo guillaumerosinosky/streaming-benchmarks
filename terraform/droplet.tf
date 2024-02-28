@@ -98,8 +98,8 @@ resource "digitalocean_droplet" "load" {
   }
 }
 
-resource "digitalocean_droplet" "redis" {
-  name     = "redis"
+resource "digitalocean_droplet" "redisdo" {
+  name     = "redisdo"
   image    = var.droplet-os-version
   region   = var.droplet-region
   size     = var.droplet-size
@@ -122,12 +122,11 @@ resource "digitalocean_droplet" "redis" {
   }
 }
 
-
 output "redis_private_ip" {
-  value = digitalocean_droplet.redis.ipv4_address_private
+  value = digitalocean_droplet.redisdo.ipv4_address_private
 }
 output "redis_public_ip" {
-  value = digitalocean_droplet.redis.ipv4_address
+  value = digitalocean_droplet.redisdo.ipv4_address
 }
 
 output "zookeeper_private_ip" {
@@ -154,7 +153,6 @@ output "stream_public_ip" {
 output "load_private_ip" {
   value = digitalocean_droplet.load.*.ipv4_address_private
 }
-
 output "load_public_ip" {
   value = digitalocean_droplet.load.*.ipv4_address
 }

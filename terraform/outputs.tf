@@ -17,7 +17,7 @@ resource "local_file" "hosts_cfg" {
         for node in digitalocean_droplet.load.* : node
       ]
       redis_nodes = [
-        for node in digitalocean_droplet.redis.* : node
+        for node in digitalocean_droplet.redisdo.* : node
       ]
     }
   )

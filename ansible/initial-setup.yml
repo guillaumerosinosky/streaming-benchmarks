@@ -1,16 +1,48 @@
 ---
-- hosts: all
+- name: Initial server setup
+  hosts: all
   become: yes
-  become_user: root
+  vars:
+    java_home: "{{ lookup('env','JAVA_HOME') }}"
+  tasks:
+    - name: Update and install necessary packages
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop:
+        - openjdk-17-jdk
+        - maven
+        - make
+        - gcc
+        - tcl
+        - build-essential
+        - python2.7
 
-  pre_tasks:
-    - name: update all packages
+    - name: Install Glances from script
+      ansible.builtin.shell: |
+        wget -O- https://raw.githubusercontent.com/nicolargo/glancesautoinstall/master/install.sh | /bin/bash
+      args:
+        executable: /bin/bash
+        creates: /usr/bin/glances
+
+    - name: Download and install Leiningen
+      block:
+        - name: Download Leiningen script
+          get_url:
+            url: https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein
+            dest: "/tmp/lein"
+            mode: '0755'
+
+        - name: Move Leiningen to /usr/local/bin
+          ansible.builtin.copy:
+            src: "/tmp/lein"
+            dest: "/usr/local/bin/lein"
+            remote_src: yes
+            mode: '0755'
+      when: ansible_os_family == "Debian"
+
+  handlers:
+    - name: Update apt cache
       apt:
         update_cache: yes
-        upgrade: dist
-
-  roles:
-    - java
-    - maven
-    - git
-    - news_api
