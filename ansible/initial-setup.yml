@@ -18,14 +18,12 @@
         - tcl
         - build-essential
         - python2.7
-
     - name: Install Glances from script
       ansible.builtin.shell: |
         wget -O- https://raw.githubusercontent.com/nicolargo/glancesautoinstall/master/install.sh | /bin/bash
       args:
         executable: /bin/bash
         creates: /usr/bin/glances
-
     - name: Download and install Leiningen
       block:
         - name: Download Leiningen script
@@ -41,13 +39,15 @@
             remote_src: yes
             mode: '0755'
       when: ansible_os_family == "Debian"
-
     - name: Clone a repository
       ansible.builtin.git:
         repo: 'https://github.com/elkhan-shahverdi/streaming-benchmarks.git'
         dest: /root/streaming-benchmarks
         version: master  # or specify a different branch or tag
-
+    - name: "Build hosts file"
+      lineinfile: dest=/etc/hosts regexp='.*{{ item }}$' line="{{ hostvars[item].ansible_default_ipv4.address }} {{item}}" state=present
+      when: hostvars[item].ansible_default_ipv4.address is defined
+      with_items: groups['all']
   handlers:
     - name: Update apt cache
       apt:

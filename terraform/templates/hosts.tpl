@@ -1,9 +1,3 @@
-[defaults]
-forks = 20
-
-[ssh_connection]
-pipelining = True
-
 [all:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 
