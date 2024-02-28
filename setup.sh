@@ -26,7 +26,7 @@ echo "stream-node-06" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
 echo "stream-node-07" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
 echo "stream-node-08" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
 echo "stream-node-09" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
-echo "stream-node10" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
+echo "stream-node-10" >> /root/stream-benchmarking/"${FLINK_DIR}"/conf/workers
 
 
 cp /dev/null /root/stream-benchmarking/"${FLINK_DIR}"/conf/masters
@@ -43,7 +43,7 @@ echo "stream-node-06" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
 echo "stream-node-07" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
 echo "stream-node-08" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
 echo "stream-node-09" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
-echo "stream-node10" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
+echo "stream-node-10" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/workers
 
 
 cp /dev/null /root/stream-benchmarking/"${SPARK_DIR}"/conf/spark-env.sh
@@ -150,7 +150,7 @@ mvn install:install-file -Dfile=/root/stream-benchmarking/jstorm-2.4.0/jstorm-co
 #scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node-07:~/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
 #scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node-08:~/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
 #scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node-09:~/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
-#scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node10:~/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
+#scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node-10:~/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
 #scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node11:~/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
 
 

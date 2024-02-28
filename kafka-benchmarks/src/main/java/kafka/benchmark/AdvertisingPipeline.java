@@ -17,6 +17,8 @@ import org.apache.kafka.streams.kstream.Transformer;
 import org.apache.kafka.streams.processor.AbstractProcessor;
 import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.processor.TimestampExtractor;
+import org.apache.kafka.streams.processor.api.ContextualProcessor;
+import org.apache.kafka.streams.processor.api.Record;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,23 +37,17 @@ public class AdvertisingPipeline {
     private static int timeDivisor;
     private static String redisServerHost;
 
-
-    static class EnrichedData {
-
-        EnrichedData(String ad_id, String event_time) {
-            this.ad_id = ad_id;
-            this.event_time = event_time;
-        }
-
-        String ad_id;
-        String campaign_id;
-        String event_time;
-    }
-
-
     public static class RowData implements Serializable {
 
-        RowData(String user_id, String page_id, String ad_id, String ad_type, String event_type, String event_time, String ip_address) {
+        RowData(
+                String user_id,
+                String page_id,
+                String ad_id,
+                String ad_type,
+                String event_type,
+                String event_time,
+                String ip_address
+        ) {
             this.user_id = user_id;
             this.page_id = page_id;
             this.ad_id = ad_id;
@@ -78,12 +74,13 @@ public class AdvertisingPipeline {
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(opts, args);
         String configPath = cmd.getOptionValue("conf");
+        //noinspection rawtypes
         Map commonConfig = Utils.findAndReadConfigFile(configPath, true);
 
         redisServerHost = (String) commonConfig.get("redis.host");
         String kafkaTopic = (String) commonConfig.get("kafka.topic");
         String kafkaServerHosts = Utils.joinHosts((List<String>) commonConfig.get("kafka.brokers"),
-                Integer.toString((Integer) commonConfig.get("kafka.port")));
+                                                  Integer.toString((Integer) commonConfig.get("kafka.port")));
 
         timeDivisor = ((Number) commonConfig.get("time.divisor")).intValue();
 
@@ -92,7 +89,7 @@ public class AdvertisingPipeline {
         logger.info(redisServerHost);
 
         Properties config = new Properties();
-//        config.put(StreamsConfig.TIMESTAMP_EXTRACTOR_CLASS_CONFIG, TimestampExtractorImpl.class);
+        //        config.put(StreamsConfig.TIMESTAMP_EXTRACTOR_CLASS_CONFIG, TimestampExtractorImpl.class);
         config.put(StreamsConfig.APPLICATION_ID_CONFIG, "kafka-benchmark");
         config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServerHosts);
         config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
@@ -100,11 +97,11 @@ public class AdvertisingPipeline {
 
         StreamsBuilder builder = new StreamsBuilder();
         builder.stream(kafkaTopic)
-                .mapValues(o -> deserializeBolt(o.toString()))
-                .filter((o, rowData) -> rowData.event_type.equals("view"))
-                .mapValues(rowData -> new EnrichedData(rowData.ad_id, rowData.event_time))
-                .transform(RedisJoinBolt::new)
-                .process(CampaignProcessor::new);
+               .mapValues(o -> deserializeBolt(o.toString()))
+               .filter((o, rowData) -> rowData.event_type.equals("view"))
+               .mapValues(rowData -> new EnrichedData(rowData.ad_id, rowData.event_time))
+               .transform(RedisJoinBolt::new)
+               .process(CampaignProcessor::new);
         KafkaStreams streams = new KafkaStreams(builder.build(), config);
         streams.start();
 
@@ -128,7 +125,6 @@ public class AdvertisingPipeline {
         RedisAdCampaignCache redisAdCampaignCache;
 
         @Override
-        @SuppressWarnings("unchecked")
         public void init(ProcessorContext context) {
             this.redisAdCampaignCache = new RedisAdCampaignCache(redisServerHost);
             this.redisAdCampaignCache.prepare();
@@ -152,21 +148,17 @@ public class AdvertisingPipeline {
     }
 
 
-    public static class CampaignProcessor extends AbstractProcessor<String, EnrichedData> {
+    public static class CampaignProcessor extends ContextualProcessor<String, EnrichedData, String, EnrichedData> {
 
         CampaignProcessorCommon campaignProcessorCommon;
 
-        @Override
-        @SuppressWarnings("unchecked")
         public void init(ProcessorContext context) {
             this.campaignProcessorCommon = new CampaignProcessorCommon(redisServerHost, (long) timeDivisor);
             this.campaignProcessorCommon.prepare();
         }
 
-
         @Override
-        public void process(String s, EnrichedData enrichedData) {
-            this.campaignProcessorCommon.execute(enrichedData.campaign_id, enrichedData.event_time);
+        public void process(Record record) {
 
         }
     }
@@ -175,12 +167,12 @@ public class AdvertisingPipeline {
     private static RowData deserializeBolt(String value) {
         JSONObject obj = new JSONObject(value);
         return new RowData(obj.getString("user_id"),
-                obj.getString("page_id"),
-                obj.getString("ad_id"),
-                obj.getString("ad_type"),
-                obj.getString("event_type"),
-                obj.getString("event_time"),
-                obj.getString("ip_address"));
+                           obj.getString("page_id"),
+                           obj.getString("ad_id"),
+                           obj.getString("ad_type"),
+                           obj.getString("event_type"),
+                           obj.getString("event_time"),
+                           obj.getString("ip_address"));
     }
 
 
