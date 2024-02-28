@@ -82,8 +82,8 @@ fetch_untar_file() {
 }
 
 create_kafka_topic() {
-    local count=`$KAFKA_DIR/bin/kafka-topics.sh --describe --bootstrap-server "$BOOTSTRAP_SERVERS" --topic ${TOPIC} 2>/dev/null | grep -c ${TOPIC}`
-    if [[ "$count" = "0" ]];
+    local count=`$KAFKA_DIR/bin/kafka-topics.sh --describe --bootstrap-server "$BOOTSTRAP_SERVERS" --topic ${TOPIC} 2>/dev/null | grep -c "does not exist"`
+    if [[ "$count" = "1" ]];
     then
         $KAFKA_DIR/bin/kafka-topics.sh --create --bootstrap-server "$BOOTSTRAP_SERVERS" --replication-factor 1 --partitions ${PARTITIONS} --topic ${TOPIC}
     else
@@ -92,8 +92,8 @@ create_kafka_topic() {
 }
 
 create_kafka_stream_topic() {
-    local count=`$KAFKA_STREAM_DIR/bin/kafka-topics.sh --describe --bootstrap-server "$BOOTSTRAP_SERVERS" --topic ${TOPIC} 2>/dev/null | grep -c ${TOPIC}`
-    if [[ "$count" = "0" ]];
+    local count=`$KAFKA_STREAM_DIR/bin/kafka-topics.sh --describe --bootstrap-server "$BOOTSTRAP_SERVERS" --topic ${TOPIC} 2>/dev/null | grep -c "does not exist"`
+    if [[ "$count" = "1" ]];
     then
         $KAFKA_STREAM_DIR/bin/kafka-topics.sh --create --bootstrap-server "$BOOTSTRAP_SERVERS" --replication-factor 1 --partitions ${PARTITIONS} --topic ${TOPIC}
     else
@@ -244,10 +244,10 @@ run() {
     "${FLINK_DIR}"/bin/stop-cluster.sh
   elif [ "START_JET" = "$OPERATION" ];
   then
-    start_if_needed HazelcastJet HazelcastJet 1 ${HAZELCAST_DIR}/bin/jet-start.sh
+    start_if_needed HazelcastJet HazelcastJet 1 ${HAZELCAST_DIR}/bin/jet-start
   elif [ "STOP_JET" = "$OPERATION" ];
   then
-    ${HAZELCAST_DIR}/bin/jet-stop.sh
+    ${HAZELCAST_DIR}/bin/jet-stop
   elif [ "START_SPARK" = "$OPERATION" ];
   then
     start_if_needed org.apache.spark.deploy.master.Master SparkMaster 5 $SPARK_DIR/sbin/start-master.sh -h localhost -p 7077
@@ -311,7 +311,7 @@ run() {
     fi
   elif [ "START_JET_PROCESSING" = "$OPERATION" ];
   then
-    start_if_needed HazelcastJetProcessing "Hazelcast Jet Processing" 3 "$HAZELCAST_DIR/bin/jet-submit.sh" ./hazelcast-benchmarks/target/hazelcast-benchmarks-0.1.0.jar -conf $CONF_FILE
+    start_if_needed HazelcastJetProcessing "Hazelcast Jet Processing" 3 "$HAZELCAST_DIR/bin/jet" ./hazelcast-benchmarks/target/hazelcast-benchmarks-0.1.0.jar -conf $CONF_FILE
     sleep 3
   elif [ "START_JET_EMBEDDED_PROCESSING" = "$OPERATION" ];
   then
@@ -376,21 +376,6 @@ run() {
     sleep ${TEST_TIME}
     run "STOP_LOAD"
     run "STOP_SPARK_PROCESSING"
-    run "STOP_SPARK"
-    run "STOP_KAFKA"
-    run "STOP_REDIS"
-    run "STOP_ZK"
-  elif [ "SPARK_CP_TEST" = "$OPERATION" ];
-  then
-    run "START_ZK"
-    run "START_REDIS"
-    run "START_KAFKA"
-    run "START_SPARK"
-    run "START_SPARK_CP_PROCESSING"
-    run "START_LOAD"
-    sleep ${TEST_TIME}
-    run "STOP_LOAD"
-    run "STOP_SPARK_CP_PROCESSING"
     run "STOP_SPARK"
     run "STOP_KAFKA"
     run "STOP_REDIS"
