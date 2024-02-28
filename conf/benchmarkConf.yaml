@@ -2,16 +2,16 @@
 # Licensed under the terms of the Apache License 2.0. Please see LICENSE file in the project root for terms.
 
 kafka.brokers:
-    - "kafka-node01"
-    - "kafka-node02"
-    - "kafka-node03"
-    - "kafka-node04"
-    - "kafka-node05"
+    - "kafka-node-01"
+    - "kafka-node-02"
+    - "kafka-node-03"
+    - "kafka-node-04"
+    - "kafka-node-05"
 
 zookeeper.servers:
-    - "zookeeper-node01"
-    - "zookeeper-node02"
-    - "zookeeper-node03"
+    - "zookeeper-node-01"
+    - "zookeeper-node-02"
+    - "zookeeper-node-03"
 
 kafka.port: 9092
 zookeeper.port: 2181
@@ -30,7 +30,7 @@ storm.ack: "enabled"
 
 #Spark Specific
 spark.batchtime: 3000
-spark.master: "spark://stream-node01:7077"
+spark.master: "spark://stream-node-01:7077"
 spark.app.name: "KafkaRedisAdvertisingStream"
 
 #Time Divisor

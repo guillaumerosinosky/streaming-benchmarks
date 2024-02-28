@@ -19,12 +19,12 @@ variable "zookeeper-node-count" {
 }
 
 variable "load-node-count" {
-  default = 1
+  default = 10
   type    = number
 }
 
 variable "stream-node-count" {
-  default = 1
+  default = 10
   type    = number
 }
 

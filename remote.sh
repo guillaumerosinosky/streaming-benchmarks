@@ -38,8 +38,8 @@ CHANGE_TPS_CMD="sed -i “s/TPS:-${INITIAL_TPS}/TPS:-$TPS/g” $PROJECT_DIR/vari
 LOAD_START_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_LOAD;"
 LOAD_STOP_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_LOAD;"
 
-DELETE_TOPIC="cd $PROJECT_DIR/$KAFKA_FOLDER; ./bin/kafka-topics.sh --delete --zookeeper zookeeper-node01:2181,zookeeper-node02:2181,zookeeper-node03:2181 --topic $TOPIC;"
-CREATE_TOPIC="cd $PROJECT_DIR/$KAFKA_FOLDER; ./bin/kafka-topics.sh --create --zookeeper zookeeper-node01:2181,zookeeper-node02:2181,zookeeper-node03:2181 --replication-factor 1 --partitions $PARTITIONS --topic $TOPIC;"
+DELETE_TOPIC="cd $PROJECT_DIR/$KAFKA_FOLDER; ./bin/kafka-topics.sh --delete --zookeeper zookeeper-node-01:2181,zookeeper-node-02:2181,zookeeper-node-03:2181 --topic $TOPIC;"
+CREATE_TOPIC="cd $PROJECT_DIR/$KAFKA_FOLDER; ./bin/kafka-topics.sh --create --zookeeper zookeeper-node-01:2181,zookeeper-node-02:2181,zookeeper-node-03:2181 --replication-factor 1 --partitions $PARTITIONS --topic $TOPIC;"
 
 START_MONITOR_CPU="top -b -d 1 | grep --line-buffered Cpu > cpu.load;"
 START_MONITOR_MEM="top -b -d 1 | grep --line-buffered 'KiB Mem' > mem.load;"

@@ -33,5 +33,5 @@ CONF_FILE=./conf/localConf.yaml
 TPS=${TPS:-10}
 TEST_TIME=${TEST_TIME:-60}
 
-SPARK_MASTER_HOST="stream-node01"
+SPARK_MASTER_HOST="stream-node-01"
 BATCH="3000"
