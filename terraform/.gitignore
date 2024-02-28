@@ -11,3 +11,4 @@ crash.log
 # tfvars and plan files
 *.tfvars
 *.out
+.terraform.lock.hcl
