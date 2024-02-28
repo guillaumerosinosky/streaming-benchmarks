@@ -82,20 +82,20 @@ fetch_untar_file() {
 }
 
 create_kafka_topic() {
-    local count=`$KAFKA_DIR/bin/kafka-topics.sh --describe --zookeeper "$ZK_CONNECTIONS" --topic ${TOPIC} 2>/dev/null | grep -c ${TOPIC}`
+    local count=`$KAFKA_DIR/bin/kafka-topics.sh --describe --bootstrap-server "$BOOTSTRAP_SERVERS" --topic ${TOPIC} 2>/dev/null | grep -c ${TOPIC}`
     if [[ "$count" = "0" ]];
     then
-        $KAFKA_DIR/bin/kafka-topics.sh --create --zookeeper "$ZK_CONNECTIONS" --replication-factor 1 --partitions ${PARTITIONS} --topic ${TOPIC}
+        $KAFKA_DIR/bin/kafka-topics.sh --create --bootstrap-server "$BOOTSTRAP_SERVERS" --replication-factor 1 --partitions ${PARTITIONS} --topic ${TOPIC}
     else
         echo "Kafka topic $TOPIC already exists"
     fi
 }
 
 create_kafka_stream_topic() {
-    local count=`$KAFKA_STREAM_DIR/bin/kafka-topics.sh --describe --zookeeper "$ZK_CONNECTIONS" --topic ${TOPIC} 2>/dev/null | grep -c ${TOPIC}`
+    local count=`$KAFKA_STREAM_DIR/bin/kafka-topics.sh --describe --bootstrap-server "$BOOTSTRAP_SERVERS" --topic ${TOPIC} 2>/dev/null | grep -c ${TOPIC}`
     if [[ "$count" = "0" ]];
     then
-        $KAFKA_STREAM_DIR/bin/kafka-topics.sh --create --zookeeper "$ZK_CONNECTIONS" --replication-factor 1 --partitions ${PARTITIONS} --topic ${TOPIC}
+        $KAFKA_STREAM_DIR/bin/kafka-topics.sh --create --bootstrap-server "$BOOTSTRAP_SERVERS" --replication-factor 1 --partitions ${PARTITIONS} --topic ${TOPIC}
     else
         echo "Kafka topic $TOPIC already exists"
     fi

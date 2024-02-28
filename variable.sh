@@ -22,9 +22,8 @@ HAZELCAST_DIR="hazelcast-jet-$HAZELCAST_VERSION"
 #Get one of the closet apache mirrors
 APACHE_MIRROR="https://archive.apache.org/dist"
 
-ZK_HOST="localhost"
-ZK_PORT="2181"
-ZK_CONNECTIONS="$ZK_HOST:$ZK_PORT"
+# shellcheck disable=SC2034
+BOOTSTRAP_SERVERS="localhost:9092"
 TOPIC=${TOPIC:-"ad-events"}
 PARTITIONS=${PARTITIONS:-1}
 

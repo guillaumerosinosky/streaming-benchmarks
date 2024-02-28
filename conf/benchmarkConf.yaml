@@ -53,6 +53,6 @@ time.long: 10
 time.wait: 20
 
 ssh.user: "root"
-kafka.folder: "kafka_2.11-0.11.0.2"
+kafka.folder: "kafka_2.13-3.6.1"
 
 
