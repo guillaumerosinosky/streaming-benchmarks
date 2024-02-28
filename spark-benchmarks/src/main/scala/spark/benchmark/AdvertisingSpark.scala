@@ -8,7 +8,7 @@ import redis.clients.jedis._
 
 import java.util
 import java.util.UUID
-import scala.jdk.CollectionConverters._
+import scala.collection.JavaConverters._
 
 object AdvertisingSpark {
 

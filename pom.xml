@@ -22,8 +22,8 @@ Licensed under the terms of the Apache License 2.0. Please see LICENSE file in t
         <flink.kafka.connector.version>3.1.0-1.18</flink.kafka.connector.version>
         <hazelcast.version>4.5.4</hazelcast.version>
         <storm.version>2.6.1</storm.version>
-        <scala.binary.version>2.13</scala.binary.version>
-        <scala.version>2.13.13</scala.version>
+        <scala.binary.version>2.12</scala.binary.version>
+        <scala.version>2.12.11</scala.version>
         <json.version>20140107</json.version>
         <jedis.version>2.4.2</jedis.version>
         <slf4j.version>1.7.7</slf4j.version>

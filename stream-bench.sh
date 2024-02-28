@@ -182,13 +182,6 @@ run() {
   then
     stop_if_needed zookeeper ZooKeeper
     rm -rf /tmp/zookeeper
-  elif [ "START_ZK_KAFKA_STREAM" = "$OPERATION" ];
-  then
-    start_if_needed zookeeper ZooKeeper 10 ${KAFKA_STREAM_DIR}/bin/zookeeper-server-start.sh -daemon ${KAFKA_STREAM_DIR}/config/zookeeper.properties
-  elif [ "STOP_ZK_KAFKA_STREAM" = "$OPERATION" ];
-  then
-    stop_if_needed zookeeper ZooKeeper
-    rm -rf /tmp/zookeeper
   elif [ "START_REDIS" = "$OPERATION" ];
   then
     start_if_needed redis-server Redis 1 "$REDIS_DIR/src/redis-server" --protected-mode no
@@ -368,13 +361,13 @@ run() {
   elif [ "KAFKA_TEST" = "$OPERATION" ];
   then
     run "START_REDIS"
-    run "START_KAFKA_STREAM"
+    run "START_KAFKA"
     run "START_KAFKA_PROCESSING"
     run "START_LOAD"
     sleep ${TEST_TIME}
     run "STOP_LOAD"
     run "STOP_KAFKA_PROCESSING"
-    run "STOP_KAFKA_STREAM"
+    run "STOP_KAFKA"
     run "STOP_REDIS"
   elif [ "STOP_ALL" = "$OPERATION" ];
   then
@@ -388,9 +381,7 @@ run() {
     run "STOP_STORM"
     run "STOP_KAFKA_PROCESSING"
     run "STOP_KAFKA"
-    run "STOP_KAFKA_STREAM"
     run "STOP_REDIS"
-    run "STOP_ZK_KAFKA_STREAM"
     run "STOP_ZK_STORM"
   else
     if [ "HELP" != "$OPERATION" ];

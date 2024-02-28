@@ -14,14 +14,11 @@ import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.Transformer;
-import org.apache.kafka.streams.processor.AbstractProcessor;
-import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.processor.TimestampExtractor;
 import org.apache.kafka.streams.processor.api.ContextualProcessor;
+import org.apache.kafka.streams.processor.api.ProcessorContext;
 import org.apache.kafka.streams.processor.api.Record;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -31,8 +28,6 @@ import java.util.Properties;
 
 
 public class AdvertisingPipeline {
-
-    private static final Logger logger = LoggerFactory.getLogger(AdvertisingPipeline.class);
 
     private static int timeDivisor;
     private static String redisServerHost;
@@ -85,11 +80,8 @@ public class AdvertisingPipeline {
         timeDivisor = ((Number) commonConfig.get("time.divisor")).intValue();
 
 
-        logger.info("******************");
-        logger.info(redisServerHost);
-
         Properties config = new Properties();
-        //        config.put(StreamsConfig.TIMESTAMP_EXTRACTOR_CLASS_CONFIG, TimestampExtractorImpl.class);
+        config.put(StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG, TimestampExtractorImpl.class.getName());
         config.put(StreamsConfig.APPLICATION_ID_CONFIG, "kafka-benchmark");
         config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServerHosts);
         config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
@@ -125,7 +117,7 @@ public class AdvertisingPipeline {
         RedisAdCampaignCache redisAdCampaignCache;
 
         @Override
-        public void init(ProcessorContext context) {
+        public void init(org.apache.kafka.streams.processor.ProcessorContext context) {
             this.redisAdCampaignCache = new RedisAdCampaignCache(redisServerHost);
             this.redisAdCampaignCache.prepare();
         }
@@ -152,14 +144,17 @@ public class AdvertisingPipeline {
 
         CampaignProcessorCommon campaignProcessorCommon;
 
-        public void init(ProcessorContext context) {
+        @Override
+        public void init(final ProcessorContext<String, EnrichedData> context) {
             this.campaignProcessorCommon = new CampaignProcessorCommon(redisServerHost, (long) timeDivisor);
             this.campaignProcessorCommon.prepare();
         }
 
         @Override
         public void process(Record record) {
-
+            String campaign_id = ((EnrichedData) record.value()).campaign_id;
+            String event_time = ((EnrichedData) record.value()).event_time;
+            campaignProcessorCommon.execute(campaign_id, event_time);
         }
     }
 
