@@ -42,6 +42,12 @@
             mode: '0755'
       when: ansible_os_family == "Debian"
 
+    - name: Clone a repository
+      ansible.builtin.git:
+        repo: 'https://github.com/elkhan-shahverdi/streaming-benchmarks.git'
+        dest: /root/streaming-benchmarks
+        version: master  # or specify a different branch or tag
+
   handlers:
     - name: Update apt cache
       apt:

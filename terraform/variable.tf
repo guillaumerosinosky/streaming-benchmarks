@@ -9,7 +9,7 @@ variable "droplet-region" {
 }
 
 variable "kafka-node-count" {
-  default = 3
+  default = 6
   type    = number
 }
 

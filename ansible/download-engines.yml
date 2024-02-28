@@ -1,0 +1,52 @@
+---
+- name: Benchmark Setup
+  hosts: all
+  become: yes
+  vars:
+    working_directory: /root/streaming-benchmarks
+  pre_tasks:
+    - name: Pre-task to pull git repository
+      ansible.builtin.command: git pull origin master
+      args:
+        chdir: "{{ working_directory }}"
+  tasks:
+    - name: Build Benchmark
+      ansible.builtin.shell: ./stream-bench.sh SETUP_BENCHMARK
+      no_log: true
+      args:
+        chdir: "{{ working_directory }}"
+    - name: Setup Redis
+      ansible.builtin.shell: ./stream-bench.sh SETUP_REDIS
+      no_log: true
+      args:
+        chdir: "{{ working_directory }}"
+    - name: Setup Kafka
+      ansible.builtin.shell: ./stream-bench.sh SETUP_KAFKA
+      no_log: true
+      args:
+        chdir: "{{ working_directory }}"
+    - name: Setup Kafka Stream
+      ansible.builtin.shell: ./stream-bench.sh SETUP_KAFKA_STREAM
+      no_log: true
+      args:
+        chdir: "{{ working_directory }}"
+    - name: Setup Hazelcast
+      ansible.builtin.shell: ./stream-bench.sh SETUP_HAZELCAST
+      no_log: true
+      args:
+        chdir: "{{ working_directory }}"
+    - name: Setup Storm
+      ansible.builtin.shell: ./stream-bench.sh SETUP_STORM
+      no_log: true
+      args:
+        chdir: "{{ working_directory }}"
+    - name: Setup Flink
+      ansible.builtin.shell: ./stream-bench.sh SETUP_FLINK
+      no_log: true
+      args:
+        chdir: "{{ working_directory }}"
+    - name: Setup Spark
+      ansible.builtin.shell: ./stream-bench.sh SETUP_SPARK
+      no_log: true
+      args:
+        chdir: "{{ working_directory }}"
