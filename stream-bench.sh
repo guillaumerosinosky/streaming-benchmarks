@@ -297,7 +297,7 @@ run() {
     fi
   elif [ "START_JET_PROCESSING" = "$OPERATION" ];
   then
-    start_if_needed HazelcastJetProcessing "Hazelcast Jet Processing" 3 "$HAZELCAST_DIR/bin/jet" ./hazelcast-benchmarks/target/hazelcast-benchmarks-0.1.0.jar -conf $CONF_FILE
+    start_if_needed HazelcastJetProcessing "Hazelcast Jet Processing" 3 "$HAZELCAST_DIR/bin/jet" submit ./hazelcast-benchmarks/target/hazelcast-benchmarks-0.1.0.jar -conf $CONF_FILE
     sleep 3
   elif [ "START_JET_EMBEDDED_PROCESSING" = "$OPERATION" ];
   then

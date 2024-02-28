@@ -21,8 +21,6 @@ import org.apache.commons.cli.Options;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.json.JSONObject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 import scala.Tuple2;
 import scala.Tuple7;
@@ -31,8 +29,6 @@ import java.util.*;
 import java.util.function.Consumer;
 
 public class AdvertisingPipeline {
-
-    private static final Logger logger = LoggerFactory.getLogger(AdvertisingPipeline.class);
 
     public static class AdsFiltered {
 
@@ -88,8 +84,6 @@ public class AdvertisingPipeline {
     public static Map<String, String> map;
 
     public static void main(final String[] args) throws Exception {
-        System.setProperty("hazelcast.logging.type", "log4j");
-
         Options opts = new Options();
         opts.addOption("conf", true, "Path to the config file.");
 
@@ -206,7 +200,6 @@ public class AdvertisingPipeline {
     private static void createCustomSink(JetInstance instance, Jedis jedis) {
         ITopic<Tuple2<Tuple2<String, Long>, Long>> topic = instance.getHazelcastInstance().getTopic("topic");
         addListener(topic, e -> {
-            logger.info(e.toString());
             writeWindow(jedis, e);
         });
     }
