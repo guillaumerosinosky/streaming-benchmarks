@@ -158,18 +158,3 @@ output "load_private_ip" {
 output "load_public_ip" {
   value = digitalocean_droplet.load.*.ipv4_address
 }
-
-
-# generate inventory file for Ansible
-resource "local_file" "hosts_cfg" {
-  content = templatefile("${path.module}/templates/hosts.tpl",
-    {
-      kafka_nodes = digitalocean_droplet.kafka.*.ipv4_address
-      zookeeper_nodes = digitalocean_droplet.zookeeper.*.ipv4_address
-      stream_nodes = digitalocean_droplet.stream.*.ipv4_address
-      load_nodes = digitalocean_droplet.load.*.ipv4_address
-      redis_nodes = digitalocean_droplet.redis.*.ipv4_address
-    }
-  )
-  filename = "../ansible/inventory/hosts.cfg"
-}

@@ -1,24 +1,24 @@
 [kafka]
-%{ for ip in kafka_nodes ~}
-${ip}
+%{ for node in kafka_nodes ~}
+${node.name} ansible_host=${node.ipv4_address} ansible_private_ip=${node.ipv4_address_private}
 %{ endfor ~}
 
 [zookeeper]
-%{ for ip in zookeeper_nodes ~}
-${ip}
+%{ for node in zookeeper_nodes ~}
+${node.name} ansible_host=${node.ipv4_address} ansible_private_ip=${node.ipv4_address_private}
 %{ endfor ~}
 
 [stream]
-%{ for ip in stream_nodes ~}
-${ip}
+%{ for node in stream_nodes ~}
+${node.name} ansible_host=${node.ipv4_address} ansible_private_ip=${node.ipv4_address_private}
 %{ endfor ~}
 
 [load]
-%{ for ip in load_nodes ~}
-${ip}
+%{ for node in load_nodes ~}
+${node.name} ansible_host=${node.ipv4_address} ansible_private_ip=${node.ipv4_address_private}
 %{ endfor ~}
 
 [redis]
-%{ for ip in redis_nodes ~}
-${ip}
+%{ for node in redis_nodes ~}
+${node.name} ansible_host=${node.ipv4_address} ansible_private_ip=${node.ipv4_address_private}
 %{ endfor ~}

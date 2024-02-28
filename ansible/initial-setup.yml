@@ -1,0 +1,16 @@
+---
+- hosts: all
+  become: yes
+  become_user: root
+
+  pre_tasks:
+    - name: update all packages
+      apt:
+        update_cache: yes
+        upgrade: dist
+
+  roles:
+    - java
+    - maven
+    - git
+    - news_api
