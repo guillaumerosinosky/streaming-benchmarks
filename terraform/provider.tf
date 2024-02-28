@@ -24,6 +24,7 @@ provider "ansible" {
 
 variable "DO_TOKEN" {
   sensitive = true
+  default = "token"
 }
 
 variable "SSH_KEY" {
