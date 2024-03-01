@@ -1,8 +1,8 @@
 - name: Update /etc/hosts on all nodes
-  hosts: all
+  hosts: zookeeper
   gather_facts: yes
   tasks:
     - name: Configure /etc/hosts with all host IPs
       template:
-        src: templates/etc-hosts.tpl
+        src: etc-hosts.tpl
         dest: /etc/hosts
