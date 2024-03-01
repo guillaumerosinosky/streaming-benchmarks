@@ -24,7 +24,7 @@ resource "local_file" "hosts_cfg" {
 }
 
 resource "local_file" "etc_hosts_cfg" {
-  content = templatefile("${path.module}/templates/etc-hosts.tpl",
+  content = templatefile("${path.module}/templates/etc-hosts-private.tpl",
     {
 
       kafka_nodes = [
@@ -44,5 +44,5 @@ resource "local_file" "etc_hosts_cfg" {
       ]
     }
   )
-  filename = "../ansible/etc-hosts.cfg"
+  filename = "../ansible/etc-hosts-private.cfg"
 }

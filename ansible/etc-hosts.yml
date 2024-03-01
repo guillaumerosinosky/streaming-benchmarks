@@ -1,0 +1,11 @@
+- hosts: all
+  gather_facts: no
+
+  tasks:
+    - package:
+        name: py-dnspython
+        state: present
+    - lineinfile:
+        path: /etc/hosts
+        line: "{{ item }} ip-{{ item | replace('.', '-') }}"
+      loop: "{{ lookup('dig', 'stackoverflow.com.').split(',') }}"

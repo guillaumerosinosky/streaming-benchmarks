@@ -57,19 +57,19 @@ echo "SPARK_WORKER_MEMORY=30g" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/
 echo "SPARK_DAEMON_MEMORY=30g" >> /root/stream-benchmarking/"${SPARK_DIR}"/conf/spark-env.sh
 chmod +x /root/stream-benchmarking/"${SPARK_DIR}"/conf/spark-env.sh
 
-#STORM SETUP
-cp /dev/null /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
-# shellcheck disable=SC2129
-echo "storm.zookeeper.servers:" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
-echo "    - \"zookeeper-node-01\"" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
-echo "    - \"zookeeper-node-02\"" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
-echo "    - \"zookeeper-node-03\"" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
-echo "storm.zookeeper.port: 2181" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
-echo "nimbus.childopts: \"-Xmx3g\"" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
-echo "nimbus.seeds: [\"stream-node-01\"]" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
-echo "supervisor.childopts: \"-Xmx1g -Djava.net.preferIPv4Stack=true]\"" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
-echo "worker.childopts: \"-Xmx1g -Djava.net.preferIPv4Stack=true\"" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
-
+##STORM SETUP
+#cp /dev/null /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
+## shellcheck disable=SC2129
+#echo "storm.zookeeper.servers:" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
+#echo "    - \"zookeeper-node-01\"" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
+#echo "    - \"zookeeper-node-02\"" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
+#echo "    - \"zookeeper-node-03\"" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
+#echo "storm.zookeeper.port: 2181" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
+#echo "nimbus.childopts: \"-Xmx3g\"" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
+#echo "nimbus.seeds: [\"stream-node-01\"]" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
+#echo "supervisor.childopts: \"-Xmx1g -Djava.net.preferIPv4Stack=true]\"" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
+#echo "worker.childopts: \"-Xmx1g -Djava.net.preferIPv4Stack=true\"" >> /root/stream-benchmarking/"${STORM_DIR}"/conf/storm.yaml
+#
 
 #KAFKA SETUP
 sed -i 's/zookeeper.connect=localhost:2181/zookeeper.connect=zookeeper-node-01:2181,zookeeper-node-02:2181,zookeeper-node-03:2181/g' /root/stream-benchmarking/"${KAFKA_STREAM_DIR}"/config/server.properties
