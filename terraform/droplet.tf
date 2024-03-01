@@ -1,6 +1,6 @@
 resource "digitalocean_droplet" "zookeeper" {
   count    = var.zookeeper-node-count
-  name     = "zookeeper-node-0${(count.index + 1)}"
+  name     = "zookeeper-node-${format("%02d", (count.index + 1))}"
   image    = var.droplet-os-version
   region   = var.droplet-region
   size     = var.droplet-size
@@ -25,7 +25,7 @@ resource "digitalocean_droplet" "zookeeper" {
 
 resource "digitalocean_droplet" "kafka" {
   count    = var.kafka-node-count
-  name     = "kafka-node-0${(count.index + 1)}"
+  name     = "kafka-node-${format("%02d", (count.index + 1))}"
   image    = var.droplet-os-version
   region   = var.droplet-region
   size     = var.droplet-size
@@ -50,7 +50,7 @@ resource "digitalocean_droplet" "kafka" {
 
 resource "digitalocean_droplet" "stream" {
   count    = var.stream-node-count
-  name     = "stream-node-0${(count.index + 1)}"
+  name     = "stream-node-${format("%02d", (count.index + 1))}"
   image    = var.droplet-os-version
   region   = var.droplet-region
   size     = var.droplet-size
@@ -75,7 +75,7 @@ resource "digitalocean_droplet" "stream" {
 
 resource "digitalocean_droplet" "load" {
   count    = var.load-node-count
-  name     = "load-node-0${(count.index + 1)}"
+  name     = "load-node-${format("%02d", (count.index + 1))}"
   image    = var.droplet-os-version
   region   = var.droplet-region
   size     = var.droplet-size
