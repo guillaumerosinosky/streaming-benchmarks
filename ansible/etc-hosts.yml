@@ -1,11 +1,8 @@
-- hosts: all
-  gather_facts: no
-
+- name: Update /etc/hosts on all nodes
+  hosts: all
+  gather_facts: yes
   tasks:
-    - package:
-        name: py-dnspython
-        state: present
-    - lineinfile:
-        path: /etc/hosts
-        line: "{{ item }} ip-{{ item | replace('.', '-') }}"
-      loop: "{{ lookup('dig', 'stackoverflow.com.').split(',') }}"
+    - name: Configure /etc/hosts with all host IPs
+      template:
+        src: templates/etc-hosts.tpl
+        dest: /etc/hosts
