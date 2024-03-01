@@ -91,16 +91,6 @@ create_kafka_topic() {
     fi
 }
 
-create_kafka_stream_topic() {
-    local count=`$KAFKA_STREAM_DIR/bin/kafka-topics.sh --describe --bootstrap-server "$BOOTSTRAP_SERVERS" --topic ${TOPIC} 2>/dev/null | grep -c "does not exist"`
-    if [[ "$count" = "1" ]];
-    then
-        $KAFKA_STREAM_DIR/bin/kafka-topics.sh --create --bootstrap-server "$BOOTSTRAP_SERVERS" --replication-factor 1 --partitions ${PARTITIONS} --topic ${TOPIC}
-    else
-        echo "Kafka topic $TOPIC already exists"
-    fi
-}
-
 run() {
   OPERATION=$1
   if [ "SETUP" = "$OPERATION" ];
@@ -118,7 +108,7 @@ run() {
     $MVN clean install \
       -Dspark.version="$SPARK_VERSION" \
       -Dkafka.version="$KAFKA_VERSION" \
-      -Dkafka.stream.version="$KAFKA_STREAM_VERSION" \
+      -Dkafka.stream.version="$KAFKA_STREAM" \
       -Dhazelcast.version="$HAZELCAST_VERSION" \
       -Dflink.version="$FLINK_VERSION" \
       -Dstorm.version="$STORM_VERSION" \
@@ -139,12 +129,6 @@ run() {
     KAFKA_FILE="$KAFKA_DIR.tgz"
     echo "$KAFKA_FILE"
     fetch_untar_file "$KAFKA_FILE" "$APACHE_MIRROR/kafka/$KAFKA_VERSION/$KAFKA_FILE"
-  elif [ "SETUP_KAFKA_STREAM" = "$OPERATION" ];
-  then
-
-    #Fetch Kafka
-    KAFKA_STREAM_FILE="$KAFKA_STREAM_DIR.tgz"
-    fetch_untar_file "$KAFKA_STREAM_FILE" "$APACHE_MIRROR/kafka/$KAFKA_STREAM_VERSION/$KAFKA_STREAM_FILE"
   elif [ "SETUP_FLINK" = "$OPERATION" ];
   then
     
@@ -218,14 +202,6 @@ run() {
     start_if_needed kafka\.Kafka Kafka 10 "$KAFKA_DIR/bin/kafka-server-start.sh" "$KAFKA_DIR/config/server.properties"
     create_kafka_topic
   elif [ "STOP_KAFKA" = "$OPERATION" ];
-  then
-    stop_if_needed kafka\.Kafka Kafka
-    rm -rf /tmp/kafka-logs/
-  elif [ "START_KAFKA_STREAM" = "$OPERATION" ];
-  then
-    start_if_needed kafka\.Kafka Kafka 10 "$KAFKA_STREAM_DIR/bin/kafka-server-start.sh" "$KAFKA_STREAM_DIR/config/server.properties"
-    create_kafka_stream_topic
-  elif [ "STOP_KAFKA_STREAM" = "$OPERATION" ];
   then
     stop_if_needed kafka\.Kafka Kafka
     rm -rf /tmp/kafka-logs/
