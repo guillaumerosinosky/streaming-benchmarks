@@ -77,10 +77,19 @@ function kafka_setup() {
 }
 
 function zookeeper_setup() {
+    #ZOOKEEPER SETUP
+    mkdir /root/zookeeper -p
     # shellcheck disable=SC2129
     echo "server.1=zookeeper-node-01:2888:3888" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
     echo "server.2=zookeeper-node-02:2888:3888" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
     echo "server.3=zookeeper-node-03:2888:3888" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
+
+    sed -i 's/maxClientCnxns=0/maxClientCnxns=0/g' /root/stream-benchmarking/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
+    # shellcheck disable=SC2129
+    echo "tickTime=2000" >> /root/streaming-benchmarks/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
+    echo "initLimit=20" >> /root/streaming-benchmarks/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
+    echo "syncLimit=10" >> /root/streaming-benchmarks/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
+    echo "dataDir=/root/zookeeper" >> /root/streaming-benchmarks/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
 
     mkdir /tmp/zookeeper/ -p
     rm -rf /tmp/zookeeper/*
