@@ -4,8 +4,6 @@
 . ./variable.sh --source-only
 
 
-
-
 TPS_RANGE=1000
 TPS_LIMIT=15000
 INITIAL_TPS=${TPS}
@@ -54,14 +52,8 @@ STOP_FLINK_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_FLINK_PROCESSING;"
 
 START_SPARK_CMD="cd $PROJECT_DIR/$SPARK_DIR; ./sbin/start-all.sh;"
 STOP_SPARK_CMD="cd $PROJECT_DIR/$SPARK_DIR; ./sbin/stop-all.sh;"
-START_SPARK_RDD_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_SPARK_CP_PROCESSING;"
-STOP_SPARK_RDD_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_SPARK_CP_PROCESSING;"
-
-START_SPARK_DSTREAM_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_SPARK_PROCESSING;"
-STOP_SPARK_DSTREAM_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_SPARK_PROCESSING;"
-
-START_SPARK_DATASET_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_SPARK_CP_PROCESSING;"
-STOP_SPARK_DATASET_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_SPARK_CP_PROCESSING;"
+START_SPARK_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_SPARK_PROCESSING;"
+STOP_SPARK_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_SPARK_PROCESSING;"
 
 START_ZK_CMD="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/zookeeper-server-start.sh -daemon config/zookeeper.properties"
 STOP_ZK_CMD="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/zookeeper-server-stop.sh;"
@@ -84,11 +76,6 @@ STOP_REDIS_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_REDIS;"
 
 PULL_GIT="cd $PROJECT_DIR; git reset --hard HEAD; git pull origin master;"
 
-
-C1="{\"type\":\"resize\",\"size\":\"c-1vcpu-2gb\"}"
-C2="{\"type\":\"resize\",\"size\":\"c-2\"}"
-C4="{\"type\":\"resize\",\"size\":\"c-4\"}"
-C16="{\"type\":\"resize\",\"size\":\"c-16\"}"
 DG_POWER_OFF="{\"type\":\"power_off\"}"
 DG_POWER_ON="{\"type\":\"power_on\"}"
 
@@ -216,32 +203,12 @@ function stopSpark {
 
 function startSparkProcessing {
     echo "Starting Spark processing"
-    case $1 in
-        dstream)
-            runCommandMasterStreamServers "${START_SPARK_DSTREAM_PROC_CMD}" "nohup"
-        ;;
-        dataset)
-            runCommandMasterStreamServers "${START_SPARK_DATASET_PROC_CMD}" "nohup"
-        ;;
-        *)
-            echo "Which spark processing would you like to start"
-        ;;
-    esac
+    runCommandMasterStreamServers "${START_SPARK_PROC_CMD}" "nohup"
 }
 
 function stopSparkProcessing {
     echo "Stopping Spark processing"
-     case $1 in
-        dstream)
-            runCommandMasterStreamServers "${STOP_SPARK_DSTREAM_PROC_CMD}" "nohup"
-        ;;
-        dataset)
-            runCommandMasterStreamServers "${STOP_SPARK_DATASET_PROC_CMD}" "nohup"
-        ;;
-        *)
-            echo "Which spark processing would you like to stop"
-        ;;
-    esac
+    runCommandMasterStreamServers "${STOP_SPARK_PROC_CMD}" "nohup"
 }
 
 function startKafkaProcessing {
@@ -427,8 +394,7 @@ function stopAll (){
     stopJet
     stopFlinkProcessing
     stopFlink
-    stopSparkProcessing "dataset"
-    stopSparkProcessing "dstream"
+    stopSparkProcessing
     stopSpark
     stopStormProcessing
     stopStorm
@@ -477,8 +443,7 @@ case $1 in
         benchmarkLoop "kafka"
     ;;
     all)
-        benchmarkLoop "spark" "dataset"
-        benchmarkLoop "spark" "dstream"
+        benchmarkLoop "spark"
         benchmarkLoop "storm"
         benchmarkLoop "flink"
         benchmarkLoop "kafka"
@@ -587,8 +552,7 @@ case $1 in
         TPS=$[15000]
         changeTps ${TPS}
         runSystem $2 $3
-        #Rscript --vanilla reporting.R "spark_dstream_1000" 1000 60
-        #Rscript --vanilla reporting.R "spark_dataset_1000" 1000 60
+        #Rscript --vanilla reporting.R "spark" 1000 60
         #Rscript --vanilla reporting.R "flink" 1000 60
         #Rscript --vanilla reporting.R "storm" 1000 60
         echo "Please Enter valid command"
