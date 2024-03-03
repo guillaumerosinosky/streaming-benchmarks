@@ -87,7 +87,6 @@ function runCommandRedisServer(){
     fi
 }
 
-
 function getResultFromStreamServer(){
     counter=1
     while [ ${counter} -le ${STREAM_SERVER_COUNT} ]
@@ -107,7 +106,6 @@ function getResultFromKafkaServer(){
         ((counter++))
     done
 }
-
 
 function getResultFromRedisServer(){
     scp ${SSH_USER}@redisdo:~/stream-benchmarking/data/seen.txt $1/redis-seen.txt

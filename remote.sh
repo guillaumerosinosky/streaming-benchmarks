@@ -16,11 +16,6 @@ LONG_SLEEP=5
 WAIT_AFTER_STOP_PRODUCER=30
 WAIT_AFTER_REBOOT_SERVER=30
 
-
-# Before running kafka stream benchmark comment the first line and uncomment the second line after this line.
-KAFKA_FOLDER="kafka_2.11-0.11.0.2"
-#KAFKA_FOLDER="kafka_2.11-1.1.0"
-
 PROJECT_DIR="/root/stream-benchmarking"
 
 
@@ -38,8 +33,8 @@ CHANGE_TPS_CMD="sed -i “s/TPS:-${INITIAL_TPS}/TPS:-$TPS/g” $PROJECT_DIR/vari
 LOAD_START_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_LOAD;"
 LOAD_STOP_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_LOAD;"
 
-DELETE_TOPIC="cd $PROJECT_DIR/$KAFKA_FOLDER; ./bin/kafka-topics.sh --delete --zookeeper zookeeper-node-01:2181,zookeeper-node-02:2181,zookeeper-node-03:2181 --topic $TOPIC;"
-CREATE_TOPIC="cd $PROJECT_DIR/$KAFKA_FOLDER; ./bin/kafka-topics.sh --create --zookeeper zookeeper-node-01:2181,zookeeper-node-02:2181,zookeeper-node-03:2181 --replication-factor 1 --partitions $PARTITIONS --topic $TOPIC;"
+DELETE_TOPIC="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-topics.sh --delete --zookeeper zookeeper-node-01:2181,zookeeper-node-02:2181,zookeeper-node-03:2181 --topic $TOPIC;"
+CREATE_TOPIC="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-topics.sh --create --zookeeper zookeeper-node-01:2181,zookeeper-node-02:2181,zookeeper-node-03:2181 --replication-factor 1 --partitions $PARTITIONS --topic $TOPIC;"
 
 START_MONITOR_CPU="top -b -d 1 | grep --line-buffered Cpu > cpu.load;"
 START_MONITOR_MEM="top -b -d 1 | grep --line-buffered 'KiB Mem' > mem.load;"
@@ -68,12 +63,11 @@ STOP_SPARK_DSTREAM_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_SPARK_PROCE
 START_SPARK_DATASET_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_SPARK_CP_PROCESSING;"
 STOP_SPARK_DATASET_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_SPARK_CP_PROCESSING;"
 
+START_ZK_CMD="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/zookeeper-server-start.sh -daemon config/zookeeper.properties"
+STOP_ZK_CMD="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/zookeeper-server-stop.sh;"
 
-START_ZK_CMD="cd $PROJECT_DIR/$KAFKA_FOLDER; ./bin/zookeeper-server-start.sh -daemon config/zookeeper.properties"
-STOP_ZK_CMD="cd $PROJECT_DIR/$KAFKA_FOLDER; ./bin/zookeeper-server-stop.sh;"
-
-START_KAFKA_CMD="cd $PROJECT_DIR/$KAFKA_FOLDER; ./bin/kafka-server-start.sh -daemon config/server.properties"
-STOP_KAFKA_CMD="cd $PROJECT_DIR/$KAFKA_FOLDER; ./bin/kafka-server-stop.sh;"
+START_KAFKA_CMD="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-server-start.sh -daemon config/server.properties"
+STOP_KAFKA_CMD="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-server-stop.sh;"
 
 START_KAFKA_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_KAFKA_PROCESSING;"
 STOP_KAFKA_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_KAFKA_PROCESSING;"
