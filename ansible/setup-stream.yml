@@ -1,0 +1,27 @@
+---
+- name: Stream Engine Setup
+  hosts: stream
+  become: yes
+  vars:
+    working_directory: /root/streaming-benchmarks
+  pre_tasks:
+    - name: Pre-task to pull git repository
+      ansible.builtin.command: git pull origin master
+      args:
+        chdir: "{{ working_directory }}"
+  tasks:
+    - name: Setup Flink Engine
+      ansible.builtin.shell: ./setup.sh flink
+      no_log: true
+      args:
+        chdir: "{{ working_directory }}"
+#    - name: Setup Spark
+#      ansible.builtin.shell: ./setup.sh spark
+#      no_log: true
+#      args:
+#        chdir: "{{ working_directory }}"
+#    - name: Setup Kafka
+#      ansible.builtin.shell: ./setup.sh kafka
+#      no_log: true
+#      args:
+#        chdir: "{{ working_directory }}"

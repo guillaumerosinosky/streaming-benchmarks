@@ -1,6 +1,6 @@
 ---
-- name: Zookeeper setup
-  hosts: zookeeper
+- name: Kafka broker setup
+  hosts: kafka
   become: yes
   vars:
     working_directory: /root/streaming-benchmarks
@@ -10,8 +10,8 @@
       args:
         chdir: "{{ working_directory }}"
   tasks:
-    - name: Zookeeper setup
-      ansible.builtin.shell: ./setup.sh zookeeper
+    - name: Setup Kafka broker
+      ansible.builtin.shell: ./setup.sh kafka
       no_log: true
       args:
         chdir: "{{ working_directory }}"
