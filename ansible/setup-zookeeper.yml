@@ -12,6 +12,5 @@
   tasks:
     - name: Zookeeper setup
       ansible.builtin.shell: ./setup.sh zookeeper
-      no_log: true
       args:
         chdir: "{{ working_directory }}"
