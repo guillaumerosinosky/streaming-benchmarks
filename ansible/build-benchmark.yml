@@ -1,0 +1,17 @@
+---
+- name: Benchmark Setup
+  hosts: all
+  become: yes
+  vars:
+    working_directory: /root/streaming-benchmarks
+  pre_tasks:
+    - name: Pre-task to pull git repository
+      ansible.builtin.command: git pull origin master
+      args:
+        chdir: "{{ working_directory }}"
+  tasks:
+    - name: Build Benchmark
+      ansible.builtin.shell: ./stream-bench.sh SETUP_BENCHMARK
+      no_log: true
+      args:
+        chdir: "{{ working_directory }}"

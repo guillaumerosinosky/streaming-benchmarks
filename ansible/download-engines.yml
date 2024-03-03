@@ -10,11 +10,6 @@
       args:
         chdir: "{{ working_directory }}"
   tasks:
-    - name: Build Benchmark
-      ansible.builtin.shell: ./stream-bench.sh SETUP_BENCHMARK
-      no_log: true
-      args:
-        chdir: "{{ working_directory }}"
     - name: Setup Kafka
       ansible.builtin.shell: ./stream-bench.sh SETUP_KAFKA
       no_log: true
