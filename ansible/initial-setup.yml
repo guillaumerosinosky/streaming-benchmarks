@@ -16,6 +16,7 @@
         - make
         - gcc
         - tcl
+        - net-tools
         - build-essential
         - python2.7
     - name: Install Glances from script
