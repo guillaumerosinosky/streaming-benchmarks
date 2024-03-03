@@ -1,5 +1,4 @@
-127.0.0.1 localhost
-127.0.1.1 {{ ansible_hostname }} {{ ansible_fqdn }}  # Add the host's own entry
+127.0.0.1 localhost {{ ansible_hostname }}
 
 {% for host in groups['all'] %}
 {% if host != inventory_hostname %}
