@@ -13,8 +13,8 @@ generateResourceConsumptionReport <- function(engines, tps, duration, tps_count)
      for(eng in 1:length(engines)){
        engine = engines[eng]
        TPS = toString(tps*i)
-       reportFolder = paste("/Users/sahverdiyev/Desktop/EDU/THESIS/stream-benchmarking/result/", sep = "")
-       sourceFolder = paste("/Users/sahverdiyev/Desktop/EDU/THESIS/stream-benchmarking/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
+       reportFolder = paste("/Users/sahverdiyev/Desktop/EDU/THESIS/streaming-benchmarks/result/", sep = "")
+       sourceFolder = paste("/Users/sahverdiyev/Desktop/EDU/THESIS/streaming-benchmarks/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
        #Get the stream servers cpu and memory consumption statistics
        for(x in 1:10) {
          streamCpu = read.table(paste(sourceFolder, "stream-node-0", x,".cpu",sep=""),header=F,stringsAsFactors=F,sep=',')
@@ -124,8 +124,8 @@ generateResourceConsumptionReportByTps <- function(engine, tps, duration, tps_co
     for(i in 1:tps_count) {
   
       TPS = toString(tps*i)
-      reportFolder = paste("/Users/sahverdiyev/Desktop/EDU/THESIS/stream-benchmarking/result/", engine, "/", sep = "")
-      sourceFolder = paste("/Users/sahverdiyev/Desktop/EDU/THESIS/stream-benchmarking/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
+      reportFolder = paste("/Users/sahverdiyev/Desktop/EDU/THESIS/streaming-benchmarks/result/", engine, "/", sep = "")
+      sourceFolder = paste("/Users/sahverdiyev/Desktop/EDU/THESIS/streaming-benchmarks/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
       #Get the stream servers cpu and memory consumption statistics
       for(x in 1:10) {
         streamCpu = read.table(paste(sourceFolder, "stream-node-0", x,".cpu",sep=""),header=F,stringsAsFactors=F,sep=',')

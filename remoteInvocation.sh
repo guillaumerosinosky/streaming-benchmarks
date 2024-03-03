@@ -108,6 +108,6 @@ function getResultFromKafkaServer(){
 }
 
 function getResultFromRedisServer(){
-    scp ${SSH_USER}@redisdo:~/stream-benchmarking/data/seen.txt $1/redis-seen.txt
-    scp ${SSH_USER}@redisdo:~/stream-benchmarking/data/updated.txt $1/redis-updated.txt
+    scp ${SSH_USER}@redisdo:~/streaming-benchmarks/data/seen.txt $1/redis-seen.txt
+    scp ${SSH_USER}@redisdo:~/streaming-benchmarks/data/updated.txt $1/redis-updated.txt
 }

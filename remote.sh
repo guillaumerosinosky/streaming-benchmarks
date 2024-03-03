@@ -14,7 +14,7 @@ LONG_SLEEP=5
 WAIT_AFTER_STOP_PRODUCER=30
 WAIT_AFTER_REBOOT_SERVER=30
 
-PROJECT_DIR="/root/stream-benchmarking"
+PROJECT_DIR="/root/streaming-benchmarks"
 
 
 
@@ -261,7 +261,7 @@ function stopMonitoring(){
 
 function changeTps(){
     #TODO replace with CHANGE_TPS_CMD variable
-    runCommandLoadServers "sed -i \"s/TPS:-${INITIAL_TPS}/TPS:-$1/g\" stream-benchmarking/variable.sh" "nohup"
+    runCommandLoadServers "sed -i \"s/TPS:-${INITIAL_TPS}/TPS:-$1/g\" streaming-benchmarks/variable.sh" "nohup"
 }
 
 function startRedis {
