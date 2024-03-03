@@ -1,6 +1,6 @@
 ---
 - name: Benchmark Setup
-  hosts: all
+  hosts: redis
   become: yes
   vars:
     working_directory: /root/streaming-benchmarks
