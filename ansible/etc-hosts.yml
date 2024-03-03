@@ -1,5 +1,5 @@
 - name: Update /etc/hosts on all nodes
-  hosts: zookeeper
+  hosts: all
   gather_facts: yes
   tasks:
     - name: Configure /etc/hosts with all host IPs
