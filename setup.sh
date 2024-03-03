@@ -81,11 +81,6 @@ function zookeeper_setup() {
     : > /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
 
     # shellcheck disable=SC2129
-    echo "server.1=zookeeper-node-01:2888:3888" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
-    echo "server.2=zookeeper-node-02:2888:3888" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
-    echo "server.3=zookeeper-node-03:2888:3888" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
-
-    # shellcheck disable=SC2129
     echo 'maxClientCnxns=0' >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
     echo "tickTime=2000" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
     echo "initLimit=20" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
@@ -98,6 +93,11 @@ function zookeeper_setup() {
     rm -rf /tmp/zookeeper/*
     touch /tmp/zookeeper/myid
     echo "${HOSTNAME: -1}" >> /tmp/zookeeper/myid
+
+    # shellcheck disable=SC2129
+    echo "server.1=zookeeper-node-01:2888:3888" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
+    echo "server.2=zookeeper-node-02:2888:3888" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
+    echo "server.3=zookeeper-node-03:2888:3888" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
 }
 
 case $1 in
