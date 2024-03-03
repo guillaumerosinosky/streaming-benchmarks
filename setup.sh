@@ -98,6 +98,8 @@ function zookeeper_setup() {
     echo "server.1=zookeeper-node-01:2888:3888" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
     echo "server.2=zookeeper-node-02:2888:3888" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
     echo "server.3=zookeeper-node-03:2888:3888" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
+
+    sed -i "s/$(hostname)/0.0.0.0/g" /root/streaming-benchmarks/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
 }
 
 case $1 in
