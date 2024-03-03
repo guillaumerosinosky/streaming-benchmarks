@@ -105,6 +105,40 @@ function kafka_setup() {
     echo '1' >> /root/zookeeper/myid
 }
 
+function zookeeper_setup() {
+    #KAFKA SETUP
+    sed -i 's/zookeeper.connect=localhost:2181/zookeeper.connect=zookeeper-node-01:2181,zookeeper-node-02:2181,zookeeper-node-03:2181/g' /root/stream-benchmarking/"${KAFKA_STREAM_DIR}"/config/server.properties
+
+    sed -i 's/maxClientCnxns=0/maxClientCnxns=0/g' /root/stream-benchmarking/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
+    # shellcheck disable=SC2129
+    echo "tickTime=2000" >> /root/stream-benchmarking/"${KAFKA_DIR}"/config/zookeeper.properties
+    echo "initLimit=20" >> /root/stream-benchmarking/"${KAFKA_DIR}"/config/zookeeper.properties
+    echo "syncLimit=10" >> /root/stream-benchmarking/"${KAFKA_DIR}"/config/zookeeper.properties
+    echo "server.1=zookeeper-node-01:2888:3888" >> /root/stream-benchmarking/"${KAFKA_DIR}"/config/zookeeper.properties
+    echo "server.2=zookeeper-node-02:2888:3888" >> /root/stream-benchmarking/"${KAFKA_DIR}"/config/zookeeper.properties
+    echo "server.3=zookeeper-node-03:2888:3888" >> /root/stream-benchmarking/"${KAFKA_DIR}"/config/zookeeper.properties
+
+    mkdir /tmp/zookeeper/ -p
+    touch /tmp/zookeeper/myid
+    echo "${HOSTNAME: -1}" >> /tmp/zookeeper/myid
+
+
+
+    sed -i 's/maxClientCnxns=0/maxClientCnxns=0/g' /root/stream-benchmarking/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
+    # shellcheck disable=SC2129
+    echo "tickTime=2000" >> /root/stream-benchmarking/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
+    echo "initLimit=20" >> /root/stream-benchmarking/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
+    echo "syncLimit=10" >> /root/stream-benchmarking/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
+    echo "dataDir=/root/zookeeper" >> /root/stream-benchmarking/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
+    echo "server.1=zookeeper-node-01:2888:3888" >> /root/stream-benchmarking/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
+    echo "server.2=zookeeper-node-02:2888:3888" >> /root/stream-benchmarking/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
+    echo "server.3=zookeeper-node-03:2888:3888" >> /root/stream-benchmarking/"${KAFKA_STREAM_DIR}"/config/zookeeper.properties
+
+    mkdir /root/zookeeper/ -p
+    touch /root/zookeeper/myid
+    echo '1' >> /root/zookeeper/myid
+}
+
 case $1 in
     "flink")
         flink_setup
@@ -117,6 +151,9 @@ case $1 in
         ;;
     "kafka")
         kafka_setup
+        ;;
+    "zookeeper")
+        zookeeper_setup
         ;;
     *)
         echo "Invalid argument"
