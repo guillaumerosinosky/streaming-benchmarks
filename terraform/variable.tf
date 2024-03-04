@@ -13,6 +13,20 @@ variable "zookeeper-droplet-size" {
   default     = "c-2"
 }
 
+variable "load-droplet-size" {
+  description = "The size of the droplet"
+  default     = "c-2"
+}
+
+variable "stream-droplet-size" {
+  description = "The size of the droplet"
+  default     = "c-8-intel"
+}
+
+variable "redis-droplet-size" {
+  description = "The size of the droplet"
+  default     = "g-2vcpu-8gb-intel"
+}
 
 variable "droplet-region" {
   description = "The region of the droplet"

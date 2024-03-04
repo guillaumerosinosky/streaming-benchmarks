@@ -53,7 +53,7 @@ resource "digitalocean_droplet" "stream" {
   name     = "stream-node-${format("%02d", (count.index + 1))}"
   image    = var.droplet-os-version
   region   = var.droplet-region
-  size     = var.droplet-size
+  size     = var.stream-droplet-size
   ssh_keys = [
     digitalocean_ssh_key.ssh-key.fingerprint
   ]
@@ -78,7 +78,7 @@ resource "digitalocean_droplet" "load" {
   name     = "load-node-${format("%02d", (count.index + 1))}"
   image    = var.droplet-os-version
   region   = var.droplet-region
-  size     = var.droplet-size
+  size     = var.load-droplet-size
   ssh_keys = [
     digitalocean_ssh_key.ssh-key.fingerprint
   ]
