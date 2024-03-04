@@ -102,7 +102,7 @@ resource "digitalocean_droplet" "redisdo" {
   name     = "redisdo"
   image    = var.droplet-os-version
   region   = var.droplet-region
-  size     = var.droplet-size
+  size     = var.redis-droplet-size
   ssh_keys = [
     digitalocean_ssh_key.ssh-key.fingerprint
   ]
