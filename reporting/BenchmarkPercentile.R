@@ -13,8 +13,8 @@ generateBenchmarkSpesificPercentile <- function(engines, tps, duration, percenti
     for(i in 1:tps_count) {
       TPS = toString(tps * i)
       TPS
-      reportFolder = paste("/Users/sahverdiyev/Desktop/EDU/THESIS/streaming-benchmarks/result/", sep = "")
-      sourceFolder = paste("/Users/sahverdiyev/Desktop/EDU/THESIS/streaming-benchmarks/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
+      reportFolder = paste("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", sep = "")
+      sourceFolder = paste("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
       Seen = read.table(paste(sourceFolder, "redis-seen.txt",sep=""),header=F,stringsAsFactors=F,sep=',')
       Updated = read.table(paste(sourceFolder, "redis-updated.txt",sep=""),header=F,stringsAsFactors=F,sep=',')
       
@@ -62,8 +62,8 @@ generateBenchmarkPercentile <- function(engine, tps, duration, tps_count){
   result = NULL
   for(i in 1:tps_count) {
     TPS = toString(tps * i)
-    reportFolder = paste("/Users/sahverdiyev/Desktop/EDU/THESIS/streaming-benchmarks/result/", engine, "/", sep = "")
-    sourceFolder = paste("/Users/sahverdiyev/Desktop/EDU/THESIS/streaming-benchmarks/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
+    reportFolder = paste("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/", sep = "")
+    sourceFolder = paste("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
     Seen = read.table(paste(sourceFolder, "redis-seen.txt",sep=""),header=F,stringsAsFactors=F,sep=',')
     Updated = read.table(paste(sourceFolder, "redis-updated.txt",sep=""),header=F,stringsAsFactors=F,sep=',')
     

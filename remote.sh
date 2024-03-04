@@ -299,16 +299,9 @@ function destroyEnvironment(){
 
 
 function getBenchmarkResult(){
-
-    if [ "$1" == "spark" ]; then
-        ENGINE_PATH=${1}_${2}_${BATCH}
-        SUB_PATH=TPS_${TPS}_DURATION_${TEST_TIME}
-        PATH_RESULT=result/${ENGINE_PATH}/${SUB_PATH}
-    else
-        ENGINE_PATH=${1}
-        SUB_PATH=TPS_${TPS}_DURATION_${TEST_TIME}
-        PATH_RESULT=result/${ENGINE_PATH}/${SUB_PATH}
-    fi
+    ENGINE_PATH=${1}
+    SUB_PATH=TPS_${TPS}_DURATION_${TEST_TIME}
+    PATH_RESULT=result/${ENGINE_PATH}/${SUB_PATH}
     rm -rf ${PATH_RESULT};
     mkdir -p ${PATH_RESULT}
     getResultFromStreamServer "${PATH_RESULT}"
@@ -327,7 +320,6 @@ function benchmark(){
     sleep ${WAIT_AFTER_STOP_PRODUCER}
     stopMonitoring
 }
-
 
 function runSystem(){
     prepareEnvironment
@@ -358,9 +350,9 @@ function runSystem(){
         spark)
             startSpark
             sleep ${SHORT_SLEEP}
-            startSparkProcessing $2
+            startSparkProcessing
             benchmark $1
-            stopSparkProcessing $2
+            stopSparkProcessing
             sleep ${SHORT_SLEEP}
             stopSpark
         ;;
@@ -383,7 +375,7 @@ function runSystem(){
         ;;
     esac
     destroyEnvironment
-    getBenchmarkResult $1 $2
+    getBenchmarkResult $1
 
 }
 

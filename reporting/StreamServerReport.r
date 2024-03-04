@@ -7,7 +7,7 @@ generateStreamServerLoadReport <- function(engine, tps, duration, tps_count){
     TPS = toString(tps*i)
     memoryUsage= NULL
     cpuUsage= NULL
-    sourceFolder = paste("/Users/sahverdiyev/Desktop/EDU/THESIS/streaming-benchmarks/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
+    sourceFolder = paste("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
     for(x in 1:10) {
       streamCpu = read.table(paste(sourceFolder, "stream-node-0", x,".cpu",sep=""),header=F,stringsAsFactors=F,sep=',')
       streamMem = read.table(paste(sourceFolder, "stream-node-0", x,".mem",sep=""),header=F,stringsAsFactors=F,sep=',')
