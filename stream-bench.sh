@@ -108,7 +108,7 @@ run() {
     $MVN clean install \
       -Dspark.version="$SPARK_VERSION" \
       -Dkafka.version="$KAFKA_VERSION" \
-      -Dkafka.stream.version="$KAFKA_STREAM" \
+      -Dkafka.stream.version="$KAFKA_VERSION" \
       -Dhazelcast.version="$HAZELCAST_VERSION" \
       -Dflink.version="$FLINK_VERSION" \
       -Dstorm.version="$STORM_VERSION" \
