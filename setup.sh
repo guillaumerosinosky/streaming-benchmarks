@@ -2,16 +2,10 @@
 . ./variable.sh --source-only
 
 function flink_setup() {
-    sed -i 's/taskmanager.heap.mb: 1024/taskmanager.heap.mb: 6144/g' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
-    sed -i 's/taskmanager.numberOfTaskSlots: 1/taskmanager.numberOfTaskSlots: 4/g' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
-    sed -i 's/jobmanager.rpc.address: localhost/jobmanager.rpc.address: stream-node-01/g' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
-
-    sed -i 's/taskmanager.heap.mb: 6144/taskmanager.heap.mb: 15360/g' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
-    sed -i 's/taskmanager.numberOfTaskSlots: 4/taskmanager.numberOfTaskSlots: 8/g' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
-
-    sed -i 's/taskmanager.heap.mb: 15360/taskmanager.heap.mb: 30720/g' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
-    sed -i 's/taskmanager.numberOfTaskSlots: 8/taskmanager.numberOfTaskSlots: 16/g' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
-    sed -i 's/jobmanager.heap.mb: 1024/jobmanager.heap.mb: 15360/g' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
+    sed -i '/jobmanager.rpc.address/c\jobmanager.rpc.address: stream-node-01' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
+    sed -i '/taskmanager.heap.mb/c\taskmanager.heap.mb: 30720' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
+    sed -i '/taskmanager.numberOfTaskSlots/c\taskmanager.numberOfTaskSlots: 16' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
+    sed -i '/jobmanager.heap.mb/c\jobmanager.heap.mb: 15360' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
 
     cp /dev/null /root/streaming-benchmarks/"${FLINK_DIR}"/conf/workers
     # shellcheck disable=SC2129
