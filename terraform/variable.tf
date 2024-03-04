@@ -3,6 +3,17 @@ variable "droplet-size" {
   default     = "s-1vcpu-1gb"
 }
 
+variable "kafka-droplet-size" {
+  description = "The size of the droplet"
+  default     = "c-4-intel"
+}
+
+variable "zookeeper-droplet-size" {
+  description = "The size of the droplet"
+  default     = "c-2"
+}
+
+
 variable "droplet-region" {
   description = "The region of the droplet"
   default     = "nyc1"

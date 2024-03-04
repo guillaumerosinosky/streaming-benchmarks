@@ -3,7 +3,7 @@ resource "digitalocean_droplet" "zookeeper" {
   name     = "zookeeper-node-${format("%02d", (count.index + 1))}"
   image    = var.droplet-os-version
   region   = var.droplet-region
-  size     = var.droplet-size
+  size     = var.zookeeper-droplet-size
   ssh_keys = [
     digitalocean_ssh_key.ssh-key.fingerprint
   ]
@@ -28,7 +28,7 @@ resource "digitalocean_droplet" "kafka" {
   name     = "kafka-node-${format("%02d", (count.index + 1))}"
   image    = var.droplet-os-version
   region   = var.droplet-region
-  size     = var.droplet-size
+  size     = var.kafka-droplet-size
   ssh_keys = [
     digitalocean_ssh_key.ssh-key.fingerprint
   ]
