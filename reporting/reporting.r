@@ -2,6 +2,7 @@
 library(ggplot2)
 library(scales)
 library(dplyr)
+library(patchwork)
 theme_set(theme_bw())
 options("scipen"=10)
 args <- commandArgs(TRUE)

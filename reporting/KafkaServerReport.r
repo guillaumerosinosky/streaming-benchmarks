@@ -65,7 +65,7 @@ generateKafkaServerLoadReport <- function(engine, tps, duration, tps_count){
     ggsave(paste("KAFKA", "MEMMORY.pdf", sep = "_"), width = 8, height = 8, units = "cm", device = "pdf", path = sourceFolder)
     
     pdf(paste(sourceFolder, "TPS_",TPS,"_KAFKA_RESOURCE_LOAD", ".pdf", sep = ""), width = 8, height = 4)
-    multiplot(p1, p2, cols = 2)
+    p1 + p2 + plot_layout(ncol = 2)
     dev.off()
   }
 }
