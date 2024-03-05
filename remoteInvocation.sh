@@ -40,6 +40,14 @@ function runCommandSlaveStreamServers(){
     done
 }
 
+function runCommandKafkaServer(){
+    if [ "$2" != "nohup" ]; then
+        ssh ${SSH_USER}@kafka-node-01 $1
+    else
+        nohup ssh ${SSH_USER}@kafka-node-01 $1 &
+    fi
+}
+
 function runCommandKafkaServers(){
     counter=1
     while [ ${counter} -le ${KAFKA_SERVER_COUNT} ]

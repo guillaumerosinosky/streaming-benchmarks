@@ -61,6 +61,8 @@ STOP_ZK_CMD="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/zookeeper-server-stop.sh;"
 START_KAFKA_CMD="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-server-start.sh -daemon config/server.properties"
 STOP_KAFKA_CMD="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-server-stop.sh;"
 
+CREATE_KAFKA_TOPIC="cd $PROJECT_DIR; ./stream-bench.sh CREATE_TOPIC;"
+
 START_KAFKA_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_KAFKA_PROCESSING;"
 STOP_KAFKA_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_KAFKA_PROCESSING;"
 
@@ -125,6 +127,8 @@ function stopZK {
 function startKafka {
     echo "Starting Kafka nodes"
     runCommandKafkaServers "${START_KAFKA_CMD}"
+    sleep ${SHORT_SLEEP}
+    runCommandKafkaServer "${CREATE_TOPIC}"
 }
 
 function stopKafka {
@@ -140,6 +144,9 @@ function cleanResult {
     runCommandZKServers "${CLEAN_RESULT_CMD}" "nohup"
 }
 
+function createTopic() {
+    runCommandKafkaServer "${CREATE_KAFKA_TOPIC}" "nohup"
+}
 
 function startJet {
     echo "Starting Jet"
