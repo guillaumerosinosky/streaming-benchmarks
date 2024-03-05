@@ -3,10 +3,12 @@
 
 function flink_setup() {
     sed -i '/jobmanager.rpc.address/c\jobmanager.rpc.address: stream-node-01' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
-    sed -i '/jobmanager.bind-host/c\jobmanager.bind-host: 0.0.0.0' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
     sed -i '/jobmanager.heap.mb/c\jobmanager.heap.mb: 15360' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
 
-    sed -i '/taskmanager.bind-host:/c\taskmanager.bind-host: 0.0.0.0' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
+    # shellcheck disable=SC2016
+    sed -i "/jobmanager.bind-host/c\jobmanager.bind-host: ${ip addr show eth1 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1}" /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
+    sed -i "/taskmanager.bind-host:/c\taskmanager.bind-host: ${ip addr show eth1 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1}" /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
+
     sed -i '/taskmanager.heap.mb/c\taskmanager.heap.mb: 15360' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
     sed -i '/taskmanager.numberOfTaskSlots/c\taskmanager.numberOfTaskSlots: 8' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
 
