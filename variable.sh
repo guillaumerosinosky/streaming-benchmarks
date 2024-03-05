@@ -25,7 +25,7 @@ BOOTSTRAP_SERVERS="localhost:9092"
 TOPIC=${TOPIC:-"ad-events"}
 PARTITIONS=${PARTITIONS:-1}
 
-CONF_FILE=./conf/localConf.yaml
+CONF_FILE=./conf/benchmarkConf.yaml
 
 TPS=${TPS:-10}
 TEST_TIME=${TEST_TIME:-60}
