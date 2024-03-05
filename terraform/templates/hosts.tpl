@@ -1,5 +1,6 @@
 [all:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+ansible_ssh_extra_args='-o StrictHostKeyChecking=no'
 
 [kafka]
 %{ for node in kafka_nodes ~}
