@@ -23,7 +23,7 @@ APACHE_MIRROR="https://archive.apache.org/dist"
 # shellcheck disable=SC2034
 BOOTSTRAP_SERVERS="localhost:9092"
 TOPIC=${TOPIC:-"ad-events"}
-PARTITIONS=${PARTITIONS:6}
+PARTITIONS=${PARTITIONS:-6}
 
 CONF_FILE=./conf/benchmarkConf.yaml
 
