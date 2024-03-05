@@ -3,6 +3,7 @@
 
 function flink_setup() {
     sed -i '/jobmanager.rpc.address/c\jobmanager.rpc.address: stream-node-01' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
+    sed -i '/jobmanager.bind-host/c\jobmanager.bind-host: stream-node-01' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
     sed -i '/jobmanager.heap.mb/c\jobmanager.heap.mb: 15360' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
 
     sed -i '/taskmanager.heap.mb/c\taskmanager.heap.mb: 30720' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
