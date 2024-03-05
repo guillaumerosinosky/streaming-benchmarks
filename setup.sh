@@ -77,9 +77,11 @@ function storm_setup() {
 
 function kafka_setup() {
     #KAFKA SETUP
+    PRIVATE_IP=$(ip addr show eth1 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
     rm -rf /tmp/kafka-logs/*
     sed -i 's/zookeeper.connect=localhost:2181/zookeeper.connect=zookeeper-node-01:2181,zookeeper-node-02:2181,zookeeper-node-03:2181/g' /root/streaming-benchmarks/"${KAFKA_DIR}"/config/server.properties
     sed -i "/broker.id/c\broker.id=${HOSTNAME: -1}" /root/streaming-benchmarks/"${KAFKA_DIR}"/config/server.properties
+    sed -i "/advertised.listeners/c\advertised.listeners=PLAINTEXT://${HOSTNAME: -1}:9092,PLAINTEXT_HOST://localhost:19092" /root/streaming-benchmarks/"${KAFKA_DIR}"/config/server.properties
 }
 
 function zookeeper_setup() {

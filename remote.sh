@@ -81,9 +81,6 @@ PULL_GIT="cd $PROJECT_DIR; git reset --hard HEAD; git pull origin master;"
 DG_POWER_OFF="{\"type\":\"power_off\"}"
 DG_POWER_ON="{\"type\":\"power_on\"}"
 
-
-
-
 function runAllServers {
     runCommandStreamServers "${1}" "nohup"
     runCommandZKServers "${1}" "nohup"
@@ -96,7 +93,6 @@ function stopLoadData {
     echo "Main loaders stopping"
     runCommandLoadServers "${LOAD_STOP_CMD}" "nohup"
 }
-
 
 function startLoadData {
     echo "Main loaders starting"
@@ -123,12 +119,11 @@ function stopZK {
     runCommandZKServers "${STOP_ZK_CMD}"
 }
 
-
 function startKafka {
     echo "Starting Kafka nodes"
     runCommandKafkaServers "${START_KAFKA_CMD}"
     sleep ${SHORT_SLEEP}
-    runCommandKafkaServer "${CREATE_TOPIC}"
+    runCommandKafkaServer "${CREATE_KAFKA_TOPIC}" "nohup"
 }
 
 function stopKafka {
@@ -142,10 +137,6 @@ function cleanResult {
     runCommandKafkaServers "${CLEAN_LOAD_RESULT_CMD}" "nohup"
     runCommandRedisServer "${CLEAN_RESULT_CMD}" "nohup"
     runCommandZKServers "${CLEAN_RESULT_CMD}" "nohup"
-}
-
-function createTopic() {
-    runCommandKafkaServer "${CREATE_KAFKA_TOPIC}" "nohup"
 }
 
 function startJet {

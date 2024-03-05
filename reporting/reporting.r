@@ -1,17 +1,21 @@
 #!/usr/bin/env Rscript
+require(devtools)
+# install_version("ggplot2", version = "2.2.1", repos = "http://cran.us.r-project.org")
+# install_version("dplyr", version = "0.7.4", repos = "http://cran.us.r-project.org")
+# install_version("scales", version = "0.4.1", repos = "http://cran.us.r-project.org")
 library(ggplot2)
 library(scales)
 library(dplyr)
-library(patchwork)
+library(grid)
+
 theme_set(theme_bw())
 options("scipen"=10)
 args <- commandArgs(TRUE)
 tps <- as.numeric(args[2])
 duration <- as.numeric(args[3])
 tps_count <- as.numeric(args[4])
-engines_all <- c("flink","spark", "kafka", "jet", "storm")
-engines <- c("flink","spark", "kafka", "jet")
-storms <- c("storm","storm_no_ack")
+engines_all <- c("flink","spark", "kafka")
+source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/util.r')
 source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/StreamServerReport.r')
 source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/KafkaServerReport.r')
 source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/BenchmarkResult.r')
@@ -31,18 +35,16 @@ tps_count = 15
 if(length(args) == 0){
   for (i in 1:length(engines_all)) { 
     generateBenchmarkReport(engines_all[i], 1000, 600, tps_count)
-    generateStreamServerLoadReport(engines_all[i], 1000, 600, tps_count)
-    generateKafkaServerLoadReport(engines_all[i], 1000, 600, tps_count)
+    # generateStreamServerLoadReport(engines_all[i], 1000, 600, tps_count)
+    # generateKafkaServerLoadReport(engines_all[i], 1000, 600, tps_count)
     generateBenchmarkPercentile(engines_all[i], 1000, 600, tps_count)
-    generateResourceConsumptionReportByTps(engines_all[i], 1000, 600, tps_count)
+    # generateResourceConsumptionReportByTps(engines_all[i], 1000, 600, tps_count)
   }
-  generateResourceConsumptionReport(engines_all, 1000, 600, tps_count)
-  generateBenchmarkSpesificPercentile(engines, 1000, 600, 99, tps_count)
-  generateBenchmarkSpesificPercentile(engines, 1000, 600, 95, tps_count)
-  generateBenchmarkSpesificPercentile(engines, 1000, 600, 90, tps_count)
+  # generateResourceConsumptionReport(engines_all, 1000, 600, tps_count)
+  generateBenchmarkSpesificPercentile(engines_all, 1000, 600, 99, tps_count)
+  generateBenchmarkSpesificPercentile(engines_all, 1000, 600, 95, tps_count)
+  generateBenchmarkSpesificPercentile(engines_all, 1000, 600, 90, tps_count)
   
 }
   
-generateResourceConsumptionReport(engines_all, 1000, 600, 15)
-
-
+# generateResourceConsumptionReport(engines_all, 1000, 600, 15)
