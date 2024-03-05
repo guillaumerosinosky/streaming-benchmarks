@@ -405,7 +405,7 @@ function benchmarkLoop (){
             break
         fi
         changeTps "${TPS}"
-        runSystem $1 $2
+        runSystem $1
         TPS=$[$TPS + $TPS_RANGE]
     done
     rebootServer
@@ -419,7 +419,7 @@ case $1 in
         benchmarkLoop "flink"
     ;;
     spark)
-        benchmarkLoop "spark" $2
+        benchmarkLoop "spark"
     ;;
     jet)
         benchmarkLoop "jet"
@@ -540,10 +540,10 @@ case $1 in
         getResultFromRedisServer "result/$1/TPS_4000_DURATION_600"
     ;;
     test)
-        #runSystem $2 $3
+        #runSystem $2
         TPS=$[15000]
         changeTps ${TPS}
-        runSystem $2 $3
+        runSystem $2
         #Rscript --vanilla reporting.R "spark" 1000 60
         #Rscript --vanilla reporting.R "flink" 1000 60
         #Rscript --vanilla reporting.R "storm" 1000 60

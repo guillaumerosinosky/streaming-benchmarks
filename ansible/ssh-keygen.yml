@@ -1,0 +1,11 @@
+- name: generate SSH key
+  hosts: stream
+  become: yes
+  tasks:
+    - name: generate SSH key id_rsa
+      openssh_keypair:
+        path: "~/.ssh/id_rsa"
+        type: rsa
+        size: 4096
+        state: present
+        force: no
