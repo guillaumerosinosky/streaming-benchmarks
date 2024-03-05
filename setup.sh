@@ -12,6 +12,7 @@ function flink_setup() {
     sed -i "/rest.bind-address/c\rest.bind-address: 0.0.0.0" /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
     sed -i "/jobmanager.bind-host/c\jobmanager.bind-host: 0.0.0.0" /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
     sed -i "/taskmanager.bind-host:/c\taskmanager.bind-host: 0.0.0.0" /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
+    sed -i "/taskmanager.host:/c\taskmanager.host: 0.0.0.0" /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
 
     sed -i '/taskmanager.heap.mb/c\taskmanager.heap.mb: 15360' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
     sed -i '/taskmanager.numberOfTaskSlots/c\taskmanager.numberOfTaskSlots: 8' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
