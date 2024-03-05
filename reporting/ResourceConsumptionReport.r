@@ -108,7 +108,7 @@ generateResourceConsumptionReport <- function(engines, tps, duration, tps_count)
              legend.box.margin=margin(c(3,3,3,3)),
              legend.text=element_text(size=rel(1.0)))
      pdf(paste(reportFolder, "TPS_",TPS,"_RESOURCE_LOAD", ".pdf", sep = ""), width = 6, height = 6)
-     p1 + p2 + p3 + p4 + plot_layout(ncol = 2)
+     multiplot(p1, p2, p3, p4, cols = 2)
      dev.off()
    }
 
@@ -230,7 +230,7 @@ generateResourceConsumptionReportByTps <- function(engine, tps, duration, tps_co
             legend.box.margin=margin(c(3,3,3,3)),
             legend.text=element_text(size=rel(0.5)))
     pdf(paste(reportFolder, "TPS_",TPS,"_RESOURCE_LOAD", ".pdf", sep = ""), width = 6, height = 6)
-    p1 + p2 + p3 + p4 + plot_layout(ncol = 2)
+    multiplot(p1, p2, p3, p4, cols = 2)
     dev.off()
 }
 
