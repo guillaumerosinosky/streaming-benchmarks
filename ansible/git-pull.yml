@@ -5,6 +5,11 @@
   vars:
     working_directory: /root/streaming-benchmarks
   pre_tasks:
+    - name: Pre-task to git reset hard head
+      ansible.builtin.command: git reset --hard HEAD
+      args:
+        chdir: "{{ working_directory }}"
+  tasks:
     - name: Pre-task to pull git repository
       ansible.builtin.command: git pull origin master
       args:
