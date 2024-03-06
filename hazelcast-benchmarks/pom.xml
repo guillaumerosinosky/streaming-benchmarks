@@ -63,7 +63,7 @@
         </dependency>
         <dependency>
             <groupId>com.yahoo.stream</groupId>
-            <artifactId>streaming-benchmark-common</artifactId>
+            <artifactId>benchmark-common</artifactId>
         </dependency>
     </dependencies>
 

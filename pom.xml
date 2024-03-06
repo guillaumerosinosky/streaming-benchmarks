@@ -60,7 +60,7 @@ Licensed under the terms of the Apache License 2.0. Please see LICENSE file in t
             </dependency>
             <dependency>
                 <groupId>com.yahoo.stream</groupId>
-                <artifactId>streaming-benchmark-common</artifactId>
+                <artifactId>benchmark-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -112,11 +112,11 @@ Licensed under the terms of the Apache License 2.0. Please see LICENSE file in t
     </dependencyManagement>
 
     <modules>
-        <module>streaming-benchmark-common</module>
+        <module>benchmark-common</module>
         <module>flink-benchmarks</module>
-        <module>hazelcast-benchmarks</module>
         <module>kafka-benchmarks</module>
         <module>spark-benchmarks</module>
+        <module>hazelcast-benchmarks</module>
     </modules>
 
     <build>

@@ -67,7 +67,7 @@
         </dependency>
         <dependency>
             <groupId>com.yahoo.stream</groupId>
-            <artifactId>streaming-benchmark-common</artifactId>
+            <artifactId>benchmark-common</artifactId>
         </dependency>
         <dependency>
             <groupId>net.jpountz.lz4</groupId>

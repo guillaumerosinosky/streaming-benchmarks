@@ -13,7 +13,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>streaming-benchmark-common</artifactId>
+    <artifactId>benchmark-common</artifactId>
 
     <dependencies>
         <dependency>
