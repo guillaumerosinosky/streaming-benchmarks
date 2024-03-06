@@ -47,10 +47,11 @@ function spark_setup() {
     echo "stream-node-09" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/workers
     echo "stream-node-10" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/workers
 
-
+    PRIVATE_IP=$(ip addr show eth1 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
     cp /dev/null /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
     # shellcheck disable=SC2129
     echo "#!/usr/bin/env bash" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
+    echo "SPARK_MASTER_HOST=${PRIVATE_IP}" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
     echo "SPARK_DRIVER_MEMORY=15G" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
     echo "SPARK_EXECUTOR_CORES=8" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
     echo "SPARK_EXECUTOR_MEMORY=15G" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
