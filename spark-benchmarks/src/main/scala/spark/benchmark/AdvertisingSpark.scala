@@ -13,8 +13,9 @@ import org.apache.spark.sql.{DataFrame, Dataset, ForeachWriter, SparkSession}
 import org.json.JSONObject
 import redis.clients.jedis._
 
-import scala.collection.Iterator
-import scala.collection.JavaConverters._
+import java.util
+import java.util.UUID
+import collection.JavaConverters._
 import scala.compat.Platform.currentTime
 
 object AdvertisingSpark {
