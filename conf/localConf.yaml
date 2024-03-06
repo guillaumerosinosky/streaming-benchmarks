@@ -16,4 +16,4 @@ time.divisor: 10000
 #Spark Specific
 spark.batchtime: 1000
 spark.master: "local"
-spark.app.name: "KafkaRedisAdvertisingStream"
+spark.app.name: "AdvertisingSpark"
