@@ -1,6 +1,6 @@
 ---
 - name: Kafka broker setup
-  hosts: kafka, stream
+  hosts: kafka, zookeeper
   become: yes
   vars:
     working_directory: /root/streaming-benchmarks
