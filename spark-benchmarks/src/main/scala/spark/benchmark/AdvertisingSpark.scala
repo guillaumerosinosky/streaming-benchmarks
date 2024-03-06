@@ -13,9 +13,8 @@ import org.apache.spark.sql.{DataFrame, Dataset, ForeachWriter, SparkSession}
 import org.json.JSONObject
 import redis.clients.jedis._
 
-import java.util
-import java.util.UUID
-import collection.JavaConverters._
+import scala.collection.Iterator
+import scala.collection.JavaConverters._
 import scala.compat.Platform.currentTime
 
 object AdvertisingSpark {
@@ -23,7 +22,7 @@ object AdvertisingSpark {
 
   case class AdsEvent(user_id: String, page_id: String, ad_id: String, ad_type: String, event_type: String, event_time: String, ip_address: String)
 
-  private object AdsEvent {
+  object AdsEvent {
     def apply(rawStr: String): AdsEvent = {
       val parser = new JSONObject(rawStr)
       AdsEvent(
@@ -41,12 +40,12 @@ object AdvertisingSpark {
 
   case class AdsEnriched(campaign_id: String, ad_id: String, event_time: String)
 
-  private case class AdsCalculated(ad_id: String, campaign_id: String, window_time: Long)
+  case class AdsCalculated(ad_id: String, campaign_id: String, window_time: Long)
 
   case class AdsCounted(campaign_id: String, window_time: Long, count: Long = 0)
 
 
-  def main(args: Array[String]): Unit = {
+  def main(args: Array[String]) {
 
     //        val commonConfig = Utils.findAndReadConfigFile("./conf/localConf.yaml", true).asInstanceOf[java.util.Map[String, Any]];
     val commonConfig = Utils.findAndReadConfigFile(args(0), true).asInstanceOf[java.util.Map[String, Any]];
@@ -82,7 +81,7 @@ object AdvertisingSpark {
 
 
     // Create context with 2 second batch interval
-    //    val sparkConf = new SparkConf().setAppName("AdvertisingSpark")
+    //    val sparkConf = new SparkConf().setAppName("KafkaRedisAdvertisingStream")
     //    val ssc = new StreamingContext(sparkConf, Milliseconds(batchSize))
 
 
