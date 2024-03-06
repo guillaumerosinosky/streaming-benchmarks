@@ -34,7 +34,7 @@ public class Utils {
 
             if (mustExist) {
                 if (confFileEmpty)
-                    throw new RuntimeException("Config file " + name + " doesn't have any valid storm configs");
+                    throw new RuntimeException("Config file " + name + " doesn't have any valid configs");
                 else
                     throw new RuntimeException("Could not find config file on classpath " + name);
             } else {

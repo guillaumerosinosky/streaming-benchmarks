@@ -16,9 +16,7 @@ WAIT_AFTER_REBOOT_SERVER=30
 
 PROJECT_DIR="/root/streaming-benchmarks"
 
-
-
-CLEAN_LOAD_RESULT_CMD="rm *.load; rm -rf $PROJECT_DIR/$STORM_DIR/logs/*;rm -rf $PROJECT_DIR/$STORM_DIR/logs/*; rm -rf $PROJECT_DIR/$SPARK_DIR/work/*; rm -rf /tmp/kafka-logs/*;"
+CLEAN_LOAD_RESULT_CMD="rm *.load; rm -rf $PROJECT_DIR/$SPARK_DIR/work/*; rm -rf /tmp/kafka-logs/*;"
 REBOOT_CMD="reboot;"
 SHUTDOWN_CMD="shutdown;"
 CLEAN_RESULT_CMD="cd $PROJECT_DIR; rm data/*.txt; rm -rf data/workers; rm -rf /root/zookeeper/version-2/*"
@@ -37,13 +35,6 @@ CREATE_TOPIC="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-topics.sh --create --boots
 START_MONITOR_CPU="top -b -d 1 | grep --line-buffered Cpu > cpu.load;"
 START_MONITOR_MEM="top -b -d 1 | grep --line-buffered 'KiB Mem' > mem.load;"
 STOP_MONITOR="ps aux | grep top | awk {'print \$2'} | xargs sudo kill;"
-
-START_STORM_NIMBUS_CMD="cd $PROJECT_DIR; ./$STORM_DIR/bin/storm nimbus;"
-STOP_STORM_NIMBUS_CMD="ps aux | grep storm | awk {'print \$2'} | xargs sudo kill;"
-START_STORM_SUPERVISOR_CMD="cd $PROJECT_DIR; ./$STORM_DIR/bin/storm supervisor;"
-STOP_STORM_SUPERVISOR_CMD="ps aux | grep storm | awk {'print \$2'} | xargs sudo kill;"
-START_STORM_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_STORM_TOPOLOGY;"
-STOP_STORM_PROC_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_STORM_TOPOLOGY;"
 
 START_FLINK_CMD="cd $PROJECT_DIR; ./$FLINK_DIR/bin/start-cluster.sh;"
 STOP_FLINK_CMD="cd $PROJECT_DIR; ./$FLINK_DIR/bin/stop-cluster.sh;"
@@ -215,30 +206,6 @@ function stopKafkaProcessing {
     runCommandStreamServers "${STOP_KAFKA_PROC_CMD}" "nohup"
 }
 
-function startStorm {
-    echo "Starting Storm"
-    runCommandMasterStreamServers "${START_STORM_NIMBUS_CMD}" "nohup"
-    sleep ${SHORT_SLEEP}
-    runCommandSlaveStreamServers "${START_STORM_SUPERVISOR_CMD}" "nohup"
-}
-
-function stopStorm {
-    echo "Stopping Storm"
-    runCommandSlaveStreamServers "${STOP_STORM_SUPERVISOR_CMD}" "nohup"
-    sleep ${SHORT_SLEEP}
-    runCommandMasterStreamServers "${STOP_STORM_NIMBUS_CMD}" "nohup"
-}
-
-function startStormProcessing {
-    echo "Starting Storm processing"
-    runCommandMasterStreamServers "${START_STORM_PROC_CMD}" "nohup"
-}
-
-function stopStormProcessing {
-    echo "Stopping Storm processing"
-    runCommandMasterStreamServers "${STOP_STORM_PROC_CMD}" "nohup"
-}
-
 function startMonitoring(){
     echo "Start Monitoring"
     runCommandStreamServers "${START_MONITOR_CPU}" "nohup"
@@ -349,16 +316,6 @@ function runSystem(){
             sleep ${SHORT_SLEEP}
             stopSpark
         ;;
-        storm)
-            startStorm
-            sleep ${SHORT_SLEEP}
-            startStormProcessing
-            sleep ${LONG_SLEEP}
-            benchmark $1
-            stopStormProcessing
-            sleep ${SHORT_SLEEP}
-            stopStorm
-        ;;
         kafka)
             sleep ${LONG_SLEEP}
             startKafkaProcessing
@@ -381,8 +338,6 @@ function stopAll (){
     stopFlink
     stopSparkProcessing
     stopSpark
-    stopStormProcessing
-    stopStorm
     cleanKafka
     destroyEnvironment
     cleanResult
@@ -420,16 +375,11 @@ case $1 in
     jet_embedded)
         benchmarkLoop "jet_embedded"
     ;;
-    storm)
-        changeTps "${TPS}"
-        benchmarkLoop "storm"
-    ;;
     kafka)
         benchmarkLoop "kafka"
     ;;
     all)
         benchmarkLoop "spark"
-        benchmarkLoop "storm"
         benchmarkLoop "flink"
         benchmarkLoop "kafka"
         benchmarkLoop "jet"
@@ -441,11 +391,6 @@ case $1 in
             ;;
             spark)
                 startSpark
-            ;;
-            storm)
-                startZK
-                sleep ${SHORT_SLEEP}
-                startStorm
             ;;
             process)
                 startFlinkProcessing
@@ -474,11 +419,6 @@ case $1 in
             ;;
             spark)
                 stopSpark
-            ;;
-            storm)
-                stopStorm
-                sleep ${SHORT_SLEEP}
-                stopZK
             ;;
             process)
                 stopFlinkProcessing
@@ -539,7 +479,6 @@ case $1 in
         runSystem $2
         #Rscript --vanilla reporting.R "spark" 1000 60
         #Rscript --vanilla reporting.R "flink" 1000 60
-        #Rscript --vanilla reporting.R "storm" 1000 60
         echo "Please Enter valid command"
 
 

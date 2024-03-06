@@ -100,7 +100,6 @@ run() {
     run "SETUP_KAFKA"
     run "SETUP_KAFKA_STREAM"
     run "SETUP_HAZELCAST"
-    run "SETUP_STORM"
     run "SETUP_FLINK"
     run "SETUP_SPARK"
   elif [ "SETUP_BENCHMARK" = "$OPERATION" ];
@@ -111,7 +110,6 @@ run() {
       -Dkafka.stream.version="$KAFKA_VERSION" \
       -Dhazelcast.version="$HAZELCAST_VERSION" \
       -Dflink.version="$FLINK_VERSION" \
-      -Dstorm.version="$STORM_VERSION" \
       -Dscala.binary.version="$SCALA_BIN_VERSION" \
       -Dscala.version="$SCALA_BIN_VERSION.$SCALA_SUB_VERSION"
   elif [ "SETUP_REDIS" = "$OPERATION" ];
@@ -141,24 +139,11 @@ run() {
     #Fetch Spark
     SPARK_FILE="$SPARK_DIR.tgz"
     fetch_untar_file "$SPARK_FILE" "$APACHE_MIRROR/spark/spark-$SPARK_VERSION/$SPARK_FILE"
-  elif [ "SETUP_STORM" = "$OPERATION" ];
-  then
-    
-    #Fetch Storm
-    STORM_FILE="$STORM_DIR.tar.gz"
-    fetch_untar_file "$STORM_FILE" "$APACHE_MIRROR/storm/$STORM_DIR/$STORM_FILE"
   elif [ "SETUP_HAZELCAST" = "$OPERATION" ];
   then
     #Fetch Hazelcast
     HAZELCAST_FILE="$HAZELCAST_DIR.tar.gz"
     fetch_untar_file "$HAZELCAST_FILE" "https://github.com/hazelcast/hazelcast-jet/releases/download/v$HAZELCAST_VERSION/$HAZELCAST_FILE"
-  elif [ "START_STORM_ZK" = "$OPERATION" ];
-  then
-    start_if_needed dev_zookeeper_storm ZooKeeperStorm 10 "$STORM_DIR/bin/storm" dev-zookeeper_storm
-  elif [ "STOP_STORM_ZK" = "$OPERATION" ];
-  then
-    stop_if_needed dev_zookeeper_storm ZooKeeperStorm
-    rm -rf /tmp/dev-storm-zookeeper
   elif [ "START_ZK" = "$OPERATION" ];
   then
     start_if_needed zookeeper ZooKeeper 10 $KAFKA_DIR/bin/zookeeper-server-start.sh -daemon $KAFKA_DIR/config/zookeeper.properties
@@ -184,19 +169,6 @@ run() {
     cd ..
     stop_if_needed redis-server Redis
     rm -f dump.rdb
-  elif [ "START_STORM" = "$OPERATION" ];
-  then
-    start_if_needed daemon.name=nimbus "Storm Nimbus" 3 "$STORM_DIR/bin/storm" nimbus
-    start_if_needed daemon.name=supervisor "Storm Supervisor" 3 "$STORM_DIR/bin/storm" supervisor
-#    start_if_needed daemon.name=ui "Storm UI" 3 "$STORM_DIR/bin/storm" ui
-#    start_if_needed daemon.name=logviewer "Storm LogViewer" 3 "$STORM_DIR/bin/storm" logviewer
-    sleep 5
-  elif [ "STOP_STORM" = "$OPERATION" ];
-  then
-    stop_if_needed daemon.name=nimbus "Storm Nimbus"
-    stop_if_needed daemon.name=supervisor "Storm Supervisor"
-#    stop_if_needed daemon.name=ui "Storm UI"
-#    stop_if_needed daemon.name=logviewer "Storm LogViewer"
   elif [ "START_KAFKA" = "$OPERATION" ];
   then
     start_if_needed kafka\.Kafka Kafka 10 "$KAFKA_DIR/bin/kafka-server-start.sh" "$KAFKA_DIR/config/server.properties"
@@ -236,14 +208,6 @@ run() {
   elif [ "STOP_LOAD" = "$OPERATION" ];
   then
     stop_if_needed leiningen.core.main "Load Generation"
-  elif [ "START_STORM_TOPOLOGY" = "$OPERATION" ];
-  then
-    "$STORM_DIR/bin/storm" jar ./storm-benchmarks/target/storm-benchmarks-0.1.0.jar storm.benchmark.AdvertisingTopology test-topo -conf $CONF_FILE
-    sleep 15
-  elif [ "STOP_STORM_TOPOLOGY" = "$OPERATION" ];
-  then
-    "$STORM_DIR/bin/storm" kill -w 0 test-topo || true
-    sleep 10
   elif [ "START_SPARK_PROCESSING" = "$OPERATION" ];
   then
     "$SPARK_DIR/bin/spark-submit" --class spark.benchmark.AdvertisingSpark ./spark-benchmarks/target/spark-benchmarks-0.1.0.jar "$CONF_FILE" &
@@ -285,19 +249,6 @@ run() {
   then
     stop_if_needed hazelcast-benchmarks hazelcast-benchmarks
     rm -rf /tmp/kafka-streams/
-  elif [ "STORM_TEST" = "$OPERATION" ];
-  then
-    run "START_REDIS"
-    run "START_KAFKA"
-    run "START_STORM"
-    run "START_STORM_TOPOLOGY"
-    run "START_LOAD"
-    sleep ${TEST_TIME}
-    run "STOP_LOAD"
-    run "STOP_STORM_TOPOLOGY"
-    run "STOP_STORM"
-    run "STOP_KAFKA"
-    run "STOP_REDIS"
   elif [ "FLINK_TEST" = "$OPERATION" ];
   then
     run "START_REDIS"
@@ -355,12 +306,9 @@ run() {
     run "STOP_JET"
     run "STOP_FLINK_PROCESSING"
     run "STOP_FLINK"
-    run "STOP_STORM_TOPOLOGY"
-    run "STOP_STORM"
     run "STOP_KAFKA_PROCESSING"
     run "STOP_KAFKA"
     run "STOP_REDIS"
-    run "STOP_ZK_STORM"
   else
     if [ "HELP" != "$OPERATION" ];
     then
@@ -379,15 +327,11 @@ run() {
     echo "STOP_KAFKA: kill kafka"
     echo "START_LOAD: run kafka load generation"
     echo "STOP_LOAD: kill kafka load generation"
-    echo "START_STORM: run storm daemons in the background"
-    echo "STOP_STORM: kill the storm daemons"
     echo "START_FLINK: run flink processes"
     echo "STOP_FLINK: kill flink processes"
     echo "START_SPARK: run spark processes"
     echo "STOP_SPARK: kill spark processes"
-    echo 
-    echo "START_STORM_TOPOLOGY: run the storm test topology"
-    echo "STOP_STORM_TOPOLOGY: kill the storm test topology"
+    echo
     echo "START_FLINK_PROCESSING: run the flink test processing"
     echo "STOP_FLINK_PROCESSING: kill the flink test processing"
     echo "START_KAFKA_PROCESSING: run the kafka test processing"
@@ -397,7 +341,6 @@ run() {
     echo "START_SPARK_PROCESSING: run the spark test processing"
     echo "STOP_SPARK_PROCESSING: kill the spark test processing"
     echo
-    echo "STORM_TEST: run Storm test (assumes SETUP is done)"
     echo "FLINK_TEST: run Flink test (assumes SETUP is done)"
     echo "SPARK_TEST: run Spark test (assumes SETUP is done)"
     echo "KAFKA_TEST: run Kafka test (assumes SETUP is done)"

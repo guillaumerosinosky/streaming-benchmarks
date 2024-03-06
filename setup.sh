@@ -61,20 +61,6 @@ function spark_setup() {
 
 }
 
-function storm_setup() {
-    cp /dev/null /root/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-    # shellcheck disable=SC2129
-    echo "storm.zookeeper.servers:" >> /root/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-    echo "    - \"zookeeper-node-01\"" >> /root/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-    echo "    - \"zookeeper-node-02\"" >> /root/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-    echo "    - \"zookeeper-node-03\"" >> /root/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-    echo "storm.zookeeper.port: 2181" >> /root/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-    echo "nimbus.childopts: \"-Xmx3g\"" >> /root/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-    echo "nimbus.seeds: [\"stream-node-01\"]" >> /root/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-    echo "supervisor.childopts: \"-Xmx1g -Djava.net.preferIPv4Stack=true]\"" >> /root/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-    echo "worker.childopts: \"-Xmx1g -Djava.net.preferIPv4Stack=true\"" >> /root/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-}
-
 function kafka_setup() {
     #KAFKA SETUP
     PRIVATE_IP=$(ip addr show eth1 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
@@ -116,9 +102,6 @@ case $1 in
         ;;
     "spark")
         spark_setup
-        ;;
-    "storm")
-        storm_setup
         ;;
     "kafka")
         kafka_setup
@@ -163,19 +146,5 @@ esac
 #
 ##Consumer
 #./bin/kafka-console-consumer.sh --zookeeper localhost:2181 --topic ad-events
-#
-#
-#
-#scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node-01:~/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-#scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node-02:~/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-#scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node-03:~/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-#scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node-04:~/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-#scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node-05:~/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-#scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node-06:~/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-#scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node-07:~/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-#scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node-08:~/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-#scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node-09:~/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-#scp "${STORM_DIR}"/conf/storm.yaml ubuntu@stream-node-10:~/streaming-benchmarks/"${STORM_DIR}"/conf/storm.yaml
-
 
 

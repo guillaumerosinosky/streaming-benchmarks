@@ -118,8 +118,6 @@ object AdvertisingSpark {
     //project the event, basically filter the fields.
     val projected = filteredOnView.select("ad_id", "event_time").map(row => AdsFiltered(row.getAs(0), row.getAs(1)))
 
-
-    //Note that the Storm benchmark caches the results from Redis, we don't do that here yet
     val redisJoined = projected.mapPartitions(queryRedisTopLevel(_, redisHost))
 
 

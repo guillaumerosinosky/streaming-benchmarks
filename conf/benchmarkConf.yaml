@@ -23,12 +23,6 @@ kafka.partitions: 6
 process.hosts: 9
 process.cores: 8
 
-#STORM Specific
-storm.workers: 72
-storm.ackers: 9
-storm.ack: "enabled"
-
-
 #Spark Specific
 spark.batchtime: 3000
 spark.master: "spark://stream-node-01:7077"
