@@ -33,7 +33,7 @@ DELETE_TOPIC="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-topics.sh --delete --boots
 CREATE_TOPIC="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-topics.sh --create --bootstrap-server "$BOOTSTRAP_SERVERS" --replication-factor 1 --partitions $PARTITIONS --topic $TOPIC;"
 
 START_MONITOR_CPU="top -b -d 1 | grep --line-buffered Cpu > cpu.load;"
-START_MONITOR_MEM="top -b -d 1 | grep --line-buffered 'KiB Mem' > mem.load;"
+START_MONITOR_MEM="top -b -d 1 | grep --line-buffered 'MiB Mem' > mem.load;"
 STOP_MONITOR="ps aux | grep top | awk {'print \$2'} | xargs sudo kill;"
 
 START_FLINK_CMD="cd $PROJECT_DIR; ./$FLINK_DIR/bin/start-cluster.sh;"
