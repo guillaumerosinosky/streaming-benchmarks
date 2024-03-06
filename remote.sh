@@ -31,8 +31,8 @@ CHANGE_TPS_CMD="sed -i “s/TPS:-${INITIAL_TPS}/TPS:-$TPS/g” $PROJECT_DIR/vari
 LOAD_START_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_LOAD;"
 LOAD_STOP_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_LOAD;"
 
-DELETE_TOPIC="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-topics.sh --delete --zookeeper zookeeper-node-01:2181,zookeeper-node-02:2181,zookeeper-node-03:2181 --topic $TOPIC;"
-CREATE_TOPIC="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-topics.sh --create --zookeeper zookeeper-node-01:2181,zookeeper-node-02:2181,zookeeper-node-03:2181 --replication-factor 1 --partitions $PARTITIONS --topic $TOPIC;"
+DELETE_TOPIC="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-topics.sh --delete --bootstrap-server "$BOOTSTRAP_SERVERS" --topic $TOPIC;"
+CREATE_TOPIC="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-topics.sh --create --bootstrap-server "$BOOTSTRAP_SERVERS" --replication-factor 1 --partitions $PARTITIONS --topic $TOPIC;"
 
 START_MONITOR_CPU="top -b -d 1 | grep --line-buffered Cpu > cpu.load;"
 START_MONITOR_MEM="top -b -d 1 | grep --line-buffered 'KiB Mem' > mem.load;"
@@ -101,12 +101,11 @@ function startLoadData {
 }
 
 function cleanKafka {
-    #FIXME delete for Kafka benchmark
     echo "Deleted kafka topic"
-    runCommandRedisServer "${DELETE_TOPIC}"
+    runCommandKafkaServer "${DELETE_TOPIC}"
     sleep ${SHORT_SLEEP}
     echo "Created kafka topic"
-    runCommandRedisServer "${CREATE_TOPIC}"
+    runCommandKafkaServer "${CREATE_TOPIC}"
 }
 
 function startZK {
@@ -122,8 +121,6 @@ function stopZK {
 function startKafka {
     echo "Starting Kafka nodes"
     runCommandKafkaServers "${START_KAFKA_CMD}"
-    sleep ${SHORT_SLEEP}
-    runCommandKafkaServer "${CREATE_KAFKA_TOPIC}" "nohup"
 }
 
 function stopKafka {
