@@ -254,7 +254,7 @@ function stopMonitoring(){
 }
 
 function changeTps(){
-    runCommandLoadServers "sed -i \"/TPS:/c\TPS:-$1\" streaming-benchmarks/variable.sh" "nohup"
+    runCommandLoadServers "sed -i \"s/TPS:-${INITIAL_TPS}/TPS:-$1/g\" stream-benchmarking/variable.sh" "nohup"
 }
 
 function startRedis {
