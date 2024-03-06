@@ -188,12 +188,12 @@ function stopSpark {
 
 function startSparkProcessing {
     echo "Starting Spark processing"
-    runCommandMasterStreamServers "${START_SPARK_PROC_CMD}" "nohup"
+    runCommandRedisServer "${START_SPARK_PROC_CMD}" "nohup"
 }
 
 function stopSparkProcessing {
     echo "Stopping Spark processing"
-    runCommandMasterStreamServers "${STOP_SPARK_PROC_CMD}" "nohup"
+    runCommandRedisServer "${STOP_SPARK_PROC_CMD}" "nohup"
 }
 
 function startKafkaProcessing {
@@ -393,7 +393,7 @@ case $1 in
                 startSpark
             ;;
             process)
-                startFlinkProcessing
+                startSparkProcessing
             ;;
             redis)
                 startRedis
@@ -421,7 +421,7 @@ case $1 in
                 stopSpark
             ;;
             process)
-                stopFlinkProcessing
+                stopSparkProcessing
             ;;
             zoo)
                 stopZK
