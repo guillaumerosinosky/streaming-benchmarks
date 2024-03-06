@@ -5,24 +5,23 @@
 ##########################                                                                                  ##########################
 ######################################################################################################################################
 generateBenchmarkReport <- function(engine, tps, duration, tps_count){
-  result = NULL
+  result <- NULL
   for(i in 1:tps_count) {
-    TPS = toString(tps * i)
-    reportFolder = paste("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/", sep = "")
-    sourceFolder = paste("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
-    Seen = read.table(paste(sourceFolder, "redis-seen.txt",sep=""),header=F,stringsAsFactors=F,sep=',')
-    Updated = read.table(paste(sourceFolder, "redis-updated.txt",sep=""),header=F,stringsAsFactors=F,sep=',')
+    TPS <- toString(tps * i)
+    reportFolder <- paste0("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/")
+    sourceFolder <- paste0("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/TPS_", TPS, "_DURATION_", toString(duration), "/")
+    Seen <- read.table(paste0(sourceFolder, "redis-seen.txt"), header=F, stringsAsFactors=F, sep=',')
+    Updated <- read.table(paste0(sourceFolder, "redis-updated.txt"), header=F, stringsAsFactors=F, sep=',')
 
-    windows = c()
-    SeenFiltered = c()
-    UpdatedFiltered = c()
+    SeenFiltered <- NULL
+    UpdatedFiltered <- NULL
     for(c in 1:(length(Updated$V1)-1)) {
       if(Seen$V1[c] != Seen$V1[c+1] && Updated$V1[c] != Updated$V1[c+1] && Updated$V1[c] > 10000){
         SeenFiltered <- c(SeenFiltered, Seen$V1[c])
         UpdatedFiltered <- c(UpdatedFiltered, Updated$V1[c])
       }
     }
-    windows <- 1:length(UpdatedFiltered)
+    windows <- seq_along(UpdatedFiltered)
     
     df <- data.frame(toString(tps*i*10), SeenFiltered, UpdatedFiltered - 10000, windows)
     result <- rbind(result, df)
@@ -46,10 +45,10 @@ generateBenchmarkReport <- function(engine, tps, duration, tps_count){
             legend.key.height=unit(0.5,"line"),
             legend.key.width=unit(0.5,"line"),
             legend.text=element_text(size=rel(0.7)))
-    ggsave( paste(engine, "_", toString(tps*i*10), ".pdf", sep=""), width = 8, height = 8, units = "cm", device = "pdf", path = sourceFolder)
+    ggsave(paste0(engine, "_", toString(tps * i * 10), ".pdf"), width = 8, height = 8, units = "cm", device = "pdf", path = sourceFolder)
   }
   names(result) <- c("TPS","Seen","Throughput", "Percentile")
-  result = result[result$Throughput > 0,]
+  result <- result[result$Throughput > 0,]
   ggplot(data=result, aes(x=Percentile, y=Throughput, group=TPS, colour=TPS)) + 
     geom_smooth(method="loess", se=F, size=0.5) + 
     guides(fill=FALSE) +
@@ -64,5 +63,5 @@ generateBenchmarkReport <- function(engine, tps, duration, tps_count){
           legend.key.width=unit(0.5,"line"),
           legend.box.margin=margin(c(3,3,3,3)),
           legend.text=element_text(size=rel(0.7)))
-  ggsave(paste(engine,"_", duration, ".pdf", sep=""), width = 8, height = 8, units = "cm", device = "pdf", path = reportFolder)
+  ggsave(paste0(engine, "_", duration, ".pdf"), width = 8, height = 8, units = "cm", device = "pdf", path = reportFolder)
 }

@@ -7,20 +7,19 @@
 
 
 generateBenchmarkSpesificPercentile <- function(engines, tps, duration, percentile, tps_count){
-  result = NULL
-  for(eng in 1:length(engines)){
-    engine = engines[eng] 
+  result <- NULL
+  for(eng in seq_along(engines)){
+    engine <- engines[eng]
     for(i in 1:tps_count) {
-      TPS = toString(tps * i)
+      TPS <- toString(tps * i)
       TPS
-      reportFolder = paste("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", sep = "")
-      sourceFolder = paste("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
-      Seen = read.table(paste(sourceFolder, "redis-seen.txt",sep=""),header=F,stringsAsFactors=F,sep=',')
-      Updated = read.table(paste(sourceFolder, "redis-updated.txt",sep=""),header=F,stringsAsFactors=F,sep=',')
-      
-      windows = c()
-      SeenFiltered = c()
-      UpdatedFiltered = c()
+      reportFolder <- paste0("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/")
+      sourceFolder <- paste0("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/TPS_", TPS, "_DURATION_", toString(duration), "/")
+      Seen <- read.table(paste0(sourceFolder, "redis-seen.txt"), header=F, stringsAsFactors=F, sep=',')
+      Updated <- read.table(paste0(sourceFolder, "redis-updated.txt"), header=F, stringsAsFactors=F, sep=',')
+
+      SeenFiltered <- NULL
+      UpdatedFiltered <- NULL
       for(c in 1:(length(Updated$V1)-1)) {
         if(Seen$V1[c] != Seen$V1[c+1] && Updated$V1[c] != Updated$V1[c+1] && Updated$V1[c] > 10000){
           SeenFiltered <- c(SeenFiltered, Seen$V1[c])
@@ -55,22 +54,21 @@ generateBenchmarkSpesificPercentile <- function(engines, tps, duration, percenti
           legend.key.width=unit(0.5,"line"),
           legend.box.margin=margin(c(3,3,3,3)),
           legend.text=element_text(size=rel(0.7)))
-  ggsave(paste(duration,"_",percentile,  "_percentile.pdf", sep=""), width = 8, height = 8, units = "cm", device = "pdf", path = reportFolder)
+  ggsave(paste0(duration, "_", percentile, "_percentile.pdf"), width = 8, height = 8, units = "cm", device = "pdf", path = reportFolder)
 }
 
 generateBenchmarkPercentile <- function(engine, tps, duration, tps_count){
-  result = NULL
+  result <- NULL
   for(i in 1:tps_count) {
-    TPS = toString(tps * i)
-    reportFolder = paste("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/", sep = "")
-    sourceFolder = paste("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
-    Seen = read.table(paste(sourceFolder, "redis-seen.txt",sep=""),header=F,stringsAsFactors=F,sep=',')
-    Updated = read.table(paste(sourceFolder, "redis-updated.txt",sep=""),header=F,stringsAsFactors=F,sep=',')
-    
-    windows = c()
-    SeenFiltered = c()
-    UpdatedFiltered = c()
-    percentile = c()
+    TPS <- toString(tps * i)
+    reportFolder <- paste0("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/")
+    sourceFolder <- paste0("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/TPS_", TPS, "_DURATION_", toString(duration), "/")
+    Seen <- read.table(paste0(sourceFolder, "redis-seen.txt"), header=F, stringsAsFactors=F, sep=',')
+    Updated <- read.table(paste0(sourceFolder, "redis-updated.txt"), header=F, stringsAsFactors=F, sep=',')
+
+    SeenFiltered <- NULL
+    UpdatedFiltered <- NULL
+    percentile <- NULL
     for(c in 1:(length(Updated$V1)-1)) {
       if(Seen$V1[c] != Seen$V1[c+1] && Updated$V1[c] != Updated$V1[c+1] && Updated$V1[c] > 10000){
         SeenFiltered <- c(SeenFiltered, Seen$V1[c])
@@ -80,7 +78,7 @@ generateBenchmarkPercentile <- function(engine, tps, duration, tps_count){
     UpdatedFiltered <- sort(UpdatedFiltered)
     windows <- 1:99
     for(c in 1:99) {
-      percentile[c] = UpdatedFiltered[round(c/100*(length(UpdatedFiltered)+1))]
+      percentile[c] <- UpdatedFiltered[round(c/100*(length(UpdatedFiltered)+1))]
     }
     
     
@@ -108,5 +106,5 @@ generateBenchmarkPercentile <- function(engine, tps, duration, tps_count){
           legend.key.width=unit(0.5,"line"),
           legend.box.margin=margin(c(3,3,3,3)),
           legend.text=element_text(size=rel(0.7)))
-  ggsave(paste(engine,"_", duration, "_all_percentile.pdf", sep=""), width = 8, height = 8, units = "cm", device = "pdf", path = reportFolder)
+  ggsave(paste0(engine, "_", duration, "_all_percentile.pdf"), width = 8, height = 8, units = "cm", device = "pdf", path = reportFolder)
 }

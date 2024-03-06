@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-require(devtools)
+# require(devtools)
 # install_version("ggplot2", version = "2.2.1", repos = "http://cran.us.r-project.org")
 # install_version("dplyr", version = "0.7.4", repos = "http://cran.us.r-project.org")
 # install_version("scales", version = "0.4.1", repos = "http://cran.us.r-project.org")
@@ -47,7 +47,6 @@ if(length(args) == 0){
   generateStreamServerLoadReport(args[1], tps, duration, tps_count)
   generateKafkaServerLoadReport(args[1], tps, duration, tps_count)
   generateBenchmarkPercentile(args[1], tps, duration, tps_count)
-
 }
   
 generateResourceConsumptionReport(engines_all, tps, duration, tps_count)

@@ -3,26 +3,29 @@
 ######################################################################################################################################
 
 generateStreamServerLoadReport <- function(engine, tps, duration, tps_count){
+  cat("Generating benchmark report ", engine, tps, duration, tps_count, "\n")
   for(i in 1:tps_count) {
-    TPS = toString(tps*i)
-    memoryUsage= NULL
-    cpuUsage= NULL
-    sourceFolder = paste("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
+    TPS <- toString(tps*i)
+    memoryUsage <- NULL
+    cpuUsage <- NULL
+    sourceFolder <- paste0("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/TPS_", TPS, "_DURATION_", toString(duration), "/")
     for(x in 1:10) {
-      streamCpu = read.table(paste(sourceFolder, "stream-node-0", x,".cpu",sep=""),header=F,stringsAsFactors=F,sep=',')
-      streamMem = read.table(paste(sourceFolder, "stream-node-0", x,".mem",sep=""),header=F,stringsAsFactors=F,sep=',')
-      
-      SecondsCpu = c()
-      for(c in 1:length(streamCpu$V1)) {
-        SecondsCpu[c] = c
+      formatted_number <- sprintf("%02d", x)
+      cpu_file <- paste0(sourceFolder, "stream-node-", formatted_number, ".cpu")
+      mem_file <- paste0(sourceFolder, "stream-node-", formatted_number, ".mem")
+      streamCpu <- read.table(cpu_file, header=F, stringsAsFactors=F, sep=',')
+      streamMem <- read.table(mem_file, header=F, stringsAsFactors=F, sep=',')
+      SecondsCpu <- NULL
+      for(c in seq_along(streamCpu$V1)) {
+        SecondsCpu[c] <- c
       }
       
-      SecondsMem = c()
-      for(m in 1:length(streamMem$V1)) {
-        SecondsMem[m] = m
+      SecondsMem <- c()
+      for(m in seq_along(streamMem$V1)) {
+        SecondsMem[m] <- m
       }
-      dfCpu <- data.frame(paste("Node " , x, sep=""), as.numeric(trim(substr(streamCpu$V1, 9, 14))), SecondsCpu)
-      dfMemory <- data.frame(paste("Node " , x, sep=""), as.numeric(trim(substr(streamMem$V3, 2, 10)))*100/as.numeric(trim(substr(streamMem$V1, 11, 19))), SecondsMem)
+      dfCpu <- data.frame(paste0("Node ", x), as.numeric(trim(substr(streamCpu$V1, 9, 14))), SecondsCpu)
+      dfMemory <- data.frame(paste0("Node ", x), as.numeric(trim(substr(streamMem$V3, 2, 10)))*100/as.numeric(trim(substr(streamMem$V1, 11, 19))), SecondsMem)
       cpuUsage <- rbind(cpuUsage, dfCpu)
       memoryUsage <- rbind(memoryUsage, dfMemory)
     }
@@ -30,7 +33,7 @@ generateStreamServerLoadReport <- function(engine, tps, duration, tps_count){
     names(cpuUsage) <- c("NODE","USAGE", "TIME")
     p1 <- ggplot(data=cpuUsage, aes(x=TIME, y=USAGE, group=NODE, colour=NODE)) + 
       scale_y_continuous(breaks= pretty_breaks()) +
-      geom_smooth(method="loess", se=F, size=0.5) + 
+      geom_smooth(method="loess", se=F) +
       guides(fill=FALSE) +
       labs(x="Seconds", y="CPU load percentage") +
       #subtitle=paste(toupper(engine), "Benchmark,","stream cpu usage with", toString(tps*i*10), "TPS")) +
@@ -47,7 +50,7 @@ generateStreamServerLoadReport <- function(engine, tps, duration, tps_count){
     
     names(memoryUsage) <- c("NODE","USAGE","TIME")
     p2 <- ggplot(data=memoryUsage, aes(x=TIME, y=USAGE, group=NODE, colour=NODE)) + 
-      geom_smooth(method="loess", se=F, size=0.5) + 
+      geom_smooth(method="loess", se=F) +
       scale_y_continuous(breaks= pretty_breaks()) +
       guides(fill=FALSE) +
       labs(x="Seconds", y="Memory load percentage") +
@@ -62,7 +65,7 @@ generateStreamServerLoadReport <- function(engine, tps, duration, tps_count){
             legend.key.width=unit(0.5,"line"),
             legend.text=element_text(size=rel(0.7)))
     ggsave(paste("STREAM", "MEMMORY.pdf", sep = "_"), width = 8, height = 8, units = "cm", device = "pdf", path = sourceFolder)
-    pdf(paste(sourceFolder, "TPS_",TPS,"_STREAM_RESOURCE_LOAD", ".pdf", sep = ""), width = 8, height = 4)
+    pdf(paste0(sourceFolder, "TPS_", TPS, "_STREAM_RESOURCE_LOAD", ".pdf"), width = 8, height = 4)
     multiplot(p1, p2, cols = 2)
     dev.off()
   }

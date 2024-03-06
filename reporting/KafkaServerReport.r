@@ -4,26 +4,26 @@
 
 generateKafkaServerLoadReport <- function(engine, tps, duration, tps_count){
   for(i in 1:tps_count) {
-    TPS = toString(tps*i)
-    memoryUsage= NULL
-    cpuUsage= NULL
-    sourceFolder = paste("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/TPS_", TPS,"_DURATION_",toString(duration),"/", sep = "")
+    TPS <- toString(tps*i)
+    memoryUsage <- NULL
+    cpuUsage <- NULL
+    sourceFolder <- paste0("/Users/sahverdiyev/IdeaProjects/dnysus/streaming-benchmarks/result/", engine, "/TPS_", TPS, "_DURATION_", toString(duration), "/")
     for(x in 1:5) {
-      kafkaCpu = read.table(paste(sourceFolder, "kafka-node-0", x,".cpu",sep=""),header=F,stringsAsFactors=F,sep=',')
-      kafkaMem = read.table(paste(sourceFolder, "kafka-node-0", x,".mem",sep=""),header=F,stringsAsFactors=F,sep=',')
+      kafkaCpu <- read.table(paste0(sourceFolder, "kafka-node-0", x, ".cpu"), header=F, stringsAsFactors=F, sep=',')
+      kafkaMem <- read.table(paste0(sourceFolder, "kafka-node-0", x, ".mem"), header=F, stringsAsFactors=F, sep=',')
       
-      SecondsCpu = c()
-      for(c in 1:length(kafkaCpu$V1)) {
-        SecondsCpu[c] = c
+      SecondsCpu <- NULL
+      for(c in seq_along(kafkaCpu$V1)) {
+        SecondsCpu[c] <- c
       }
       
-      SecondsMem = c()
-      for(m in 1:length(kafkaMem$V1)) {
-        SecondsMem[m] = m
+      SecondsMem <- c()
+      for(m in seq_along(kafkaMem$V1)) {
+        SecondsMem[m] <- m
       }
       
-      dfCpu <- data.frame(paste("Node " , x, sep=""), as.numeric(trim(substr(kafkaCpu$V1, 9, 14))), SecondsCpu)
-      dfMemory <- data.frame(paste("Node " , x, sep=""), as.numeric(trim(substr(kafkaMem$V3, 2, 10)))*100/as.numeric(trim(substr(kafkaMem$V1, 11, 19))), SecondsMem)
+      dfCpu <- data.frame(paste0("Node ", x), as.numeric(trim(substr(kafkaCpu$V1, 9, 14))), SecondsCpu)
+      dfMemory <- data.frame(paste0("Node ", x), as.numeric(trim(substr(kafkaMem$V3, 2, 10)))*100/as.numeric(trim(substr(kafkaMem$V1, 11, 19))), SecondsMem)
       cpuUsage <- rbind(cpuUsage, dfCpu)
       memoryUsage <- rbind(memoryUsage, dfMemory)
     }
@@ -64,7 +64,7 @@ generateKafkaServerLoadReport <- function(engine, tps, duration, tps_count){
             legend.text=element_text(size=rel(0.7)))
     ggsave(paste("KAFKA", "MEMMORY.pdf", sep = "_"), width = 8, height = 8, units = "cm", device = "pdf", path = sourceFolder)
     
-    pdf(paste(sourceFolder, "TPS_",TPS,"_KAFKA_RESOURCE_LOAD", ".pdf", sep = ""), width = 8, height = 4)
+    pdf(paste0(sourceFolder, "TPS_", TPS, "_KAFKA_RESOURCE_LOAD", ".pdf"), width = 8, height = 4)
     multiplot(p1, p2, cols = 2)
     dev.off()
   }
