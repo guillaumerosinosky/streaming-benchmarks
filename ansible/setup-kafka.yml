@@ -15,3 +15,7 @@
       no_log: true
       args:
         chdir: "{{ working_directory }}"
+    - name: Zookeeper setup
+      ansible.builtin.shell: ./setup.sh zookeeper
+      args:
+        chdir: "{{ working_directory }}"
