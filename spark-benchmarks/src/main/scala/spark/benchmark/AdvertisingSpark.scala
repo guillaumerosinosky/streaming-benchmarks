@@ -48,7 +48,7 @@ object AdvertisingSpark {
 
   def main(args: Array[String]) {
 
-    //        val commonConfig = Utils.findAndReadConfigFile("./conf/localConf.yaml", true).asInstanceOf[java.util.Map[String, Any]];
+//            val commonConfig = Utils.findAndReadConfigFile("./conf/localConf.yaml", true).asInstanceOf[java.util.Map[String, Any]];
     val commonConfig = Utils.findAndReadConfigFile(args(0), true).asInstanceOf[java.util.Map[String, Any]];
     val timeDivisor = commonConfig.get("time.divisor") match {
       case n: Number => n.longValue()
@@ -216,19 +216,19 @@ object AdvertisingSpark {
     pool.withJedisClient { client =>
 
       val dressUp = Dress.up(client)
-      var windowUUID = dressUp.hmget(campaign, window_timestamp).head.get
-      if (windowUUID == null) {
-        windowUUID = UUID.randomUUID().toString
-        dressUp.hset(campaign, window_timestamp, windowUUID)
-        var windowListUUID: String = dressUp.hmget(campaign, "windows").head.get
-        if (windowListUUID == null) {
-          windowListUUID = UUID.randomUUID.toString
-          dressUp.hset(campaign, "windows", windowListUUID)
+      var windowUUID = dressUp.hmget(campaign, window_timestamp).head
+      if (windowUUID.isEmpty || windowUUID == null) {
+        windowUUID = Option(UUID.randomUUID.toString)
+        dressUp.hset(campaign, window_timestamp, windowUUID.get)
+        var windowListUUID: Option[String] = dressUp.hmget(campaign, "windows").head
+        if (windowListUUID.isEmpty || windowListUUID == null) {
+          windowListUUID = Option(UUID.randomUUID.toString)
+          dressUp.hset(campaign, "windows", windowListUUID.get)
         }
-        dressUp.lpush(windowListUUID, window_timestamp)
+        dressUp.lpush(windowListUUID.get, window_timestamp)
       }
-      dressUp.hincrBy(windowUUID, "seen_count", window_seenCount)
-      dressUp.hset(windowUUID, "time_updated", currentTime.toString)
+      dressUp.hincrBy(windowUUID.get, "seen_count", window_seenCount)
+      dressUp.hset(windowUUID.get, "time_updated", currentTime.toString)
       return window_seenCount.toString
     }
 

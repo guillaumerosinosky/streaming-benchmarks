@@ -173,8 +173,6 @@ run() {
   elif [ "START_KAFKA" = "$OPERATION" ];
   then
     start_if_needed kafka\.Kafka Kafka 10 "$KAFKA_DIR/bin/kafka-server-start.sh" "$KAFKA_DIR/config/server.properties"
-  elif [ "CREATE_TOPIC" = "$OPERATION" ];
-  then
     create_kafka_topic
   elif [ "STOP_KAFKA" = "$OPERATION" ];
   then
@@ -252,6 +250,7 @@ run() {
     rm -rf /tmp/kafka-streams/
   elif [ "FLINK_TEST" = "$OPERATION" ];
   then
+    run "START_ZK"
     run "START_REDIS"
     run "START_KAFKA"
     run "START_FLINK"
@@ -263,8 +262,10 @@ run() {
     run "STOP_FLINK"
     run "STOP_KAFKA"
     run "STOP_REDIS"
+    run "STOP_ZK"
   elif [ "JET_TEST" = "$OPERATION" ];
   then
+    run "START_ZK"
     run "START_REDIS"
     run "START_KAFKA"
     run "START_JET"
@@ -275,8 +276,10 @@ run() {
     run "STOP_JET"
     run "STOP_KAFKA"
     run "STOP_REDIS"
+    run "STOP_ZK"
   elif [ "SPARK_TEST" = "$OPERATION" ];
   then
+    run "START_ZK"
     run "START_REDIS"
     run "START_KAFKA"
     run "START_SPARK"
@@ -288,8 +291,10 @@ run() {
     run "STOP_SPARK"
     run "STOP_KAFKA"
     run "STOP_REDIS"
+    run "STOP_ZK"
   elif [ "KAFKA_TEST" = "$OPERATION" ];
   then
+    run "START_ZK"
     run "START_REDIS"
     run "START_KAFKA"
     run "START_KAFKA_PROCESSING"
@@ -299,8 +304,10 @@ run() {
     run "STOP_KAFKA_PROCESSING"
     run "STOP_KAFKA"
     run "STOP_REDIS"
+    run "STOP_ZK"
   elif [ "STOP_ALL" = "$OPERATION" ];
   then
+    run "START_ZK"
     run "STOP_LOAD"
     run "STOP_SPARK_PROCESSING"
     run "STOP_SPARK"
@@ -310,6 +317,7 @@ run() {
     run "STOP_KAFKA_PROCESSING"
     run "STOP_KAFKA"
     run "STOP_REDIS"
+    run "STOP_ZK"
   else
     if [ "HELP" != "$OPERATION" ];
     then
