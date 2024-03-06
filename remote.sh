@@ -474,7 +474,7 @@ case $1 in
     ;;
     test)
         #runSystem $2
-        TPS=$[15000]
+        TPS=$[1000]
         changeTps ${TPS}
         runSystem $2
         #Rscript --vanilla reporting.R "spark" 1000 60
