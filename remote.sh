@@ -473,7 +473,7 @@ case $1 in
         getResultFromRedisServer "result/$1/TPS_4000_DURATION_600"
     ;;
     test)
-        #runSystem $2
+        runAllServers "${PULL_GIT}"
         TPS=$[1000]
         changeTps ${TPS}
         runSystem $2
