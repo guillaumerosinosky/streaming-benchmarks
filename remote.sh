@@ -376,8 +376,8 @@ case $1 in
     all)
         benchmarkLoop "flink"
         benchmarkLoop "kafka"
-        benchmarkLoop "spark"
-        benchmarkLoop "jet"
+#        benchmarkLoop "spark"
+#        benchmarkLoop "jet"
     ;;
     start)
         case $2 in

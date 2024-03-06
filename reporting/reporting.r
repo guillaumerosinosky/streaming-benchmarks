@@ -11,9 +11,6 @@ library(grid)
 theme_set(theme_bw())
 options("scipen"=10)
 args <- commandArgs(TRUE)
-tps <- as.numeric(args[2])
-duration <- as.numeric(args[3])
-tps_count <- as.numeric(args[4])
 engines_all <- c("flink", "kafka")
 source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/util.r')
 source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/StreamServerReport.r')
@@ -23,12 +20,6 @@ source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/BenchmarkPercentile
 source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/ResourceConsumptionReport.r')
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
-generateBenchmarkReport(args[1], tps, duration, tps_count)
-generateStreamServerLoadReport(args[1], tps, duration, tps_count)
-generateKafkaServerLoadReport(args[1], tps, duration, tps_count)
-generateBenchmarkPercentile(args[1], tps, duration, tps_count)
-
-
 
 #generateBenchmarkPercentile("kafka", init_tps, duration, 15)
 
@@ -36,7 +27,7 @@ if(length(args) == 0){
   tps_count <- 3
   tps <- 5000
   duration <- 60
-  for (i in 1:length(engines_all)) {
+  for (i in seq_along(engines_all)) {
     generateBenchmarkReport(engines_all[i], tps, duration, tps_count)
     generateStreamServerLoadReport(engines_all[i], tps, duration, tps_count)
     generateKafkaServerLoadReport(engines_all[i], tps, duration, tps_count)
@@ -48,6 +39,15 @@ if(length(args) == 0){
   generateBenchmarkSpesificPercentile(engines_all, tps, duration, 95, tps_count)
   generateBenchmarkSpesificPercentile(engines_all, tps, duration, 90, tps_count)
   
+} else {
+  tps <- as.numeric(args[2])
+  duration <- as.numeric(args[3])
+  tps_count <- as.numeric(args[4])
+  generateBenchmarkReport(args[1], tps, duration, tps_count)
+  generateStreamServerLoadReport(args[1], tps, duration, tps_count)
+  generateKafkaServerLoadReport(args[1], tps, duration, tps_count)
+  generateBenchmarkPercentile(args[1], tps, duration, tps_count)
+
 }
   
 generateResourceConsumptionReport(engines_all, tps, duration, tps_count)

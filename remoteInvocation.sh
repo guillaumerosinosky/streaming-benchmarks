@@ -99,8 +99,9 @@ function getResultFromStreamServer(){
     counter=1
     while [ ${counter} -le ${STREAM_SERVER_COUNT} ]
     do
-        nohup scp ${SSH_USER}@stream-node-0${counter}:~/cpu.load $1/stream-node-0${counter}.cpu &
-        nohup scp ${SSH_USER}@stream-node-0${counter}:~/mem.load $1/stream-node-0${counter}.mem &
+        formatted_number=$(printf "%02d" $counter)
+        nohup scp ${SSH_USER}@stream-node-"${formatted_number}":~/cpu.load $1/stream-node-"${formatted_number}".cpu &
+        nohup scp ${SSH_USER}@stream-node-"${formatted_number}":~/mem.load $1/stream-node-"${formatted_number}".mem &
         ((counter++))
     done
 }
