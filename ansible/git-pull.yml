@@ -1,5 +1,5 @@
 ---
-- name: Stream Engine Setup
+- name: Git Reset and Pull Repo
   hosts: all
   become: yes
   vars:
