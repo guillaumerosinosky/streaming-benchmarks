@@ -258,8 +258,7 @@ function stopMonitoring(){
 }
 
 function changeTps(){
-    #TODO replace with CHANGE_TPS_CMD variable
-    runCommandLoadServers "sed -i \"s/TPS:-${INITIAL_TPS}/TPS:-$1/g\" streaming-benchmarks/variable.sh" "nohup"
+    runCommandLoadServers "sed -i \"/TPS:/c\TPS:-$1\" streaming-benchmarks/variable.sh" "nohup"
 }
 
 function startRedis {
@@ -426,7 +425,7 @@ case $1 in
         benchmarkLoop "jet_embedded"
     ;;
     storm)
-        changeTps ${TPS}
+        changeTps "${TPS}"
         benchmarkLoop "storm"
     ;;
     kafka)
