@@ -153,8 +153,7 @@ run() {
     rm -rf /tmp/zookeeper
   elif [ "START_REDIS" = "$OPERATION" ];
   then
-    PRIVATE_IP=$(ip addr show eth1 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
-    start_if_needed redis-server Redis 1 "$REDIS_DIR/src/redis-server" --bind $PRIVATE_IP --protected-mode no
+    start_if_needed redis-server Redis 1 "$REDIS_DIR/src/redis-server" --protected-mode no
     cd data
     $LEIN run -n --configPath ../$CONF_FILE
     cd ..
