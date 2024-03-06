@@ -12,7 +12,6 @@ SHORT_SLEEP=3
 LONG_SLEEP=5
 
 WAIT_AFTER_STOP_PRODUCER=30
-WAIT_AFTER_REBOOT_SERVER=30
 
 PROJECT_DIR="/root/streaming-benchmarks"
 
@@ -68,9 +67,6 @@ START_REDIS_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_REDIS;"
 STOP_REDIS_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_REDIS;"
 
 PULL_GIT="cd $PROJECT_DIR; git reset --hard HEAD; git pull origin master;"
-
-DG_POWER_OFF="{\"type\":\"power_off\"}"
-DG_POWER_ON="{\"type\":\"power_on\"}"
 
 function runAllServers {
     runCommandStreamServers "${1}" "nohup"
@@ -356,8 +352,6 @@ function benchmarkLoop (){
         runSystem $1
         TPS=$[$TPS + $TPS_RANGE]
     done
-    rebootServer
-    sleep ${WAIT_AFTER_REBOOT_SERVER}
     TPS=${INITIAL_TPS}
 }
 
