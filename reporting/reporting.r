@@ -1,8 +1,4 @@
 #!/usr/bin/env Rscript
-# require(devtools)
-# install_version("ggplot2", version = "2.2.1", repos = "http://cran.us.r-project.org")
-# install_version("dplyr", version = "0.7.4", repos = "http://cran.us.r-project.org")
-# install_version("scales", version = "0.4.1", repos = "http://cran.us.r-project.org")
 library(ggplot2)
 library(scales)
 library(dplyr)
@@ -16,7 +12,7 @@ source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/util.r')
 source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/StreamServerReport.r')
 source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/KafkaServerReport.r')
 source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/BenchmarkResult.r')
-source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/BenchmarkPercentile.R')
+source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/BenchmarkPercentile.r')
 source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/ResourceConsumptionReport.r')
 trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 
