@@ -11,6 +11,7 @@
         size: 4096
         state: present
         force: no
+
     - name: fetch all public ssh keys
       shell: cat ~/.ssh/id_rsa.pub
       register: ssh_keys
