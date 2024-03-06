@@ -97,7 +97,6 @@ function stopLoadData {
 function startLoadData {
     echo "Main loaders starting"
     runCommandLoadServers "${LOAD_START_CMD}" "nohup"
-
 }
 
 function cleanKafka {
