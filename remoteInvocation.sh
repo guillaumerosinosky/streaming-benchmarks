@@ -10,10 +10,11 @@ function runCommandStreamServers(){
     counter=1
     while [ ${counter} -le ${STREAM_SERVER_COUNT} ]
     do
+        formatted_number=$(printf "%02d" $counter)
         if [ "$2" != "nohup" ]; then
-            ssh ${SSH_USER}@stream-node-0${counter} $1
+            ssh ${SSH_USER}@stream-node-"${formatted_number}" $1
         else
-            nohup ssh ${SSH_USER}@stream-node-0${counter} $1 &
+            nohup ssh ${SSH_USER}@stream-node-"${formatted_number}" $1 &
         fi
         ((counter++))
     done
@@ -25,19 +26,6 @@ function runCommandMasterStreamServers(){
     else
         nohup ssh ${SSH_USER}@stream-node-01 $1 &
     fi
-}
-
-function runCommandSlaveStreamServers(){
-    counter=2
-    while [ ${counter} -le ${STREAM_SERVER_COUNT} ]
-    do
-        if [ "$2" != "nohup" ]; then
-            ssh ${SSH_USER}@stream-node-0${counter} $1
-        else
-            nohup ssh ${SSH_USER}@stream-node-0${counter} $1 &
-        fi
-        ((counter++))
-    done
 }
 
 function runCommandKafkaServer(){
@@ -78,10 +66,11 @@ function runCommandLoadServers(){
     counter=1
     while [ ${counter} -le ${LOAD_SERVER_COUNT} ]
     do
+        formatted_number=$(printf "%02d" $counter)
         if [ "$2" != "nohup" ]; then
-            ssh ${SSH_USER}@load-node-0${counter} $1
+            ssh ${SSH_USER}@load-node-"${formatted_number}" $1
         else
-            nohup ssh ${SSH_USER}@load-node-0${counter} $1 &
+            nohup ssh ${SSH_USER}@load-node-"${formatted_number}" $1 &
         fi
         ((counter++))
     done
