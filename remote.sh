@@ -4,8 +4,9 @@
 . ./variable.sh --source-only
 
 
-TPS_RANGE=1000
+TPS_RANGE=5000
 TPS_LIMIT=15000
+TPS_COUNT=3
 INITIAL_TPS=${TPS}
 
 SHORT_SLEEP=3
@@ -264,7 +265,7 @@ function getBenchmarkResult(){
     getResultFromKafkaServer "${PATH_RESULT}"
     getResultFromRedisServer "${PATH_RESULT}"
     sleep ${SHORT_SLEEP}
-    Rscript reporting/reporting.R ${ENGINE_PATH} ${INITIAL_TPS} ${TEST_TIME} 15
+    Rscript reporting/reporting.R ${ENGINE_PATH} ${INITIAL_TPS} ${TEST_TIME} ${TPS_COUNT}
 }
 
 function benchmark(){
