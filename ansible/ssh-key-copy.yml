@@ -1,7 +1,16 @@
-- hosts: stream
+---
+- name: Genrate SSH key and copy to all servers
+  hosts: stream
   gather_facts: false
   remote_user: root
   tasks:
+    - name: generate SSH key id_rsa
+      openssh_keypair:
+        path: "~/.ssh/id_rsa"
+        type: rsa
+        size: 4096
+        state: present
+        force: no
     - name: fetch all public ssh keys
       shell: cat ~/.ssh/id_rsa.pub
       register: ssh_keys
