@@ -51,12 +51,12 @@ function spark_setup() {
     cp /dev/null /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
     # shellcheck disable=SC2129
     echo "#!/usr/bin/env bash" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
-    echo "SPARK_DRIVER_MEMORY=30G" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
-    echo "SPARK_EXECUTOR_CORES=16" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
-    echo "SPARK_EXECUTOR_MEMORY=30G" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
-    echo "SPARK_WORKER_CORES=16" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
-    echo "SPARK_WORKER_MEMORY=30g" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
-    echo "SPARK_DAEMON_MEMORY=30g" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
+    echo "SPARK_DRIVER_MEMORY=15G" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
+    echo "SPARK_EXECUTOR_CORES=8" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
+    echo "SPARK_EXECUTOR_MEMORY=15G" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
+    echo "SPARK_WORKER_CORES=8" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
+    echo "SPARK_WORKER_MEMORY=15g" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
+    echo "SPARK_DAEMON_MEMORY=15g" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
     chmod +x /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
 
 }
