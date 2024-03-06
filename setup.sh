@@ -64,9 +64,11 @@ function spark_setup() {
 function kafka_setup() {
     #KAFKA SETUP
     PRIVATE_IP=$(ip addr show eth1 | grep 'inet ' | awk '{print $2}' | cut -d'/' -f1)
-    rm -rf /tmp/kafka-logs/*
+    mkdir /root/zookeeper/ -p
+    rm -rf /root/kafka-logs/*
     sed -i 's/zookeeper.connect=localhost:2181/zookeeper.connect=zookeeper-node-01:2181,zookeeper-node-02:2181,zookeeper-node-03:2181/g' /root/streaming-benchmarks/"${KAFKA_DIR}"/config/server.properties
     sed -i "/broker.id/c\broker.id=${HOSTNAME: -1}" /root/streaming-benchmarks/"${KAFKA_DIR}"/config/server.properties
+    sed -i "/log.dirs=\/tmp\/kafka-logs/c\log.dirs=/root/kafka-logs" /root/streaming-benchmarks/"${KAFKA_DIR}"/config/server.properties
     sed -i "/advertised.listeners/c\advertised.listeners=PLAINTEXT://${HOSTNAME}:9092" /root/streaming-benchmarks/"${KAFKA_DIR}"/config/server.properties
 }
 
@@ -81,12 +83,12 @@ function zookeeper_setup() {
     echo "syncLimit=10" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
     echo "clientPort=2181" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
     echo "admin.enableServer=false" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
-    echo "dataDir=/tmp/zookeeper" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
+    echo "dataDir=/root/zookeeper" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
 
-    mkdir /tmp/zookeeper/ -p
-    rm -rf /tmp/zookeeper/*
-    touch /tmp/zookeeper/myid
-    echo "${HOSTNAME: -1}" >> /tmp/zookeeper/myid
+    mkdir /root/zookeeper/ -p
+    rm -rf /root/zookeeper/*
+    touch /root/zookeeper/myid
+    echo "${HOSTNAME: -1}" >> /root/zookeeper/myid
 
     # shellcheck disable=SC2129
     echo "server.1=zookeeper-node-01:2888:3888" >> /root/streaming-benchmarks/"${KAFKA_DIR}"/config/zookeeper.properties
