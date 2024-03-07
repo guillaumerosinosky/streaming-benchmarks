@@ -31,16 +31,4 @@ spark.app.name: "AdvertisingSpark"
 #Time Divisor
 time.divisor: 10000
 
-#Hazelcast Specific
-
-#Kafka Specific
-
-
-#Benchmark Specific
-test.time: 600
-
-
-ssh.user: "root"
-kafka.folder: "kafka_2.12-3.6.1"
-
 
