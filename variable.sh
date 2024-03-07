@@ -26,7 +26,7 @@ PARTITIONS=${PARTITIONS:-6}
 
 CONF_FILE=./conf/benchmarkConf.yaml
 
-TPS=${TPS:-5000}
+# shellcheck disable=SC2034
 TEST_TIME=${TEST_TIME:-600}
 
 SPARK_MASTER_HOST="stream-node-01"

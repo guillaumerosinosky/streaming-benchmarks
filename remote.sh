@@ -4,10 +4,9 @@
 . ./variable.sh --source-only
 
 
-TPS_RANGE=5000
-TPS_LIMIT=50000
-TPS_COUNT=10
-INITIAL_TPS=${TPS}
+INITIAL_TPS=5000
+BENCHMARK_COUNT=10
+CURRENT_TPS=${INITIAL_TPS}
 
 SHORT_SLEEP=3
 LONG_SLEEP=5
@@ -24,9 +23,7 @@ CLEAN_RESULT_CMD="cd $PROJECT_DIR; rm data/*.txt; rm -rf data/workers; rm -rf /r
 CLEAN_BUILD_BENCHMARK="cd $PROJECT_DIR; ./stream-bench.sh SETUP_BENCHMARK"
 SETUP_KAFKA="cd $PROJECT_DIR; ./stream-bench.sh SETUP_KAFKA"
 
-CHANGE_TPS_CMD="sed -i “s/TPS:-${INITIAL_TPS}/TPS:-$TPS/g” $PROJECT_DIR/variable.sh;"
-
-LOAD_START_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_LOAD;"
+LOAD_START_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_LOAD $CURRENT_TPS;"
 LOAD_STOP_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_LOAD;"
 
 DELETE_TOPIC="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-topics.sh --delete --bootstrap-server "$BOOTSTRAP_SERVERS" --topic $TOPIC;"
@@ -217,10 +214,6 @@ function stopMonitoring(){
     runCommandKafkaServers "${STOP_MONITOR}" "nohup"
 }
 
-function changeTps(){
-    runCommandLoadServers "sed -i \"s/TPS:-${INITIAL_TPS}/TPS:-$1/g\" stream-benchmarking/variable.sh" "nohup"
-}
-
 function startRedis {
     echo "Starting Redis"
     runCommandRedisServer "${START_REDIS_CMD}" "nohup"
@@ -257,7 +250,7 @@ function destroyEnvironment(){
 
 function getBenchmarkResult(){
     ENGINE_PATH=${1}
-    SUB_PATH=TPS_${TPS}_DURATION_${TEST_TIME}
+    SUB_PATH=TPS_${CURRENT_TPS}_DURATION_${TEST_TIME}
     PATH_RESULT=result/${ENGINE_PATH}/${SUB_PATH}
     rm -rf ${PATH_RESULT};
     mkdir -p ${PATH_RESULT}
@@ -265,7 +258,7 @@ function getBenchmarkResult(){
     getResultFromKafkaServer "${PATH_RESULT}"
     getResultFromRedisServer "${PATH_RESULT}"
     sleep ${SHORT_SLEEP}
-    Rscript reporting/reporting.R ${ENGINE_PATH} ${INITIAL_TPS} ${TEST_TIME} ${TPS_COUNT}
+    Rscript reporting/reporting.R ${ENGINE_PATH} ${INITIAL_TPS} ${TEST_TIME} ${BENCHMARK_COUNT}
 }
 
 function benchmark(){
@@ -343,17 +336,13 @@ function stopAll (){
 
 
 function benchmarkLoop (){
-    while true; do
-        runAllServers "${PULL_GIT}"
-        sleep ${SHORT_SLEEP}
-        if (("$TPS" > "$TPS_LIMIT")); then
-            break
-        fi
-        changeTps "${TPS}"
-        runSystem $1
-        TPS=$[$TPS + $TPS_RANGE]
-    done
-    TPS=${INITIAL_TPS}
+  for i in $(seq 1 $BENCHMARK_COUNT); do
+      echo "Benchmark $CURRENT_TPS"
+      runAllServers "${PULL_GIT}"
+      sleep ${SHORT_SLEEP}
+      runSystem "$1"
+      CURRENT_TPS=$((i * INITIAL_TPS))
+  done
 }
 
 
@@ -469,8 +458,6 @@ case $1 in
     ;;
     test)
         runAllServers "${PULL_GIT}"
-        TPS=$[1000]
-        changeTps ${TPS}
         runSystem $2
         #Rscript --vanilla reporting.R "spark" 1000 60
         #Rscript --vanilla reporting.R "flink" 1000 60

@@ -37,7 +37,7 @@ time.divisor: 10000
 
 
 #Benchmark Specific
-test.time: 60
+test.time: 600
 
 
 ssh.user: "root"
