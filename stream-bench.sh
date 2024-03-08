@@ -369,7 +369,7 @@ then
 else
   while [ $# -gt 0 ];
   do
-    run "$1"
+    run "$1" "$2"
     shift
   done
 fi
