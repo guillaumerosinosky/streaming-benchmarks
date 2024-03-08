@@ -23,7 +23,7 @@ CLEAN_RESULT_CMD="cd $PROJECT_DIR; rm data/*.txt; rm -rf data/workers; rm -rf /r
 CLEAN_BUILD_BENCHMARK="cd $PROJECT_DIR; ./stream-bench.sh SETUP_BENCHMARK"
 SETUP_KAFKA="cd $PROJECT_DIR; ./stream-bench.sh SETUP_KAFKA"
 
-LOAD_START_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_LOAD $CURRENT_TPS;"
+LOAD_START_CMD="cd $PROJECT_DIR; ./stream-bench.sh START_LOAD;"
 LOAD_STOP_CMD="cd $PROJECT_DIR; ./stream-bench.sh STOP_LOAD;"
 
 DELETE_TOPIC="cd $PROJECT_DIR/$KAFKA_DIR; ./bin/kafka-topics.sh --delete --bootstrap-server "$BOOTSTRAP_SERVERS" --topic $TOPIC;"
@@ -214,6 +214,10 @@ function stopMonitoring(){
     runCommandKafkaServers "${STOP_MONITOR}" "nohup"
 }
 
+function changeTps(){
+    runCommandLoadServers "sed -i \"/TPS=/c\TPS=$1\" stream-benchmarking/variable.sh" "nohup"
+}
+
 function startRedis {
     echo "Starting Redis"
     runCommandRedisServer "${START_REDIS_CMD}" "nohup"
@@ -341,6 +345,7 @@ function benchmarkLoop (){
       echo "Benchmark $CURRENT_TPS"
       runAllServers "${PULL_GIT}"
       sleep ${SHORT_SLEEP}
+      changeTps $CURRENT_TPS
       runSystem "$1"
   done
 }
