@@ -337,8 +337,6 @@ function stopAll (){
     cleanResult
 }
 
-
-
 function benchmarkLoop (){
   for i in $(seq 1 $BENCHMARK_COUNT); do
       CURRENT_TPS=$((i * INITIAL_TPS))
@@ -349,7 +347,6 @@ function benchmarkLoop (){
       runSystem "$1"
   done
 }
-
 
 case $1 in
     flink)
