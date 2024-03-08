@@ -13,8 +13,6 @@ MAKE=${MAKE:-make}
 
 . ./variable.sh --source-only
 
-TEST_TPS=${TEST_TPS:-10}
-
 
 pid_match() {
    local VAL=`ps -aef | grep "$1" | grep -v grep | awk '{print $2}'`
@@ -256,7 +254,7 @@ run() {
     run "START_KAFKA"
     run "START_FLINK"
     run "START_FLINK_PROCESSING"
-    run "START_LOAD" $TEST_TPS
+    run "START_LOAD" $1
     sleep ${TEST_TIME}
     run "STOP_LOAD"
     run "STOP_FLINK_PROCESSING"
@@ -271,7 +269,7 @@ run() {
     run "START_KAFKA"
     run "START_JET"
     run "START_JET_PROCESSING"
-    run "START_LOAD" $TEST_TPS
+    run "START_LOAD" $1
     sleep ${TEST_TIME}
     run "STOP_LOAD"
     run "STOP_JET"
@@ -285,7 +283,7 @@ run() {
     run "START_KAFKA"
     run "START_SPARK"
     run "START_SPARK_PROCESSING"
-    run "START_LOAD" $TEST_TPS
+    run "START_LOAD" $1
     sleep ${TEST_TIME}
     run "STOP_LOAD"
     run "STOP_SPARK_PROCESSING"
@@ -299,7 +297,7 @@ run() {
     run "START_REDIS"
     run "START_KAFKA"
     run "START_KAFKA_PROCESSING"
-    run "START_LOAD" $TEST_TPS
+    run "START_LOAD" $1
     sleep ${TEST_TIME}
     run "STOP_LOAD"
     run "STOP_KAFKA_PROCESSING"
