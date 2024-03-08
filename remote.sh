@@ -215,7 +215,7 @@ function stopMonitoring(){
 }
 
 function changeTps(){
-    runCommandLoadServers "sed -i \"/TPS=/c\TPS=$1\" stream-benchmarking/variable.sh" "nohup"
+    runCommandLoadServers "sed -i \"/TPS=/c\TPS=$1\" ./streaming-benchmarks/variable.sh" "nohup"
 }
 
 function startRedis {
@@ -455,6 +455,9 @@ case $1 in
     ;;
     clean)
         cleanResult
+    ;;
+    change)
+        changeTps $2
     ;;
     result)
         getResultFromStreamServer "result/$1/TPS_4000_DURATION_600"
