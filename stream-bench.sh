@@ -203,7 +203,7 @@ run() {
   elif [ "START_LOAD" = "$OPERATION" ];
   then
     cd data
-    start_if_needed leiningen.core.main "Load Generation" 1 $LEIN run -r -t $2 --configPath ../$CONF_FILE
+    start_if_needed leiningen.core.main "Load Generation" 1 $LEIN run -r -t $1 --configPath ../$CONF_FILE
     cd ..
   elif [ "STOP_LOAD" = "$OPERATION" ];
   then
