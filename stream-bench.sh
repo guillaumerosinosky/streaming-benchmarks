@@ -201,7 +201,7 @@ run() {
   elif [ "START_LOAD" = "$OPERATION" ];
   then
     cd data
-    start_if_needed leiningen.core.main "Load Generation" 1 $LEIN run -r -t $2 --configPath ../$CONF_FILE
+    start_if_needed leiningen.core.main "Load Generation" 1 $LEIN run -r -t $TPS --configPath ../$CONF_FILE
     cd ..
   elif [ "STOP_LOAD" = "$OPERATION" ];
   then
@@ -254,7 +254,7 @@ run() {
     run "START_KAFKA"
     run "START_FLINK"
     run "START_FLINK_PROCESSING"
-    run "START_LOAD" $2
+    run "START_LOAD"
     sleep ${TEST_TIME}
     run "STOP_LOAD"
     run "STOP_FLINK_PROCESSING"
@@ -269,7 +269,7 @@ run() {
     run "START_KAFKA"
     run "START_JET"
     run "START_JET_PROCESSING"
-    run "START_LOAD" $2
+    run "START_LOAD"
     sleep ${TEST_TIME}
     run "STOP_LOAD"
     run "STOP_JET"
@@ -283,7 +283,7 @@ run() {
     run "START_KAFKA"
     run "START_SPARK"
     run "START_SPARK_PROCESSING"
-    run "START_LOAD" $2
+    run "START_LOAD"
     sleep ${TEST_TIME}
     run "STOP_LOAD"
     run "STOP_SPARK_PROCESSING"
@@ -297,7 +297,7 @@ run() {
     run "START_REDIS"
     run "START_KAFKA"
     run "START_KAFKA_PROCESSING"
-    run "START_LOAD" $2
+    run "START_LOAD"
     sleep ${TEST_TIME}
     run "STOP_LOAD"
     run "STOP_KAFKA_PROCESSING"
@@ -367,7 +367,7 @@ then
 else
   while [ $# -gt 0 ];
   do
-    run "$1" "$2"
+    run "$1"
     shift
   done
 fi

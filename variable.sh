@@ -26,6 +26,7 @@ PARTITIONS=${PARTITIONS:-6}
 
 CONF_FILE=./conf/benchmarkConf.yaml
 
+TPS=${TPS:-60}
 # shellcheck disable=SC2034
 TEST_TIME=${TEST_TIME:-60}
 
