@@ -20,8 +20,3 @@
       no_log: true
       args:
         chdir: "{{ working_directory }}"
-#    - name: Setup Kafka
-#      ansible.builtin.shell: ./setup.sh kafka
-#      no_log: true
-#      args:
-#        chdir: "{{ working_directory }}"
