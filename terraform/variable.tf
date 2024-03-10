@@ -10,7 +10,7 @@ variable "kafka-droplet-size" {
 
 variable "zookeeper-droplet-size" {
   description = "The size of the droplet"
-  default     = "c-2-intel"
+  default     = "c-2"
 }
 
 variable "load-droplet-size" {
