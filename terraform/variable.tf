@@ -5,17 +5,17 @@ variable "droplet-size" {
 
 variable "kafka-droplet-size" {
   description = "The size of the droplet"
-  default     = "c-4-intel"
+  default     = "c-8-intel"
 }
 
 variable "zookeeper-droplet-size" {
   description = "The size of the droplet"
-  default     = "c-2"
+  default     = "c-2-intel"
 }
 
 variable "load-droplet-size" {
   description = "The size of the droplet"
-  default     = "c-2"
+  default     = "c-4-intel"
 }
 
 variable "stream-droplet-size" {
@@ -25,7 +25,7 @@ variable "stream-droplet-size" {
 
 variable "redis-droplet-size" {
   description = "The size of the droplet"
-  default     = "g-2vcpu-8gb-intel"
+  default     = "c-8-intel"
 }
 
 variable "droplet-region" {
