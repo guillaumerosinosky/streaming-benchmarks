@@ -28,7 +28,7 @@ CONF_FILE=./conf/benchmarkConf.yaml
 
 TPS=1000
 # shellcheck disable=SC2034
-TEST_TIME=${TEST_TIME:-600}
+TEST_TIME=${TEST_TIME:-60}
 
 SPARK_MASTER_HOST="stream-node-01"
 BATCH="3000"
