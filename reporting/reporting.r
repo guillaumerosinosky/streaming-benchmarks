@@ -7,7 +7,7 @@ library(grid)
 theme_set(theme_bw())
 options("scipen"=10)
 args <- commandArgs(TRUE)
-engines_all <- c("flink", "kafka")
+engines_all <- c("flink", "kafka", "spark")
 source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/util.r')
 source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/StreamServerReport.r')
 source('~/IdeaProjects/dnysus/streaming-benchmarks/reporting/KafkaServerReport.r')
@@ -20,8 +20,8 @@ trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 #generateBenchmarkPercentile("kafka", init_tps, duration, 15)
 
 if(length(args) == 0){
-  tps_count <- 3
-  tps <- 5000
+  tps_count <- 5
+  tps <- 10000
   duration <- 60
   for (i in seq_along(engines_all)) {
     generateBenchmarkReport(engines_all[i], tps, duration, tps_count)
