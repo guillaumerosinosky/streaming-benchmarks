@@ -1,5 +1,5 @@
 - name: Gather facts from 'all' hosts in inventory
-  hosts: all
+  hosts: load
   vars:
     ansible_host_key_checking: false
     ansible_ssh_extra_args: '-o UserKnownHostsFile=/dev/null'
