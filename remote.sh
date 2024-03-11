@@ -265,7 +265,7 @@ function getBenchmarkResult(){
     sleep ${SHORT_SLEEP}
     runAllServers "${REBOOT_CMD}"
     sleep ${WAIT_AFTER_STOP_PRODUCER}
-    Rscript reporting/reporting.R ${ENGINE_PATH} ${INITIAL_TPS} ${TEST_TIME} ${BENCHMARK_COUNT
+    Rscript reporting/reporting.R ${ENGINE_PATH} ${INITIAL_TPS} ${TEST_TIME} ${BENCHMARK_COUNT}
 }
 
 function benchmark(){
@@ -341,7 +341,7 @@ function stopAll (){
 }
 
 function benchmarkLoop (){
-  for i in $(seq 1 $BENCHMARK_COUNT); do
+  for i in $(seq 6 $BENCHMARK_COUNT); do
       CURRENT_TPS=$((i * INITIAL_TPS))
       echo "Benchmark $CURRENT_TPS"
       runAllServers "${PULL_GIT}"
