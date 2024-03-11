@@ -91,7 +91,7 @@ object AdvertisingSpark {
 
     import spark.implicits._
 
-    spark.sparkContext.setLogLevel("WARN")
+    spark.sparkContext.setLogLevel("INFO")
 
 
     val kafkaHosts = commonConfig.get("kafka.brokers").asInstanceOf[java.util.List[String]] match {
