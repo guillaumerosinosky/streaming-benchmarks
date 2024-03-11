@@ -15,7 +15,7 @@ WAIT_AFTER_STOP_PRODUCER=30
 
 PROJECT_DIR="/root/streaming-benchmarks"
 
-CLEAN_LOAD_RESULT_CMD="rm *.load; rm -rf $PROJECT_DIR/$SPARK_DIR/work/*; rm -rf /root/kafka-logs/*;"
+CLEAN_LOAD_RESULT_CMD="rm *.load; rm -rf $PROJECT_DIR/$SPARK_DIR/work/*; rm -rf data/workers; rm -rf /root/kafka-logs/*;"
 REBOOT_CMD="reboot;"
 SHUTDOWN_CMD="shutdown;"
 CLEAN_RESULT_CMD="cd $PROJECT_DIR; rm data/*.txt; rm -rf data/workers; rm -rf /root/zookeeper/version-2/*"
@@ -261,6 +261,7 @@ function getBenchmarkResult(){
     getResultFromStreamServer "${PATH_RESULT}"
     getResultFromKafkaServer "${PATH_RESULT}"
     getResultFromRedisServer "${PATH_RESULT}"
+    cleanResult
     sleep ${SHORT_SLEEP}
     runAllServers "${REBOOT_CMD}"
     sleep ${WAIT_AFTER_STOP_PRODUCER}
