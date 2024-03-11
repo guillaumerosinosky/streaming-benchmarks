@@ -64,15 +64,6 @@ function spark_setup() {
     echo "SPARK_DRIVER_MEMORY=15G" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
     echo "SPARK_DAEMON_MEMORY=15G" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
     chmod +x /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
-
-#    echo "spark.master                     spark://stream-node-01:7077" >> /root/streaming-benchmarks/"${SPARK_DIR}"/spark-defaults.conf
-#    echo "spark.serializer                 org.apache.spark.serializer.KryoSerializer" >> /root/streaming-benchmarks/"${SPARK_DIR}"/spark-defaults.conf
-#    echo "spark.driver.memory              12g" >> /root/streaming-benchmarks/"${SPARK_DIR}"/spark-defaults.conf
-#    echo "spark.worker.memory              12g" >> /root/streaming-benchmarks/"${SPARK_DIR}"/spark-defaults.conf
-#    echo "spark.worker.cores               8" >> /root/streaming-benchmarks/"${SPARK_DIR}"/spark-defaults.conf
-#    echo "spark.executor.cores             8" >> /root/streaming-benchmarks/"${SPARK_DIR}"/spark-defaults.conf
-#    echo "spark.executor.memory            12g" >> /root/streaming-benchmarks/"${SPARK_DIR}"/spark-defaults.conf
-#    echo "spark.executor.extraJavaOptions  -XX:+PrintGCDetails" >> /root/streaming-benchmarks/"${SPARK_DIR}"/spark-defaults.conf
 }
 
 function kafka_setup() {
