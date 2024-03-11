@@ -3,9 +3,8 @@
 . ./remoteInvocation.sh --source-only
 . ./variable.sh --source-only
 
-
 INITIAL_TPS=2000
-BENCHMARK_COUNT=10
+BENCHMARK_COUNT=6
 CURRENT_TPS=$INITIAL_TPS
 
 SHORT_SLEEP=3
@@ -265,7 +264,7 @@ function getBenchmarkResult(){
     sleep ${SHORT_SLEEP}
     runAllServers "${REBOOT_CMD}"
     sleep ${WAIT_AFTER_STOP_PRODUCER}
-    Rscript reporting/reporting.R ${ENGINE_PATH} ${INITIAL_TPS} ${TEST_TIME} ${BENCHMARK_COUNT}
+    Rscript reporting/reporting.R ${ENGINE_PATH} ${INITIAL_TPS} ${TEST_TIME} ${BENCHMARK_COUNT} ${LOAD_SERVER_COUNT}
 }
 
 function benchmark(){
@@ -442,7 +441,10 @@ case $1 in
         runAllServers "${PULL_GIT}"
     ;;
     report)
-        Rscript reporting.R
+        Rscript --vanilla reporting/reporting.R "spark" $INITIAL_TPS $TEST_TIME $BENCHMARK_COUNT $LOAD_SERVER_COUNT
+        Rscript --vanilla reporting/reporting.R "flink" $INITIAL_TPS $TEST_TIME $BENCHMARK_COUNT $LOAD_SERVER_COUNT
+        Rscript --vanilla reporting/reporting.R "kafka" $INITIAL_TPS $TEST_TIME $BENCHMARK_COUNT $LOAD_SERVER_COUNT
+        Rscript --vanilla reporting/reporting.R
     ;;
     reboot)
         runAllServers "${REBOOT_CMD}"
@@ -467,9 +469,5 @@ case $1 in
     test)
         runAllServers "${PULL_GIT}"
         runSystem $2
-        #Rscript --vanilla reporting.R "spark" 1000 60
-        #Rscript --vanilla reporting.R "flink" 1000 60
         echo "Please Enter valid command"
-
-
 esac

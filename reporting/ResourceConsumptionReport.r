@@ -64,7 +64,6 @@ generateResourceConsumptionReport <- function(engines, tps, duration, tps_count)
        geom_smooth(method="loess", se=F, size=0.5) +
        guides(fill=FALSE) +
        labs(x="Time (seconds)", y="CPU load percentage") +
-            #subtitle=paste("Stream Servers CPU load with", toString(tps*i*10), "TPS")) +
        theme(plot.title = element_text(size = 8, face = "plain"),
              plot.subtitle = element_text(size = 7, face = "plain"),
              text = element_text(size = 6, face = "plain"),
@@ -75,7 +74,6 @@ generateResourceConsumptionReport <- function(engines, tps, duration, tps_count)
        scale_y_continuous(breaks= pretty_breaks()) +
        guides(fill=FALSE) +
        labs(x="Time (seconds)", y="Memory load percentage") +
-            #subtitle=paste("Stream Servers Memory load with", toString(tps*i*10), "TPS")) +
        theme(plot.title = element_text(size = 8, face = "plain"),
              plot.subtitle = element_text(size = 7, face = "plain"),
              text = element_text(size = 6, face = "plain"),
@@ -86,7 +84,6 @@ generateResourceConsumptionReport <- function(engines, tps, duration, tps_count)
        geom_smooth(method="loess", se=F, size=0.5) +
        guides(fill=FALSE, size=1) +
        labs(x="Time (seconds)", y="CPU load percentage") +
-            #subtitle=paste("Kafka Servers CPU load with", toString(tps*i*10), "TPS")) +
        theme(plot.title = element_text(size = 8, face = "plain"),
              plot.subtitle = element_text(size = 7, face = "plain"),
              text = element_text(size = 6, face = "plain"),
@@ -97,7 +94,6 @@ generateResourceConsumptionReport <- function(engines, tps, duration, tps_count)
        scale_y_continuous(breaks= pretty_breaks()) +
        guides(fill=FALSE, size=1) +
        labs(x="Time (seconds)", y="Memory load percentage") +
-            #subtitle=paste("Kafka Servers Memory load with", toString(tps*i*10), "TPS")) +
        theme(plot.title = element_text(size = 8, face = "plain"),
              plot.subtitle = element_text(size = 7, face = "plain"),
              text = element_text(size = 6, face = "plain"),
@@ -175,7 +171,6 @@ generateResourceConsumptionReportByTps <- function(engine, tps, duration, tps_co
       geom_smooth(method="loess", se=F, size=0.5) +
       guides(fill=FALSE) +
       labs(x="Time (seconds)", y="CPU load percentage") +
-           #subtitle=paste("Stream Servers CPU load with", toString(tps*i*10), "TPS")) +
       theme(plot.title = element_text(size = 8, face = "plain"),
             plot.subtitle = element_text(size = 7, face = "plain"),
             text = element_text(size = 6, face = "plain"),
@@ -191,7 +186,6 @@ generateResourceConsumptionReportByTps <- function(engine, tps, duration, tps_co
       scale_y_continuous(breaks= pretty_breaks()) +
       guides(fill=FALSE) +
       labs(x="Time (seconds)", y="Memory load percentage") +
-           #subtitle=paste("Stream Servers Memory load with", toString(tps*i*10), "TPS")) +
       theme(plot.title = element_text(size = 8, face = "plain"),
             plot.subtitle = element_text(size = 7, face = "plain"),
             text = element_text(size = 6, face = "plain"),
@@ -207,7 +201,6 @@ generateResourceConsumptionReportByTps <- function(engine, tps, duration, tps_co
       geom_smooth(method="loess", se=F, size=0.5) +
       guides(fill=FALSE, size=1) +
       labs(x="Time (seconds)", y="CPU load percentage") +
-           #subtitle=paste("Kafka Servers CPU load with", toString(tps*i*10), "TPS")) +
       theme(plot.title = element_text(size = 8, face = "plain"),
             plot.subtitle = element_text(size = 7, face = "plain"),
             text = element_text(size = 6, face = "plain"),
@@ -223,7 +216,6 @@ generateResourceConsumptionReportByTps <- function(engine, tps, duration, tps_co
       scale_y_continuous(breaks= pretty_breaks()) +
       guides(fill=FALSE, size=1) +
       labs(x="Time (seconds)", y="Memory load percentage") +
-           #subtitle=paste("Kafka Servers Memory load with", toString(tps*i*10), "TPS")) +
       theme(plot.title = element_text(size = 8, face = "plain"),
             plot.subtitle = element_text(size = 7, face = "plain"),
             text = element_text(size = 6, face = "plain"),

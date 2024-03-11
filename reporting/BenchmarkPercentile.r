@@ -6,7 +6,7 @@
 ######################################################################################################################################
 
 
-generateBenchmarkSpesificPercentile <- function(engines, tps, duration, percentile, tps_count){
+generateBenchmarkSpecificPercentile <- function(engines, tps, duration, percentile, tps_count, load_node_count){
   result <- NULL
   for(eng in seq_along(engines)){
     engine <- engines[eng]
@@ -27,7 +27,7 @@ generateBenchmarkSpesificPercentile <- function(engines, tps, duration, percenti
         }
       }
       UpdatedFiltered <- sort(UpdatedFiltered)
-      df <- data.frame(tps*i*10, engine, UpdatedFiltered[round(percentile/100*(length(UpdatedFiltered)+1))]-10000)
+      df <- data.frame(tps*i*load_node_count, engine, UpdatedFiltered[round(percentile/100*(length(UpdatedFiltered)+1))]-10000)
       
       result <- rbind(result, df)
       df
@@ -38,13 +38,12 @@ generateBenchmarkSpesificPercentile <- function(engines, tps, duration, percenti
     }
   }
   names(result) <- c("TPS","Engine","Throughput")
-  ggplot(data=result, aes(x=TPS, y=Throughput, group=Engine, colour=Engine)) + 
+  ggplot(data=result, aes(x=TPS, y=Throughput, group=Engine, colour=Engine)) +
     geom_smooth(method="loess", se=F, size=0.5) +
     guides(fill=FALSE) +
-    scale_y_continuous(breaks = round(seq(min(result$Throughput), max(result$Throughput), by = 5000),1)) +
-    scale_x_continuous(breaks = round(seq(min(result$TPS), max(result$TPS), by = 10000),1)) +
+    scale_y_continuous(breaks = round(seq(min(result$Throughput), max(result$Throughput), by = 10000), -4)) +
+    scale_x_continuous(breaks = round(seq(min(result$TPS), max(result$TPS), by = tps*load_node_count), 1)) +
     xlab("Emit Rate (event/s)") + ylab("Latency (ms) ") +
-    #ggtitle(paste(toString(percentile), "% Percentile chart", sep = " ")) +
     theme(plot.title = element_text(size = 8, face = "plain"), 
           axis.text.x = element_text(size = 6, angle = 30, hjust = 1), 
           text = element_text(size = 6, face = "plain"),
@@ -57,7 +56,7 @@ generateBenchmarkSpesificPercentile <- function(engines, tps, duration, percenti
   ggsave(paste0(duration, "_", percentile, "_percentile.pdf"), width = 8, height = 8, units = "cm", device = "pdf", path = reportFolder)
 }
 
-generateBenchmarkPercentile <- function(engine, tps, duration, tps_count){
+generateBenchmarkPercentile <- function(engine, tps, duration, tps_count, load_node_count){
   result <- NULL
   for(i in 1:tps_count) {
     TPS <- toString(tps * i)
@@ -82,7 +81,7 @@ generateBenchmarkPercentile <- function(engine, tps, duration, tps_count){
     }
     
     
-    df <- data.frame(toString(tps*i*10), 1:99, percentile - 10000, windows)
+    df <- data.frame(toString(tps*i*load_node_count), 1:99, percentile - 10000, windows)
     result <- rbind(result, df)
     
     if (length(Seen$V1)  != length(Updated$V1)){ 
@@ -96,8 +95,7 @@ generateBenchmarkPercentile <- function(engine, tps, duration, tps_count){
     geom_smooth(method="loess", se=F, size=0.5) + 
     scale_y_continuous(breaks= pretty_breaks()) +
     guides(fill=FALSE) +
-    xlab("Percentage of Completed Tuple") + ylab("Latency (ms) ") +
-    #ggtitle(paste(toupper(engine), "Benchmark, Percentile chart", sep = " ")) +
+    xlab("Percentile of Completed Tuple") + ylab("Latency (ms) ") +
     theme(plot.title = element_text(size = 8, face = "plain"), 
           text = element_text(size = 6, face = "plain"),
           legend.justification = c(0, 1), 

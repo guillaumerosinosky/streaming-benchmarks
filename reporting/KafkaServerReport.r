@@ -35,7 +35,6 @@ generateKafkaServerLoadReport <- function(engine, tps, duration, tps_count){
       guides(fill=FALSE) +
       scale_y_continuous(breaks= pretty_breaks()) +
       labs(x="Seconds", y="CPU load percentage") +
-           #subtitle=paste(toupper(engine)," Benchmark","Kafka cpu usage with", toString(tps*i*10), "TPS")) +
       theme(plot.title = element_text(size = 8, face = "plain"), 
             plot.subtitle = element_text(size = 7, face = "plain"), 
             text = element_text(size = 7, face = "plain"),
@@ -52,7 +51,6 @@ generateKafkaServerLoadReport <- function(engine, tps, duration, tps_count){
       guides(fill=FALSE) +
       scale_y_continuous(breaks= pretty_breaks()) +
       labs(x="Seconds", y="Memory load percentage") +
-           #subtitle=paste(toupper(engine),"Benchmark","Kafka memory usage with", toString(tps*i*10), "TPS")) +
       theme(plot.title = element_text(size = 8, face = "plain"), 
             plot.subtitle = element_text(size = 7, face = "plain"), 
             text = element_text(size = 7, face = "plain"),

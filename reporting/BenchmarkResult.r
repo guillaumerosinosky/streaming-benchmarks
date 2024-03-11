@@ -4,7 +4,7 @@
 ##########################                             Stream Benchmark Result                              ##########################
 ##########################                                                                                  ##########################
 ######################################################################################################################################
-generateBenchmarkReport <- function(engine, tps, duration, tps_count){
+generateBenchmarkReport <- function(engine, tps, duration, tps_count, load_node_count){
   result <- NULL
   for(i in 1:tps_count) {
     TPS <- toString(tps * i)
@@ -23,7 +23,7 @@ generateBenchmarkReport <- function(engine, tps, duration, tps_count){
     }
     windows <- seq_along(UpdatedFiltered)
     
-    df <- data.frame(toString(tps*i*10), SeenFiltered, UpdatedFiltered - 10000, windows)
+    df <- data.frame(toString(tps*i*load_node_count), SeenFiltered, UpdatedFiltered - 10000, windows)
     result <- rbind(result, df)
     
     if (length(Seen$V1)  != length(Updated$V1)){ 
@@ -45,7 +45,7 @@ generateBenchmarkReport <- function(engine, tps, duration, tps_count){
             legend.key.height=unit(0.5,"line"),
             legend.key.width=unit(0.5,"line"),
             legend.text=element_text(size=rel(0.7)))
-    ggsave(paste0(engine, "_", toString(tps * i * 10), ".pdf"), width = 8, height = 8, units = "cm", device = "pdf", path = sourceFolder)
+    ggsave(paste0(engine, "_", toString(tps * i * load_node_count), ".pdf"), width = 8, height = 8, units = "cm", device = "pdf", path = sourceFolder)
   }
   names(result) <- c("TPS","Seen","Throughput", "Percentile")
   result <- result[result$Throughput > 0,]
