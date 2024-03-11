@@ -158,7 +158,7 @@ object AdvertisingSpark {
     }
     val writeToConsole = totalEventsPerCampaignTime
       .writeStream.foreach(writer)
-      .trigger(Trigger.ProcessingTime(batchSize))
+      .trigger(Trigger.Continuous(batchSize))
       .outputMode("update").start()
 
     spark.streams.awaitAnyTermination()
