@@ -182,7 +182,7 @@ function stopSpark {
 
 function startSparkProcessing {
     echo "Starting Spark processing"
-    runCommandRedisServer "${START_SPARK_PROC_CMD}" "nohup"
+    runCommandMasterStreamServers "${START_SPARK_PROC_CMD}" "nohup"
 }
 
 function stopSparkProcessing {

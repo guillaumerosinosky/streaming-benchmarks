@@ -15,7 +15,7 @@ import redis.clients.jedis._
 
 import java.util
 import java.util.UUID
-import collection.JavaConverters._
+import scala.collection.JavaConverters._
 import scala.compat.Platform.currentTime
 
 object AdvertisingSpark {
