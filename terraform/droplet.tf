@@ -1,10 +1,11 @@
 resource "digitalocean_droplet" "zookeeper" {
-  count    = var.zookeeper-node-count
-  name     = "zookeeper-node-${format("%02d", (count.index + 1))}"
-  image    = var.droplet-os-version
-  region   = var.droplet-region
-  size     = var.zookeeper-droplet-size
-  ssh_keys = [
+  count       = var.zookeeper-node-count
+  name        = "zookeeper-node-${format("%02d", (count.index + 1))}"
+  image       = var.droplet-os-version
+  region      = var.droplet-region
+  size        = var.zookeeper-droplet-size
+  resize_disk = false
+  ssh_keys    = [
     digitalocean_ssh_key.ssh-key.fingerprint
   ]
 
@@ -24,12 +25,13 @@ resource "digitalocean_droplet" "zookeeper" {
 }
 
 resource "digitalocean_droplet" "kafka" {
-  count    = var.kafka-node-count
-  name     = "kafka-node-${format("%02d", (count.index + 1))}"
-  image    = var.droplet-os-version
-  region   = var.droplet-region
-  size     = var.kafka-droplet-size
-  ssh_keys = [
+  count       = var.kafka-node-count
+  name        = "kafka-node-${format("%02d", (count.index + 1))}"
+  image       = var.droplet-os-version
+  region      = var.droplet-region
+  size        = var.kafka-droplet-size
+  resize_disk = false
+  ssh_keys    = [
     digitalocean_ssh_key.ssh-key.fingerprint
   ]
 
@@ -49,12 +51,13 @@ resource "digitalocean_droplet" "kafka" {
 }
 
 resource "digitalocean_droplet" "stream" {
-  count    = var.stream-node-count
-  name     = "stream-node-${format("%02d", (count.index + 1))}"
-  image    = var.droplet-os-version
-  region   = var.droplet-region
-  size     = var.stream-droplet-size
-  ssh_keys = [
+  count       = var.stream-node-count
+  name        = "stream-node-${format("%02d", (count.index + 1))}"
+  image       = var.droplet-os-version
+  region      = var.droplet-region
+  size        = var.stream-droplet-size
+  resize_disk = false
+  ssh_keys    = [
     digitalocean_ssh_key.ssh-key.fingerprint
   ]
 
@@ -74,12 +77,13 @@ resource "digitalocean_droplet" "stream" {
 }
 
 resource "digitalocean_droplet" "load" {
-  count    = var.load-node-count
-  name     = "load-node-${format("%02d", (count.index + 1))}"
-  image    = var.droplet-os-version
-  region   = var.droplet-region
-  size     = var.load-droplet-size
-  ssh_keys = [
+  count       = var.load-node-count
+  name        = "load-node-${format("%02d", (count.index + 1))}"
+  image       = var.droplet-os-version
+  region      = var.droplet-region
+  size        = var.load-droplet-size
+  resize_disk = false
+  ssh_keys    = [
     digitalocean_ssh_key.ssh-key.fingerprint
   ]
 
@@ -99,11 +103,12 @@ resource "digitalocean_droplet" "load" {
 }
 
 resource "digitalocean_droplet" "redisdo" {
-  name     = "redisdo"
-  image    = var.droplet-os-version
-  region   = var.droplet-region
-  size     = var.redis-droplet-size
-  ssh_keys = [
+  name        = "redisdo"
+  image       = var.droplet-os-version
+  region      = var.droplet-region
+  size        = var.redis-droplet-size
+  resize_disk = false
+  ssh_keys    = [
     digitalocean_ssh_key.ssh-key.fingerprint
   ]
 
