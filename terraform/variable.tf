@@ -44,7 +44,7 @@ variable "zookeeper-node-count" {
 }
 
 variable "load-node-count" {
-  default = 10
+  default = 20
   type    = number
 }
 

@@ -34,7 +34,7 @@ if(length(args) == 0){
   generateBenchmarkSpesificPercentile(engines_all, tps, duration, 99, tps_count)
   generateBenchmarkSpesificPercentile(engines_all, tps, duration, 95, tps_count)
   generateBenchmarkSpesificPercentile(engines_all, tps, duration, 90, tps_count)
-  
+
 } else {
   tps <- as.numeric(args[2])
   duration <- as.numeric(args[3])
@@ -43,6 +43,7 @@ if(length(args) == 0){
   generateStreamServerLoadReport(args[1], tps, duration, tps_count)
   generateKafkaServerLoadReport(args[1], tps, duration, tps_count)
   generateBenchmarkPercentile(args[1], tps, duration, tps_count)
+  generateResourceConsumptionReportByTps(args[1], tps, duration, tps_count)
 }
   
 generateResourceConsumptionReport(engines_all, tps, duration, tps_count)
