@@ -15,7 +15,7 @@ variable "zookeeper-droplet-size" {
 
 variable "load-droplet-size" {
   description = "The size of the droplet"
-  default     = "c-4-intel"
+  default     = "c-8-intel"
 }
 
 variable "stream-droplet-size" {
