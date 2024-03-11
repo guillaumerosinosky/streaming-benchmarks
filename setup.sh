@@ -15,7 +15,7 @@ function flink_setup() {
     sed -i "/taskmanager.bind-host:/c\taskmanager.bind-host: ${PRIVATE_IP}" /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
     sed -i "/taskmanager.host:/c\taskmanager.host: ${PRIVATE_IP}" /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
     sed -i '/taskmanager.heap.mb/c\taskmanager.heap.mb: 15360' /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
-    sed -i "/taskmanager.numberOfTaskSlots/c\taskmanager.numberOfTaskSlots: 72" /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
+    sed -i "/taskmanager.numberOfTaskSlots/c\taskmanager.numberOfTaskSlots: 8" /root/streaming-benchmarks/"${FLINK_DIR}"/conf/flink-conf.yaml
 
     cp /dev/null /root/streaming-benchmarks/"${FLINK_DIR}"/conf/workers
     # shellcheck disable=SC2129
