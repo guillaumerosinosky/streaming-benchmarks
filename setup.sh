@@ -36,7 +36,7 @@ function flink_setup() {
 
 function spark_setup() {
     cp /dev/null /root/streaming-benchmarks/"${SPARK_DIR}"/conf/workers
-    if ! grep -qxF 'SPARK_HOME' ~/.bashrc; then
+    if ! grep 'SPARK_HOME' ~/.bashrc; then
       echo "export SPARK_HOME=~/streaming-benchmarks/${SPARK_DIR}" >> /root/.bashrc
       echo "export SPARK_CONF_DIR=~/streaming-benchmarks/${SPARK_DIR}/conf" >> /root/.bashrc
     fi
