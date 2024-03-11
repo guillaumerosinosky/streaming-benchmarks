@@ -262,7 +262,9 @@ function getBenchmarkResult(){
     getResultFromKafkaServer "${PATH_RESULT}"
     getResultFromRedisServer "${PATH_RESULT}"
     sleep ${SHORT_SLEEP}
-    Rscript reporting/reporting.R ${ENGINE_PATH} ${INITIAL_TPS} ${TEST_TIME} ${BENCHMARK_COUNT}
+    runAllServers "${REBOOT_CMD}"
+    sleep ${WAIT_AFTER_STOP_PRODUCER}
+    Rscript reporting/reporting.R ${ENGINE_PATH} ${INITIAL_TPS} ${TEST_TIME} ${BENCHMARK_COUNT
 }
 
 function benchmark(){
