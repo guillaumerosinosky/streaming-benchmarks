@@ -9,7 +9,7 @@
                  [clj-json "0.5.3"]
                  [clj-yaml "0.4.0"]]
   :main setup.core
-  :jvm-opts ["-Xmx2g" "-server"]
+  :jvm-opts ["-Xmx8g" "-server"]
   :target-path "target/%s"
   :profiles {:uberjar {:aot :all}})
 
