@@ -60,9 +60,9 @@ function spark_setup() {
     echo "SPARK_WORKER_DIR=/root/streaming-benchmarks/${SPARK_DIR}/work" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
     echo "SPARK_EXECUTOR_MEMORY=12G" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
     echo "SPARK_WORKER_CORES=8" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
-    echo "SPARK_WORKER_MEMORY=12g" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
+    echo "SPARK_WORKER_MEMORY=12G" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
     echo "SPARK_DRIVER_MEMORY=12G" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
-    echo "SPARK_DAEMON_MEMORY=12g" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
+    echo "SPARK_DAEMON_MEMORY=12G" >> /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
     chmod +x /root/streaming-benchmarks/"${SPARK_DIR}"/conf/spark-env.sh
 
 }
