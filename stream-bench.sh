@@ -208,7 +208,7 @@ run() {
     stop_if_needed leiningen.core.main "Load Generation"
   elif [ "START_SPARK_PROCESSING" = "$OPERATION" ];
   then
-    "$SPARK_DIR/bin/spark-submit" --class spark.benchmark.AdvertisingSpark ./spark-benchmarks/target/spark-benchmarks-0.1.0.jar "$CONF_FILE" &
+    "$SPARK_DIR/bin/spark-submit" --conf spark.executor.extraJavaOptions=-XX:+TraceClassUnloading --conf spark.driver.extraJavaOptions=-XX:+TraceClassUnloading --class spark.benchmark.AdvertisingSpark ./spark-benchmarks/target/spark-benchmarks-0.1.0.jar "$CONF_FILE" &
     sleep 5
   elif [ "STOP_SPARK_PROCESSING" = "$OPERATION" ];
   then
