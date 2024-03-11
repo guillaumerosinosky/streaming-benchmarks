@@ -12,9 +12,9 @@ function runCommandStreamServers(){
     do
         formatted_number=$(printf "%02d" $counter)
         if [ "$2" != "nohup" ]; then
-            ssh ${SSH_USER}@stream-node-"${formatted_number}" $1
+            ssh -o StrictHostKeyChecking=no ${SSH_USER}@stream-node-"${formatted_number}" $1
         else
-            nohup ssh ${SSH_USER}@stream-node-"${formatted_number}" $1 &
+            nohup ssh -o StrictHostKeyChecking=no ${SSH_USER}@stream-node-"${formatted_number}" $1 &
         fi
         ((counter++))
     done
@@ -22,17 +22,17 @@ function runCommandStreamServers(){
 
 function runCommandMasterStreamServers(){
     if [ "$2" != "nohup" ]; then
-        ssh ${SSH_USER}@stream-node-01 $1
+        ssh -o StrictHostKeyChecking=no ${SSH_USER}@stream-node-01 $1
     else
-        nohup ssh ${SSH_USER}@stream-node-01 $1 &
+        nohup ssh -o StrictHostKeyChecking=no ${SSH_USER}@stream-node-01 $1 &
     fi
 }
 
 function runCommandKafkaServer(){
     if [ "$2" != "nohup" ]; then
-        ssh ${SSH_USER}@kafka-node-01 $1
+        ssh -o StrictHostKeyChecking=no ${SSH_USER}@kafka-node-01 $1
     else
-        nohup ssh ${SSH_USER}@kafka-node-01 $1 &
+        nohup ssh -o StrictHostKeyChecking=no ${SSH_USER}@kafka-node-01 $1 &
     fi
 }
 
@@ -41,9 +41,9 @@ function runCommandKafkaServers(){
     while [ ${counter} -le ${KAFKA_SERVER_COUNT} ]
     do
         if [ "$2" != "nohup" ]; then
-            ssh ${SSH_USER}@kafka-node-0${counter} $1
+            ssh -o StrictHostKeyChecking=no ${SSH_USER}@kafka-node-0${counter} $1
         else
-            nohup ssh ${SSH_USER}@kafka-node-0${counter} $1 &
+            nohup ssh -o StrictHostKeyChecking=no ${SSH_USER}@kafka-node-0${counter} $1 &
         fi
         ((counter++))
     done
@@ -54,9 +54,9 @@ function runCommandZKServers(){
     while [ ${counter} -le ${ZOOKEEPER_SERVER_COUNT} ]
     do
        if [ "$2" != "nohup" ]; then
-           ssh ${SSH_USER}@zookeeper-node-0${counter} $1
+           ssh -o StrictHostKeyChecking=no ${SSH_USER}@zookeeper-node-0${counter} $1
        else
-           nohup ssh ${SSH_USER}@zookeeper-node-0${counter} $1 &
+           nohup ssh -o StrictHostKeyChecking=no ${SSH_USER}@zookeeper-node-0${counter} $1 &
        fi
        ((counter++))
     done
@@ -68,9 +68,9 @@ function runCommandLoadServers(){
     do
         formatted_number=$(printf "%02d" $counter)
         if [ "$2" != "nohup" ]; then
-            ssh ${SSH_USER}@load-node-"${formatted_number}" $1
+            ssh -o StrictHostKeyChecking=no ${SSH_USER}@load-node-"${formatted_number}" $1
         else
-            nohup ssh ${SSH_USER}@load-node-"${formatted_number}" $1 &
+            nohup ssh -o StrictHostKeyChecking=no ${SSH_USER}@load-node-"${formatted_number}" $1 &
         fi
         ((counter++))
     done
@@ -78,9 +78,9 @@ function runCommandLoadServers(){
 
 function runCommandRedisServer(){
     if [ "$2" != "nohup" ]; then
-        ssh ${SSH_USER}@redisdo $1
+        ssh -o StrictHostKeyChecking=no ${SSH_USER}@redisdo $1
     else
-        nohup ssh ${SSH_USER}@redisdo $1 &
+        nohup ssh -o StrictHostKeyChecking=no ${SSH_USER}@redisdo $1 &
     fi
 }
 
@@ -89,8 +89,8 @@ function getResultFromStreamServer(){
     while [ ${counter} -le ${STREAM_SERVER_COUNT} ]
     do
         formatted_number=$(printf "%02d" $counter)
-        nohup scp ${SSH_USER}@stream-node-"${formatted_number}":~/cpu.load $1/stream-node-"${formatted_number}".cpu &
-        nohup scp ${SSH_USER}@stream-node-"${formatted_number}":~/mem.load $1/stream-node-"${formatted_number}".mem &
+        nohup scp -o StrictHostKeyChecking=no ${SSH_USER}@stream-node-"${formatted_number}":~/cpu.load $1/stream-node-"${formatted_number}".cpu &
+        nohup scp -o StrictHostKeyChecking=no ${SSH_USER}@stream-node-"${formatted_number}":~/mem.load $1/stream-node-"${formatted_number}".mem &
         ((counter++))
     done
 }
@@ -99,13 +99,13 @@ function getResultFromKafkaServer(){
     counter=1
     while [ ${counter} -le ${KAFKA_SERVER_COUNT} ]
     do
-        nohup scp ${SSH_USER}@kafka-node-0${counter}:~/cpu.load $1/kafka-node-0${counter}.cpu &
-        nohup scp ${SSH_USER}@kafka-node-0${counter}:~/mem.load $1/kafka-node-0${counter}.mem &
+        nohup scp -o StrictHostKeyChecking=no ${SSH_USER}@kafka-node-0${counter}:~/cpu.load $1/kafka-node-0${counter}.cpu &
+        nohup scp -o StrictHostKeyChecking=no ${SSH_USER}@kafka-node-0${counter}:~/mem.load $1/kafka-node-0${counter}.mem &
         ((counter++))
     done
 }
 
 function getResultFromRedisServer(){
-    scp ${SSH_USER}@redisdo:~/streaming-benchmarks/data/seen.txt $1/redis-seen.txt
-    scp ${SSH_USER}@redisdo:~/streaming-benchmarks/data/updated.txt $1/redis-updated.txt
+    scp -o StrictHostKeyChecking=no ${SSH_USER}@redisdo:~/streaming-benchmarks/data/seen.txt $1/redis-seen.txt
+    scp -o StrictHostKeyChecking=no ${SSH_USER}@redisdo:~/streaming-benchmarks/data/updated.txt $1/redis-updated.txt
 }
