@@ -1,4 +1,6 @@
+{% if group != 'stream' %}
 127.0.0.1 localhost {{ ansible_hostname }}
+{% endif %}
 
 {% for host in groups['all'] %}
 {% if host != inventory_hostname %}
