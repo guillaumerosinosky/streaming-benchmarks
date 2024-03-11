@@ -4,8 +4,8 @@
 . ./variable.sh --source-only
 
 
-INITIAL_TPS=2000
-BENCHMARK_COUNT=10
+INITIAL_TPS=10000
+BENCHMARK_COUNT=5
 CURRENT_TPS=$INITIAL_TPS
 
 SHORT_SLEEP=3
@@ -367,7 +367,7 @@ case $1 in
     all)
         benchmarkLoop "flink"
         benchmarkLoop "kafka"
-        benchmarkLoop "spark"
+#        benchmarkLoop "spark"
 #        benchmarkLoop "jet"
     ;;
     start)
