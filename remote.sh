@@ -341,7 +341,7 @@ function stopAll (){
 }
 
 function benchmarkLoop (){
-  for i in $(seq 6 $BENCHMARK_COUNT); do
+  for i in $(seq 1 $BENCHMARK_COUNT); do
       CURRENT_TPS=$((i * INITIAL_TPS))
       echo "Benchmark $CURRENT_TPS"
       runAllServers "${PULL_GIT}"
