@@ -20,9 +20,9 @@ trim <- function (x) gsub("^\\s+|\\s+$", "", x)
 #generateBenchmarkPercentile("kafka", init_tps, duration, 15)
 
 if(length(args) == 0){
-  tps_count <- 5
-  tps <- 10000
-  duration <- 60
+  tps_count <- 10
+  tps <- 2000
+  duration <- 600
   for (i in seq_along(engines_all)) {
     generateBenchmarkReport(engines_all[i], tps, duration, tps_count)
     generateStreamServerLoadReport(engines_all[i], tps, duration, tps_count)
