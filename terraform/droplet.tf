@@ -103,6 +103,7 @@ resource "digitalocean_droplet" "load" {
 }
 
 resource "digitalocean_droplet" "redisdo" {
+  count       = 0
   name        = "redisdo"
   image       = var.droplet-os-version
   region      = var.droplet-region
@@ -128,10 +129,10 @@ resource "digitalocean_droplet" "redisdo" {
 }
 
 output "redis_private_ip" {
-  value = digitalocean_droplet.redisdo.ipv4_address_private
+  value = digitalocean_droplet.redisdo.*.ipv4_address_private
 }
 output "redis_public_ip" {
-  value = digitalocean_droplet.redisdo.ipv4_address
+  value = digitalocean_droplet.redisdo.*.ipv4_address
 }
 
 output "zookeeper_private_ip" {
