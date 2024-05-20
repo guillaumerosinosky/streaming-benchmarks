@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 /**
  * To Run:  flink run target/flink-benchmarks-0.1.0-AdvertisingTopologyNative.jar  --confPath "../conf/benchmarkConf.yaml"
@@ -50,7 +51,15 @@ public class AdvertisingTopologyNative {
         LOG.info("conf: {}", conf);
         LOG.info("Parameters used: {}", flinkBenchmarkParams.toMap());
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env;
+        String remoteAddress = parameterTool.get("jobmanager.rpc.address");
+        if (remoteAddress == null) {
+            env = StreamExecutionEnvironment.getExecutionEnvironment();
+        } else {
+            env = StreamExecutionEnvironment.createRemoteEnvironment(remoteAddress.split(":")[0], Integer.parseInt(remoteAddress.split(":")[1]), "flink-benchmarks/target/flink-benchmarks-0.1.0.jar");
+        }
+        
+        Boolean alloy = parameterTool.getBoolean("alloy", false);
         env.getConfig().setGlobalJobParameters(flinkBenchmarkParams);
 
 		// Set the buffer timeout (default 100)
@@ -64,16 +73,23 @@ public class AdvertisingTopologyNative {
         // set default parallelism for all operators (recommended value: number of available worker CPU cores in the cluster (hosts * cores))
         env.setParallelism(hosts * cores);
 
+        Properties kafkaProperties = flinkBenchmarkParams.getProperties();
+        String overrideBootstrap = parameterTool.get("kafkaAddress");
+        if (overrideBootstrap != null) {
+            kafkaProperties.setProperty("bootstrap.servers", overrideBootstrap);
+        }
+
         DataStream<String> messageStream = env
                 .addSource(new FlinkKafkaConsumer<>(
                         flinkBenchmarkParams.getRequired("topic"),
                         new SimpleStringSchema(),
-                        flinkBenchmarkParams.getProperties()
+                        kafkaProperties
                 ))
                 .setParallelism(Math.min(hosts * cores, kafkaPartitions));
 
-        messageStream
-                .rebalance()
+        if (!alloy) {
+            messageStream
+                //.rebalance() // remove rebalance
                 // Parse the String as JSON
                 .flatMap(new DeserializeBolt())
                 //Filter the records if event type is "view"
@@ -85,7 +101,21 @@ public class AdvertisingTopologyNative {
                 // process campaign
                 .keyBy(0)
                 .flatMap(new CampaignProcessor());
-
+        } else {
+            messageStream
+                //.rebalance() // remove rebalance
+                // Parse the String as JSON
+                .flatMap(new DeserializeBoltAlloy()) // alloy projection: we parse only 2 fields instead of 7
+                //Filter the records if event type is "view"
+                // .filter(new EventFilterBolt()) // alloy selection
+                // project the event
+                //.<Tuple2<String, String>>project(2, 5) // alloy projection
+                // perform join with redis data
+                .flatMap(new RedisJoinBolt())
+                // process campaign
+                //.keyBy(0) // alloy partition
+                .flatMap(new CampaignProcessor());
+        }
 
         env.execute();
     }
@@ -106,6 +136,21 @@ public class AdvertisingTopologyNative {
                             obj.getString("event_type"),
                             obj.getString("event_time"),
                             obj.getString("ip_address"));
+            out.collect(tuple);
+        }
+    }
+
+    public static class DeserializeBoltAlloy implements
+            FlatMapFunction<String, Tuple2<String, String>> {
+
+        @Override
+        public void flatMap(String input, Collector<Tuple2<String, String>> out)
+                throws Exception {
+            JSONObject obj = new JSONObject(input);
+            Tuple2<String, String> tuple =
+                    new Tuple2<String, String>(
+                            obj.getString("ad_id"),
+                            obj.getString("event_time"));
             out.collect(tuple);
         }
     }

@@ -1,0 +1,73 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "CampaignProcessorCommon",
+            "request": "launch",
+            "mainClass": "benchmark.common.advertising.CampaignProcessorCommon",
+            "projectName": "benchmark-common"
+        },
+        {
+            "type": "java",
+            "name": "** AdvertisingTopologyNative Flink",
+            "request": "launch",
+            "mainClass": "flink.benchmark.AdvertisingTopologyNative",
+            "projectName": "flink-benchmarks",
+            "args": [
+                "--jobmanager.rpc.address",
+                "localhost:8081",
+                "--kafkaAddress",
+                "kafka-edge1:9092,localhost:9092",                
+                "--detached",
+                "--parallelism",
+                "2",
+                "--confPath",
+                "conf/composeConf.yaml"
+            ],  
+        },
+        {
+            "type": "java",
+            "name": "** AdvertisingTopologyNative Flink Alloy",
+            "request": "launch",
+            "mainClass": "flink.benchmark.AdvertisingTopologyNative",
+            "projectName": "flink-benchmarks",
+            "args": [
+                "--jobmanager.rpc.address",
+                "localhost:8081",
+                "--kafkaAddress",
+                "kafka-edge1:9092,localhost:9092",                
+                "--detached",
+                "--parallelism",
+                "2",
+                "--confPath",
+                "conf/composeConf.yaml",
+                "--alloy",
+                "true"
+            ],  
+        },        
+        {
+            "type": "java",
+            "name": "AdvertisingPipeline",
+            "request": "launch",
+            "mainClass": "hazelcast.benchmark.AdvertisingPipeline",
+            "projectName": "hazelcast-benchmarks"
+        },
+        {
+            "type": "java",
+            "name": "AdvertisingPipeline(1)",
+            "request": "launch",
+            "mainClass": "kafka.benchmark.AdvertisingPipeline",
+            "projectName": "kafka-benchmarks"
+        }
+    ]
+}
