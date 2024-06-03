@@ -32,7 +32,7 @@
                 "--parallelism",
                 "2",
                 "--confPath",
-                "conf/composeConf.yaml"
+                "composeConf.yaml"
             ],  
         },
         {
@@ -45,12 +45,12 @@
                 "--jobmanager.rpc.address",
                 "localhost:8081",
                 "--kafkaAddress",
-                "kafka-edge1:9092,localhost:9092",                
+                "envoy1:9093,localhost:9093",                
                 "--detached",
                 "--parallelism",
                 "2",
                 "--confPath",
-                "conf/composeConf.yaml",
+                "composeConf.yaml",
                 "--alloy",
                 "true"
             ],  

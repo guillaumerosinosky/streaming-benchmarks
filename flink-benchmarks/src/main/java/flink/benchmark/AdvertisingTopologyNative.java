@@ -7,6 +7,8 @@ package flink.benchmark;
 import benchmark.common.Utils;
 import benchmark.common.advertising.CampaignProcessorCommon;
 import benchmark.common.advertising.RedisAdCampaignCache;
+
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
@@ -15,11 +17,15 @@ import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple7;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.configuration.Configuration;
+import org.apache.flink.connector.kafka.source.KafkaSource;
+import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsInitializer;
+import org.apache.flink.connector.kafka.source.reader.deserializer.KafkaRecordDeserializationSchema;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.connectors.kafka.FlinkKafkaConsumer;
 import org.apache.flink.streaming.util.serialization.SimpleStringSchema;
 import org.apache.flink.util.Collector;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -78,7 +84,7 @@ public class AdvertisingTopologyNative {
         if (overrideBootstrap != null) {
             kafkaProperties.setProperty("bootstrap.servers", overrideBootstrap);
         }
-
+/*
         DataStream<String> messageStream = env
                 .addSource(new FlinkKafkaConsumer<>(
                         flinkBenchmarkParams.getRequired("topic"),
@@ -86,7 +92,30 @@ public class AdvertisingTopologyNative {
                         kafkaProperties
                 ))
                 .setParallelism(Math.min(hosts * cores, kafkaPartitions));
+*/
+        String kafkaStartingOffset = parameterTool.get("kafkaStartOffset", "latest");
+        OffsetsInitializer offsetsInitializer;
+        if (kafkaStartingOffset == "latest") {
+            offsetsInitializer = OffsetsInitializer.latest();
+        } else {
+            offsetsInitializer = OffsetsInitializer.earliest();
+        }
+        final Integer fetchMaxWaitMs = parameterTool.getInt("fetchMaxWaitMs", 500);
+        final Integer fetchMinBytes = parameterTool.getInt("fetchMinBytes", 1);
+        String kafkaAddress = kafkaProperties.getProperty("bootstrap.servers");
 
+        KafkaSource<String> source = KafkaSource.<String>builder()
+            .setBootstrapServers(kafkaAddress)
+            .setTopics("ad-events")//TODO: parametrize
+            .setGroupId("ad-events")
+            .setStartingOffsets(offsetsInitializer)
+            .setDeserializer(KafkaRecordDeserializationSchema.valueOnly(StringDeserializer.class))
+            .setProperty("fetch.max.wait.ms", fetchMaxWaitMs.toString())
+            .setProperty("fetch.min.bytes", fetchMinBytes.toString())
+            .setProperty("metadata.max.age.ms", "3600000")
+            .build();
+        DataStream<String> messageStream = env.fromSource(source, WatermarkStrategy.forMonotonousTimestamps(), "ad-events");
+        
         if (!alloy) {
             messageStream
                 //.rebalance() // remove rebalance
@@ -126,17 +155,19 @@ public class AdvertisingTopologyNative {
         @Override
         public void flatMap(String input, Collector<Tuple7<String, String, String, String, String, String, String>> out)
                 throws Exception {
-            JSONObject obj = new JSONObject(input);
-            Tuple7<String, String, String, String, String, String, String> tuple =
-                    new Tuple7<String, String, String, String, String, String, String>(
-                            obj.getString("user_id"),
-                            obj.getString("page_id"),
-                            obj.getString("ad_id"),
-                            obj.getString("ad_type"),
-                            obj.getString("event_type"),
-                            obj.getString("event_time"),
-                            obj.getString("ip_address"));
-            out.collect(tuple);
+            if (input != null) {
+                JSONObject obj = new JSONObject(input);
+                Tuple7<String, String, String, String, String, String, String> tuple =
+                        new Tuple7<String, String, String, String, String, String, String>(
+                                obj.getString("user_id"),
+                                obj.getString("page_id"),
+                                obj.getString("ad_id"),
+                                obj.getString("ad_type"),
+                                obj.getString("event_type"),
+                                obj.getString("event_time"),
+                                obj.getString("ip_address"));
+                out.collect(tuple);
+            }
         }
     }
 
@@ -146,12 +177,15 @@ public class AdvertisingTopologyNative {
         @Override
         public void flatMap(String input, Collector<Tuple2<String, String>> out)
                 throws Exception {
-            JSONObject obj = new JSONObject(input);
-            Tuple2<String, String> tuple =
-                    new Tuple2<String, String>(
-                            obj.getString("ad_id"),
-                            obj.getString("event_time"));
-            out.collect(tuple);
+            if (input != null) {                    
+                JSONObject obj = new JSONObject(input);
+                Tuple2<String, String> tuple =
+                        new Tuple2<String, String>(
+                                obj.getString("ad_id"),
+                                obj.getString("event_time"));
+                out.collect(tuple);
+
+            }
         }
     }
 

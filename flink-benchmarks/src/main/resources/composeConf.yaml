@@ -1,0 +1,20 @@
+kafka.brokers:
+    - "kafka-edge1"
+#bootstrap.servers:
+#    - "kafka-edge1:9092,localhost:9092"
+zookeeper.servers:
+    - "zookeeper-edge1"
+
+kafka.port: 9092
+zookeeper.port: 2181
+redis.host: "redis"
+kafka.topic: "ad-events"
+kafka.partitions: 2
+process.hosts: 1
+process.cores: 2
+time.divisor: 10000
+
+#Spark Specific
+spark.batchtime: 1000
+spark.master: "local"
+spark.app.name: "AdvertisingSpark"
